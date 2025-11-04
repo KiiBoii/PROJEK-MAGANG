@@ -25,6 +25,7 @@ use App\Http\Controllers\Public\PageController;
 Route::get('/', [PageController::class, 'home'])->name('public.home');
 Route::get('/profil', [PageController::class, 'profil'])->name('public.profil');
 Route::get('/berita', [PageController::class, 'berita'])->name('public.berita');
+Route::get('/berita/{id}', [PageController::class, 'showBerita'])->name('public.berita.detail');
 Route::get('/layanan-publik', [PageController::class, 'layanan'])->name('public.layanan');
 Route::get('/galeri', [PageController::class, 'galeri'])->name('public.galeri');
 Route::get('/pengumuman', [PageController::class, 'pengumuman'])->name('public.pengumuman');

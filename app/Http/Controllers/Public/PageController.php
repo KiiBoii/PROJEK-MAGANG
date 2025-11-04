@@ -121,6 +121,27 @@ class PageController extends Controller
         // Kembalikan ke halaman kontak dengan pesan sukses
         return redirect()->route('public.kontak')->with('success', 'Pesan Anda telah berhasil terkirim. Terima kasih!');
     }
+    /**
+     * Halaman Detail Berita
+     * (Method BARU yang Anda tambahkan)
+     */
+    public function showBerita($id)
+    {
+        // 1. Ambil berita yang sedang dibuka
+        $berita = Berita::findOrFail($id);
+
+        // 2. Ambil berita terkait (misal: 3 berita terbaru, BUKAN yg sedang dibaca)
+        $related_news = Berita::where('id', '!=', $id) // <-- Kecualikan berita ini
+                                    ->latest()
+                                    ->take(3)
+                                    ->get();
+                                    
+        // 3. Kirim data ke view detail
+        return view('public.berita_detail', compact('berita', 'related_news'));
+    }
+
+
+    
 }
 
 
