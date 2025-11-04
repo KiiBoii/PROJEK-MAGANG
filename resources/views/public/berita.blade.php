@@ -136,7 +136,12 @@
 
 <div class="container my-5">
 
-    <div id="newsSlider" class="carousel slide mb-5 news-slider" data-bs-ride="carousel" style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+    {{-- 
+        ===== BAGIAN DIPERBARUI =====
+        data-bs-pause="false" -> Tidak berhenti saat hover
+        data-bs-interval="3000" -> Pindah slide setiap 3 detik
+    --}}
+    <div id="newsSlider" class="carousel slide mb-5 news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000" style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
         
         <div class="carousel-indicators">
             @foreach($hot_news ?? [] as $hot)
@@ -154,7 +159,6 @@
                 <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/1200x450/e0e0e0/999?text=Berita+Slider' }}" class="d-block w-100" alt="{{ $hot->judul }}">
                 
                 <div class="carousel-caption d-none d-md-block">
-                    {{-- LINK DIPERBARUI --}}
                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="text-decoration-none text-white stretched-link">
                         <h5>{{ $hot->judul }}</h5>
                     </a>
@@ -194,7 +198,6 @@
                         @php $hot = $hot_news[0]; @endphp
                         <div class="card card-news-hover h-100">
                             <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x600/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
-                            {{-- LINK DIPERBARUI --}}
                             <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                             <div class="card-hover-caption">
                                 <h6>{{ $hot->judul }}</h6>
@@ -212,7 +215,6 @@
                                 @php $hot = $hot_news[1]; @endphp
                                 <div class="card card-news-hover h-100">
                                     <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
-                                    {{-- LINK DIPERBARUI --}}
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -227,7 +229,6 @@
                                 @php $hot = $hot_news[2]; @endphp
                                 <div class="card card-news-hover h-100">
                                     <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
-                                    {{-- LINK DIPERBARUI --}}
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -244,7 +245,6 @@
                                 @php $hot = $hot_news[3]; @endphp
                                 <div class="card card-news-hover h-100">
                                     <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
-                                    {{-- LINK DIPERBARUI --}}
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -259,12 +259,11 @@
                                 @php $hot = $hot_news[4]; @endphp
                                 <div class="card card-news-hover h-100">
                                     <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
-                                    {{-- LINK DIPERBARUI --}}
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
                                     </div>
-                                </div>
+                                D</div>
                             @else
                                 <div class="card-placeholder"><span>Berita 5</span></div>
                             @endif
@@ -274,7 +273,6 @@
                                 @php $hot = $hot_news[5]; @endphp
                                 <div class="card card-news-hover h-100">
                                     <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
-                                    {{-- LINK DIPERBARUI --}}
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -287,7 +285,6 @@
                     </div>
                 </div>
             </div>
-            {{-- === AKHIR BAGIAN HOT NEWS === --}}
 
 
             <h2 class="section-title">BERITA LAINNYA</h2>
@@ -305,7 +302,6 @@
                             <span class="badge bg-primary mb-2">Berita</span>
                             <small class="text-muted d-block mb-1">{{ $berita->created_at->format('d F Y') }}</small>
                             <h5 class="card-title">
-                                {{-- LINK DIPERBARUI --}}
                                 <a href="{{ route('public.berita.detail', $berita->id) }}" class="text-decoration-none text-dark stretched-link">
                                     {{ $berita->judul }}
                                 </a>
@@ -324,7 +320,7 @@
             </div>
 
         </div> <div class="col-lg-4">
-            <div class="card sticky-top" style="top: 100px; border: 1px solid #e0e0e0;">
+            <div class="card" style="border: 1px solid #e0e0e0;">
                 <div class="card-body">
                     <h5 class="fw-bold mb-3" style="color: var(--dark-blue);">TOPIK LAINNYA</h5>
                     
