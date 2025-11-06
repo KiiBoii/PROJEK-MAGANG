@@ -13,12 +13,26 @@ class DummyUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Buat satu user baru
-        User::create([
-            'name' => 'Admin Dinsos',
-            'email' => 'admin@dinsos.com',
-            'email_verified_at' => now(), // <-- Langsung verifikasi emailnya
-            'password' => Hash::make('12345678'), // <-- Passwordnya '12345678'
-        ]);
+        // 1. Buat User ADMIN (Gunakan firstOrCreate)
+        User::firstOrCreate(
+            ['email' => 'admin@dinsos.com'], // <-- Cari berdasarkan email ini
+            [ // <-- Jika tidak ada, buat dengan data ini
+                'name' => 'Admin Dinsos',
+                'role' => 'admin',
+                'email_verified_at' => now(), 
+                'password' => Hash::make('12345678'),
+            ]
+        );
+
+        // 2. Buat User BERITA (Gunakan firstOrCreate)
+        User::firstOrCreate(
+            ['email' => 'berita@dinsos.com'], // <-- Cari berdasarkan email ini
+            [ // <-- Jika tidak ada, buat dengan data ini
+                'name' => 'Penulis Berita',
+                'role' => 'berita',
+                'email_verified_at' => now(),
+                'password' => Hash::make('12345678'),
+            ]
+        );
     }
 }
