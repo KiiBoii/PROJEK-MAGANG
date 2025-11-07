@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Pengumuman extends Model
 {
@@ -24,5 +25,11 @@ class Pengumuman extends Model
     protected $fillable = [
         'judul',
         'isi',
+        'user_id',
     ];
+        public function user()
+    {
+        // 'user_id' adalah foreign key di tabel 'beritas'
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pengumuman; // Import Model Pengumuman
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // <-- 1. IMPORT 'Auth' facade
 
 class PengumumanController extends Controller
 {
@@ -34,6 +35,11 @@ class PengumumanController extends Controller
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
         ]);
+
+        // --- 2. INI ADALAH PERBAIKANNYA ---
+        // Menambahkan ID user yang sedang login ke data yang akan disimpan
+        $validated['user_id'] = Auth::id();
+        // ------------------------------
 
         Pengumuman::create($validated);
 
@@ -65,6 +71,9 @@ class PengumumanController extends Controller
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
         ]);
+        
+        // (Opsional: Lacak siapa yang terakhir meng-update)
+        // $validated['user_id'] = Auth::id();
 
         $pengumuman->update($validated);
 

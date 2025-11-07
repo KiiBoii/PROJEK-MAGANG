@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Galeri; // Import Model Galeri
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; // Untuk mengelola file
+use Illuminate\Support\Facades\Auth; // <-- 1. IMPORT 'Auth' facade
 
 class GaleriController extends Controller
 {
@@ -53,7 +54,12 @@ class GaleriController extends Controller
             $validated['foto_path'] = $request->file('foto_path')->store('galeri_images', 'public');
         }
 
-        Galeri::create($validated); // 'bidang' akan otomatis tersimpan
+        // --- 2. INI ADALAH PERBAIKANNYA ---
+        // Menambahkan ID user yang sedang login ke data yang akan disimpan
+        $validated['user_id'] = Auth::id();
+        // ------------------------------
+
+        Galeri::create($validated); // 'bidang' dan 'user_id' akan otomatis tersimpan
 
         return redirect()->route('galeri.index')->with('success', 'Foto kegiatan berhasil ditambahkan.');
     }
@@ -98,6 +104,9 @@ class GaleriController extends Controller
             // Simpan foto baru
             $validated['foto_path'] = $request->file('foto_path')->store('galeri_images', 'public');
         }
+
+        // (Opsional: Lacak siapa yang terakhir meng-update)
+        // $validated['user_id'] = Auth::id();
 
         $galeri->update($validated); // 'bidang' akan otomatis ter-update
 

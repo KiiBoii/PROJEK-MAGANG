@@ -7,6 +7,7 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon; // <-- TAMBAHKAN INI UNTUK FILTER TANGGAL
+use Illuminate\Support\Facades\Auth; // <-- 1. IMPORT 'Auth' facade
 
 class BeritaController extends Controller
 {
@@ -40,7 +41,8 @@ class BeritaController extends Controller
         // --- AKHIR LOGIKA FILTER ---
 
         // Ambil data SETELAH difilter
-        $beritas = $query->latest()->get();
+        // PERBAIKAN: Selalu eager load relasi 'user'
+        $beritas = $query->with('user')->latest()->get();
 
         // Cek jika ini adalah permintaan API dari React
         if ($request->wantsJson() || $request->is('api/*')) {
@@ -78,6 +80,11 @@ class BeritaController extends Controller
             // Simpan gambar dan dapatkan path-nya
             $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public');
         }
+
+        // --- 2. INI ADALAH PERBAIKANNYA ---
+        // Menambahkan ID user yang sedang login ke data yang akan disimpan
+        $validated['user_id'] = Auth::id();
+        // ------------------------------
 
         Berita::create($validated);
 
@@ -127,6 +134,9 @@ class BeritaController extends Controller
             $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public');
         }
 
+        // (Opsional: Lacak siapa yang terakhir meng-update)
+        // $validated['user_id'] = Auth::id();
+
         // Update data berita di database
         $berita->update($validated);
 
@@ -157,4 +167,3 @@ class BeritaController extends Controller
     }
 }
 //NANTI LANJUT LAGI
-

@@ -99,8 +99,10 @@
                                 <i class="bi {{ $activity->icon }} fs-4 text-primary me-3"></i>
                                 <div>
                                     <a href="{{ $activity->route }}" class="text-decoration-none text-dark stretched-link">
-                                        <strong>{{ $activity->jenis_aktivitas }}</strong>: 
-                                        {{ Str::limit($activity->judul_aktivitas, 40) }}
+                                        {{-- Tampilkan nama user (dari $activity->userName) --}}
+                                        <strong>{{ $activity->userName }}</strong> 
+                                        {{ $activity->jenis_aktivitas == 'Pengaduan Baru' ? 'mengirim' : 'menambahkan' }} 
+                                        <em>{{ Str::limit($activity->judul_aktivitas, 35) }}</em>
                                     </a>
                                     <small class="d-block text-muted">
                                         {{-- Menampilkan waktu (misal: "5 menit yang lalu") --}}

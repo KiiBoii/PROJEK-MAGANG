@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User; // Import Model User
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash; // Untuk hash password
+use Illuminate\Validation\Rule; // <-- 1. IMPORT INI
 
 class KaryawanController extends Controller
 {
@@ -35,6 +36,7 @@ class KaryawanController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed', // 'confirmed' butuh field password_confirmation
+            'role' => ['required', Rule::in(['admin', 'berita'])], // <-- 2. TAMBAHKAN VALIDASI ROLE
             'jabatan' => 'nullable|string|max:255',
             'departemen' => 'nullable|string|max:255',
             'telepon' => 'nullable|string|max:20',
@@ -73,6 +75,7 @@ class KaryawanController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $karyawan->id, // Abaikan email ini saat update
             'password' => 'nullable|string|min:8|confirmed', // Password opsional saat update
+            'role' => ['required', Rule::in(['admin', 'berita'])], // <-- 3. TAMBAHKAN VALIDASI ROLE
             'jabatan' => 'nullable|string|max:255',
             'departemen' => 'nullable|string|max:255',
             'telepon' => 'nullable|string|max:20',

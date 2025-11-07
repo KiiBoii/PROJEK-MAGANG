@@ -42,31 +42,36 @@ class DashboardController extends Controller
         $chartData = $data;
         
 
-        // === 3. DATA AKTIVITAS TERBARU (BARU) ===
+        // === 3. DATA AKTIVITAS TERBARU (DIPERBARUI) ===
 
-        // Ambil 5 data terbaru dari masing-masing model
-        // Kita tambahkan 'jenis_aktivitas' dan 'judul_aktivitas' agar seragam
-        $beritaActivities = Berita::latest()->take(5)->get()->map(function($item) {
+        // Ambil 5 data terbaru, DAN ambil data 'user' yang terkait
+        // 'with('user')' -> Eager load relasi 'user' yang kita buat di Model
+        $beritaActivities = Berita::with('user')->latest()->take(5)->get()->map(function($item) {
             $item->jenis_aktivitas = 'Berita Baru';
             $item->judul_aktivitas = $item->judul;
             $item->icon = 'bi-newspaper'; // Ikon Bootstrap
-            $item->route = route('berita.edit', $item->id); // Link ke edit
+            $item->route = route('berita.index'); // Link ke index
+            
+            // Cek jika relasi user ada, jika tidak, tampilkan 'Sistem'
+            $item->userName = $item->user->name ?? 'Sistem'; // <-- Ambil nama user
             return $item;
         });
 
-        $galeriActivities = Galeri::latest()->take(5)->get()->map(function($item) {
+        $galeriActivities = Galeri::with('user')->latest()->take(5)->get()->map(function($item) {
             $item->jenis_aktivitas = 'Galeri Baru';
             $item->judul_aktivitas = $item->judul_kegiatan;
             $item->icon = 'bi-images';
-            $item->route = route('galeri.edit', $item->id);
+            $item->route = route('galeri.index');
+            $item->userName = $item->user->name ?? 'Sistem'; // <-- Ambil nama user
             return $item;
         });
 
-        $pengumumanActivities = Pengumuman::latest()->take(5)->get()->map(function($item) {
+        $pengumumanActivities = Pengumuman::with('user')->latest()->take(5)->get()->map(function($item) {
             $item->jenis_aktivitas = 'Pengumuman Baru';
             $item->judul_aktivitas = $item->judul;
             $item->icon = 'bi-megaphone';
-            $item->route = route('pengumuman.edit', $item->id);
+            $item->route = route('pengumuman.index');
+            $item->userName = $item->user->name ?? 'Sistem'; // <-- Ambil nama user
             return $item;
         });
 
@@ -74,7 +79,8 @@ class DashboardController extends Controller
             $item->jenis_aktivitas = 'Pengaduan Baru';
             $item->judul_aktivitas = 'Pesan dari ' . $item->nama;
             $item->icon = 'bi-chat-left-text';
-            $item->route = route('pengaduan.index'); // Link ke halaman index
+            $item->route = route('pengaduan.index'); 
+            $item->userName = $item->nama; // <-- Ambil nama dari pengaduan (guest)
             return $item;
         });
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Berita extends Model
 {
@@ -18,5 +19,17 @@ class Berita extends Model
         'judul',
         'isi',
         'gambar',
+        'user_id',
     ];
+
+    /**
+     * === 1. TAMBAHKAN FUNGSI INI ===
+     * Mendefinisikan relasi bahwa Berita 'dimiliki oleh' (belongsTo) satu User.
+     * Ini akan memperbaiki error 'RelationNotFoundException' Anda.
+     */
+    public function user()
+    {
+        // 'user_id' adalah foreign key di tabel 'beritas'
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

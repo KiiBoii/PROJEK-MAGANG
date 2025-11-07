@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Galeri extends Model
 {
@@ -18,5 +19,11 @@ class Galeri extends Model
         'judul_kegiatan',
         'foto_path',
         'bidang',
+        'user_id',
     ];
+        public function user()
+    {
+        // 'user_id' adalah foreign key di tabel 'beritas'
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
