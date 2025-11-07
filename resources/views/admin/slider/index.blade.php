@@ -22,14 +22,12 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    {{-- 
+        ===== BLOK ALERT SUKSES DIHAPUS DARI SINI =====
+        (Karena sudah ditangani oleh layouts/admin.blade.php)
+    --}}
 
-    {{-- === 1. TAMBAHKAN FORM FILTER INI === --}}
+    {{-- === 1. FORM FILTER === --}}
     <div class="card shadow-sm rounded-3 border-0 mb-4">
         <div class="card-body">
             <form action="{{ route('slider.index') }}" method="GET" class="d-flex align-items-center">
@@ -53,7 +51,7 @@
     {{-- === AKHIR FORM FILTER === --}}
 
 
-    {{-- === KONTEN DIPERBARUI: MENGGANTI TABLE DENGAN CARD === --}}
+    {{-- === KONTEN KARTU === --}}
     <div class="row">
         @forelse ($sliders as $slide)
             {{-- Tampilkan 3 card per baris di desktop (lg-4), 2 di tablet (md-6) --}}
@@ -117,7 +115,7 @@
             </div>
         @endforelse
     </div>
-    {{-- === AKHIR KONTEN DIPERBARUI === --}}
+    {{-- === AKHIR KONTEN KARTU === --}}
 
 </div>
 @endsection

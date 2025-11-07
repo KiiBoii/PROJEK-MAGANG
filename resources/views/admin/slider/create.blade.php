@@ -23,7 +23,10 @@
                     <label for="halaman" class="form-label">Tampilkan di Halaman</label>
                     <select class="form-select" id="halaman" name="halaman" required>
                         <option value="" selected disabled>-- Pilih Halaman --</option>
-                        @foreach($halamanList as $halaman)
+                        {{-- PERBAIKAN: Variabel yang diterima dari controller adalah $bidangList --}}
+                        {{-- Jika Anda memilih Opsi 1 di atas, Anda bisa tetap menggunakan $halamanList --}}
+                        
+                        @foreach($bidangList as $halaman) {{-- <== BARIS INI DIPERBAIKI --}}
                             <option value="{{ $halaman }}" {{ old('halaman') == $halaman ? 'selected' : '' }}>
                                 {{ ucfirst($halaman) }}
                             </option>
