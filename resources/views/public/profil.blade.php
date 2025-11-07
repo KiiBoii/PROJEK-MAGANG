@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-{{-- 1. CSS KUSTOM DITAMBAHKAN (SAMA SEPERTI HALAMAN HOME/BERITA) --}}
+{{-- 1. CSS KUSTOM (Tidak ada perubahan) --}}
 @push('styles')
 <style>
     /* Mengambil style dari halaman berita/home agar sama persis */
@@ -52,38 +52,52 @@
 
 @section('content')
 
-<!-- 1. Header Halaman (DIGANTI DENGAN SLIDER) -->
+<!-- 1. Header Halaman (DIGANTI DENGAN SLIDER DINAMIS) -->
 <div class="container my-5">
     
-    {{-- Slider ini tidak auto-scroll karena hanya 1 item --}}
-    <div id="profilHeader" class="carousel slide news-slider" data-bs-ride="false"
+    <div id="profilHeader" class="carousel slide news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000"
          style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
         
-        {{-- Indikator di-disable karena hanya 1 slide --}}
-        {{-- <div class="carousel-indicators">
-            <button type="button" data-bs-target="#profilHeader" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        </div> --}}
+        {{-- Indicators (Dibuat dinamis) --}}
+        <div class="carousel-indicators">
+            @foreach($sliders as $slider)
+                <button type="button" data-bs-target="#profilHeader" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}" aria-current="{{ $loop->first ? 'true' : 'false' }}" aria-label="Slide {{ $loop->iteration }}"></button>
+            @endforeach
+        </div>
 
+        {{-- Slides (Dibuat dinamis) --}}
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://placehold.co/1920x500/333/fff?text=Tentang+Kami" class="d-block w-100" alt="Profil Header">
-                
-                <div class="carousel-caption d-none d-md-block">
-                    <h1 class="text-white">PROFIL</h1> {{-- Menggunakan H1 untuk SEO --}}
-                    <p class="text-white-50">Visi, Misi, dan Struktur Organisasi Dinas Sosial Provinsi Riau.</p>
+            @forelse($sliders as $slider)
+                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1 class="text-white">{{ $slider->judul }}</h1>
+                        <p class="text-white-50">{{ $slider->keterangan }}</p>
+                    </div>
                 </div>
-            </div>
+            @empty
+                {{-- Fallback jika tidak ada slider di database --}}
+                <div class="carousel-item active">
+                    <img src="https://placehold.co/1920x500/333/fff?text=Tentang+Kami" class="d-block w-100" alt="Profil Header">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h1 class="text-white">PROFIL</h1> {{-- Menggunakan H1 untuk SEO --}}
+                        <p class="text-white-50">Visi, Misi, dan Struktur Organisasi Dinas Sosial Provinsi Riau.</p>
+                    </div>
+                </div>
+            @endforelse
         </div>
         
-        {{-- Tombol Navigasi di-disable karena hanya 1 slide --}}
-        {{-- <button class="carousel-control-prev" type="button" data-bs-target="#profilHeader" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#profilHeader" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button> --}}
+        {{-- Tampilkan tombol navigasi hanya jika slide lebih dari 1 --}}
+        @if($sliders->count() > 1)
+            <button class="carousel-control-prev" type="button" data-bs-target="#profilHeader" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#profilHeader" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        @endif
     </div>
 
 </div> <!-- Penutup container slider -->

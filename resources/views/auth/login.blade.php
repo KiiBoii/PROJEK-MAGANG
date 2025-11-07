@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary-color: #007bff; /* Biru primer (sesuaikan) */
+            --primary-color: #3B82F6; /* Biru cerah dari gambar */
+            --primary-dark: #2563EB;
             --form-bg: #ffffff;
-            --page-bg: #f4f7f6;
-            --text-color: #333;
-            --input-border: #e0e0e0;
+            --page-bg: #ffffff; /* Latar belakang halaman utama jadi putih */
+            --text-color: #374151; /* Abu-abu tua */
+            --text-light: #6B7280; /* Abu-abu muda */
+            --input-bg: #F3F4F6; /* Latar input abu-abu muda */
         }
 
         body {
@@ -26,7 +25,6 @@
             background-color: var(--page-bg);
             margin: 0;
             padding: 0;
-            /* Memastikan body memenuhi seluruh layar */
             min-height: 100vh;
         }
 
@@ -42,8 +40,6 @@
         /* Sisi Kiri (Biru) */
         .login-image-side {
             background-color: var(--primary-color);
-            /* Diberi gambar background (opsional, sesuai UI) */
-            /* background-image: url('URL_GAMBAR_BACKGROUND_BIRU_ANDA'); */
             background-size: cover;
             background-position: center;
         }
@@ -56,7 +52,9 @@
             align-items: center;
             justify-content: center;
             padding: 4rem 2rem;
-            min-height: 100vh; /* Pastikan tinggi penuh di mobile */
+            overflow: hidden; /* Penting untuk efek gelombang */
+            
+            
         }
         
         .login-form-wrapper {
@@ -71,11 +69,12 @@
                 content: '';
                 position: absolute;
                 top: 50%;
-                left: -1000px; /* Tarik ke kiri */
+                /* Dibuat lebih ke kanan (-900px) agar kurva lebih dalam */
+                left: -900px; 
                 transform: translateY(-50%);
                 width: 2000px; /* Lingkaran besar */
                 height: 2000px; /* Lingkaran besar */
-                background-color: var(--form-bg);
+                background-color: var(--form-bg); /* Warna gelombang = putih */
                 border-radius: 50%;
                 z-index: 1;
             }
@@ -92,70 +91,76 @@
 
         .login-title {
             font-weight: 700;
-            color: var(--primary-color);
+            font-size: 2.25rem; /* Sedikit lebih besar */
+            letter-spacing: 1px;
+            color: var(--primary-dark); /* Warna biru tua */
         }
         
         .login-subtitle {
-            color: #6c757d;
+            color: var(--text-light);
             margin-bottom: 2.5rem;
         }
         
         .form-label {
             font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-color);
+            font-size: 0.8rem;
+            color: var(--text-light); /* Label abu-abu */
             text-transform: uppercase;
         }
         
-        .input-group-text {
-            background-color: transparent;
-            border-right: 0;
-            color: #adb5bd;
-        }
-        
-        .form-control {
-            border-left: 0;
-            padding-left: 0;
-            height: 50px;
-            box-shadow: none;
-            border-color: var(--input-border);
-        }
-        .form-control:focus {
-            border-color: var(--primary-color);
-        }
-
-        /* Khusus untuk input-group */
-        .input-group .form-control {
-            border-right: 1px solid var(--input-border);
-        }
-        .input-group .form-control:focus {
-             border-right: 1px solid var(--primary-color);
-        }
-        
-        /* Tombol Toggle Password */
-        .password-toggle {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            cursor: pointer;
-            color: #adb5bd;
-        }
-        
-        .btn-login {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            font-weight: 600;
-            padding: 0.75rem;
-            border-radius: 8px;
+        /* Grup Input Styling (Baru) */
+        .input-group {
+            border: 1px solid transparent; /* Untuk transisi */
+            background-color: var(--input-bg);
+            border-radius: 10px; /* Lebih bulat */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.03);
+            overflow: hidden; /* Menjaga border-radius */
             transition: all 0.3s ease;
         }
+        
+        /* Efek focus-within pada grup */
+        .input-group:focus-within {
+            background-color: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.1);
+        }
+
+        .input-group .form-control {
+            background-color: transparent; /* Input transparan */
+            border: none; /* Tidak ada border */
+            box-shadow: none;
+            height: 50px;
+            padding-left: 0.5rem;
+        }
+        
+        .input-group .form-control::placeholder {
+            color: #ADB5BD;
+        }
+
+        .input-group .input-group-text {
+            background-color: transparent;
+            border: none;
+            color: var(--text-light);
+        }
+
+        /* Tombol Toggle Password (Dihapus, karena digabung ke input-group-text) */
+        /* .password-toggle { ... } */
+        
+        .btn-login {
+            /* Gradient sesuai gambar */
+            background-image: linear-gradient(to right, #4F46E5, var(--primary-color));
+            border: none;
+            font-weight: 600;
+            padding: 0.75rem;
+            border-radius: 10px; /* Menyamai input */
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
         .btn-login:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            background-image: linear-gradient(to right, #4338CA, var(--primary-dark));
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,123,255,0.3);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
     </style>
@@ -165,34 +170,26 @@
     <div class="container-fluid login-container-fluid">
         <div class="row g-0 login-row">
 
-            <!-- Sisi Kiri (Gambar Biru) - Hilang di mobile -->
             <div class="col-lg-5 d-none d-lg-block login-image-side">
                 {{-- Anda bisa meletakkan konten di sini jika mau --}}
             </div>
 
-            <!-- Sisi Kanan (Form) -->
             <div class="col-lg-7 col-12 login-form-side">
                 <div class="login-form-wrapper text-center">
 
-                    <!-- Logo -->
-                    <img src="https://placehold.co/150x80/007bff/white?text=LOGO" alt="Logo Diskominfo" class="login-logo">
+                    <img src="https://placehold.co/150x80/3B82F6/white?text=LOGO" alt="Logo Diskominfo" class="login-logo">
 
-                    <!-- Judul -->
                     <h1 class="login-title">WELCOME</h1>
                     <p class="login-subtitle">Silahkan login dengan menggunakan akun Anda</p>
 
-                    <!-- Form Login -->
                     <form method="POST" action="{{ route('login') }}" class="text-start">
                         @csrf
 
-                        <!-- Session Status -->
                         <x-auth-session-status class="mb-4" :status="session('status')" />
 
-                        <!-- Pesan Error Global (Dari Breeze) -->
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
-                        <!-- Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <div class="input-group">
@@ -201,19 +198,17 @@
                             </div>
                         </div>
 
-                        <!-- Password -->
                         <div class="mb-4">
                             <label for="password" class="form-label">Password</label>
-                            <div class="input-group position-relative">
+                            <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="•••••••••" required autocomplete="current-password">
-                                <span class="password-toggle" id="togglePassword">
+                                <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
                                     <i class="bi bi-eye-slash"></i>
                                 </span>
                             </div>
                         </div>
 
-                        <!-- Remember Me & Lupa Password -->
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="remember" id="remember_me">
@@ -228,7 +223,6 @@
                             @endif
                         </div>
                         
-                        <!-- Tombol Login -->
                         <button type="submit" class="btn btn-primary w-100 btn-login">
                             {{ __('Log in') }}
                         </button>
@@ -240,10 +234,8 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS (Diperlukan untuk form) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- JavaScript untuk Toggle Password -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const togglePassword = document.getElementById('togglePassword');
@@ -256,6 +248,7 @@
                     passwordInput.setAttribute('type', type);
                     
                     // Toggle ikon
+                    // JS ini tetap berfungsi karena kita menargetkan <i> di dalam span
                     this.querySelector('i').classList.toggle('bi-eye');
                     this.querySelector('i').classList.toggle('bi-eye-slash');
                 });

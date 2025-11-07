@@ -294,6 +294,16 @@
                         <i class="bi bi-people-fill"></i> Pengelolaan Admin
                     </a>
                 </li>
+                <!-- ... Link menu lainnya ... -->
+
+<li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('slider.index') ? 'active' : '' }}" href="{{ route('slider.index') }}">
+        <i class="bi bi-collection-play-fill me-2"></i>
+        Manajemen Slider
+    </a>
+</li>
+
+<!-- ... Link menu lainnya ... -->
             </ul>
 
             <ul class="list-unstyled components mt-auto pb-4">

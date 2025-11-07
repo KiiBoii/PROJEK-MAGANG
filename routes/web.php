@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PengaduanController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\PengumumanController;
 // use App\Http\Controllers\Admin\KontakController; // <-- Dihapus, digabung ke Pengaduan
+use App\Http\Controllers\Admin\SliderController; // <-- 1. IMPORT SLIDER CONTROLLER
 
 // --- IMPORT CONTROLLER PUBLIC ---
 use App\Http\Controllers\Public\PageController;
@@ -71,7 +72,6 @@ Route::middleware(['auth', 'role:admin,berita', PreventBackHistory::class])->pre
         Route::resource('pengumuman', PengumumanController::class);
         Route::resource('karyawan', KaryawanController::class);
         
-        // === PERBAIKAN DI SINI ===
         // Mengganti get() dengan resource() agar mencakup 'index' dan 'destroy'
         Route::resource('pengaduan', PengaduanController::class)->only([
             'index', 'destroy'
@@ -79,7 +79,11 @@ Route::middleware(['auth', 'role:admin,berita', PreventBackHistory::class])->pre
         
         // Mengarahkan 'kontak.index' ke PengaduanController untuk fix error sidebar
         Route::get('kontak', [PengaduanController::class, 'index'])->name('kontak.index');
-        // === AKHIR PERBAIKAN ===
+
+        // <-- 2. TAMBAHKAN RUTE BARU INI UNTUK SLIDER -->
+        Route::resource('slider', SliderController::class);
+        Route::patch('slider/{slider}/toggle', [SliderController::class, 'toggleStatus'])->name('slider.toggle');
+        // <-- AKHIR RUTE BARU -->
     
     }); // Akhir grup 'role:admin'
 

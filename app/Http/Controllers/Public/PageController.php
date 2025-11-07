@@ -8,7 +8,8 @@ use App\Models\Berita;
 use App\Models\Galeri;
 use App\Models\Pengumuman;
 use App\Models\Kontak;
-use Illuminate\Support\Facades\Storage; // <-- 1. TAMBAHKAN INI
+use App\Models\Slider; // <-- 1. IMPORT MODEL SLIDER
+use Illuminate\Support\Facades\Storage; 
 
 class PageController extends Controller
 {
@@ -17,16 +18,16 @@ class PageController extends Controller
      */
     public function home()
     {
-        // 1. Ambil 6 berita terbaru (Eager load relasi user)
+        // Ambil slider khusus untuk halaman 'home'
+        $sliders = Slider::where('halaman', 'home')->where('is_visible', true)->latest()->get();
+
+        // --- Logika Berita (Tidak berubah) ---
         $semuaBeritaBaru = Berita::with('user')->latest()->take(6)->get();
-
-        // 2. Ambil 1 berita pertama sebagai Berita Utama
         $beritaUtama = $semuaBeritaBaru->first();
-
-        // 3. Ambil 5 berita sisanya (skip 1) sebagai Berita Lainnya
         $beritaLainnya = $semuaBeritaBaru->slice(1);
         
-        return view('public.home', compact('beritaUtama', 'beritaLainnya'));
+        // Kirim $sliders ke view
+        return view('public.home', compact('sliders', 'beritaUtama', 'beritaLainnya'));
     }
 
     /**
@@ -34,7 +35,9 @@ class PageController extends Controller
      */
     public function profil()
     {
-        return view('public.profil');
+        // Ambil slider khusus untuk halaman 'profil'
+        $sliders = Slider::where('halaman', 'profil')->where('is_visible', true)->latest()->get();
+        return view('public.profil', compact('sliders'));
     }
 
     /**
@@ -42,54 +45,49 @@ class PageController extends Controller
      */
     public function berita()
     {
-        // Ambil 6 berita terbaru untuk "Hot News" (Eager load user)
+        // Ambil slider khusus untuk halaman 'berita'
+        $sliders = Slider::where('halaman', 'berita')->where('is_visible', true)->latest()->get();
+        
         $hot_news = Berita::with('user')->latest()->take(6)->get();
-
-        // Ambil ID dari hot_news
         $hot_news_ids = $hot_news->pluck('id');
-
-        // Ambil berita lainnya (selain hot news) dengan paginasi (9 per halaman)
         $beritas = Berita::with('user')->whereNotIn('id', $hot_news_ids)
                                 ->latest()
                                 ->paginate(9);
-
-        // Ambil 5 topik/berita lainnya secara acak
         $beritas_ids = $beritas->pluck('id');
         $exclude_ids = $hot_news_ids->merge($beritas_ids);
-
         $topik_lainnya = Berita::whereNotIn('id', $exclude_ids)
-                                ->inRandomOrder() // Ambil acak
+                                ->inRandomOrder()
                                 ->take(5)
                                 ->get();
 
-        return view('public.berita', compact('hot_news', 'beritas', 'topik_lainnya'));
+        // Kirim $sliders ke view
+        return view('public.berita', compact('sliders', 'hot_news', 'beritas', 'topik_lainnya'));
     }
 
     /**
      * Halaman Galeri
-     * === BAGIAN INI DIPERBARUI UNTUK FILTER ISOTOPE ===
+     * (Versi Isotope - tanpa paginasi)
      */
-    public function galeri(Request $request)
+    public function galeri(Request $request) 
     {
-        // 1. Ambil daftar bidang unik dari database
+        // Ambil slider khusus untuk halaman 'galeri'
+        $sliders = Slider::where('halaman', 'galeri')->where('is_visible', true)->latest()->get();
+
         $bidangList = Galeri::whereNotNull('bidang')
                             ->where('bidang', '!=', '')
                             ->distinct()
                             ->pluck('bidang');
 
-        // 2. Buat query galeri (sudah termasuk relasi user)
         $query = Galeri::with('user');
 
-        // 3. Terapkan filter jika ada (meskipun Isotope akan menanganinya di frontend)
         if ($request->has('bidang') && $request->bidang != '') {
             $query->where('bidang', $request->bidang);
         }
 
-        // 4. Ambil SEMUA hasil (get()) untuk Isotope, BUKAN paginate()
         $galeris = $query->latest()->get(); 
 
-        // 5. Kirim data ke view
-        return view('public.galeri', compact('galeris', 'bidangList'));
+        // Kirim $sliders ke view
+        return view('public.galeri', compact('sliders', 'galeris', 'bidangList'));
     }
 
     /**
@@ -97,7 +95,9 @@ class PageController extends Controller
      */
     public function layanan()
     {
-        return view('public.layanan');
+        // Ambil slider khusus untuk halaman 'layanan'
+        $sliders = Slider::where('halaman', 'layanan')->where('is_visible', true)->latest()->get();
+        return view('public.layanan', compact('sliders'));
     }
 
     /**
@@ -105,9 +105,13 @@ class PageController extends Controller
      */
     public function pengumuman()
     {
-        // 5. PERBARUI: Tambahkan with('user') untuk mengambil nama penulis
+        // Ambil slider khusus untuk halaman 'pengumuman'
+        $sliders = Slider::where('halaman', 'pengumuman')->where('is_visible', true)->latest()->get();
+
         $pengumumans = Pengumuman::with('user')->latest()->paginate(10);
-        return view('public.pengumuman', compact('pengumumans'));
+        
+        // Kirim $sliders ke view
+        return view('public.pengumuman', compact('sliders', 'pengumumans'));
     }
 
     /**
@@ -115,7 +119,9 @@ class PageController extends Controller
      */
     public function kontak()
     {
-        return view('public.kontak');
+        // Ambil slider khusus untuk halaman 'kontak'
+        $sliders = Slider::where('halaman', 'kontak')->where('is_visible', true)->latest()->get();
+        return view('public.kontak', compact('sliders'));
     }
 
     /**

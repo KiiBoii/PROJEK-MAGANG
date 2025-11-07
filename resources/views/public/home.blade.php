@@ -50,42 +50,59 @@
 
 @section('content')
 
+<!-- 1. Bagian Slider/Hero (TELAH DIPERBARUI MENJADI DINAMIS) -->
 <div class="container my-5">
     
     <div id="heroSlider" class="carousel slide news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000" 
          style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
         
+        <!-- Indicators (Dibuat dinamis) -->
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            @foreach($sliders as $slider)
+                <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}" aria-current="{{ $loop->first ? 'true' : 'false' }}" aria-label="Slide {{ $loop->iteration }}"></button>
+            @endforeach
         </div>
+        
+        <!-- Slides (Dibuat dinamis) -->
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://i.pinimg.com/736x/d2/fc/ad/d2fcadc36548012db71d04ab66bd6b43.jpg" class="d-block w-100" alt="Slider 1">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Selamat Datang di Dinas Sosial Riau</h5>
-                    <p>Melayani dengan hati, menjangkau seluruh lapisan masyarakat.</p>
+            @forelse($sliders as $slider)
+                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ $slider->judul }}</h5>
+                        <p>{{ $slider->keterangan }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="carousel-item">
-                <img src="https://i.pinimg.com/1200x/be/1a/cf/be1acffb33510dbc2f81cc894c7abf70.jpg" class="d-block w-100" alt="Slider 2">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Program Bantuan Sosial 2025</h5>
-                    <p>Informasi terbaru seputar program bantuan sosial di Provinsi Riau.</p>
+            @empty
+                {{-- Fallback jika tidak ada slider yang 'tampil' --}}
+                <div class="carousel-item active">
+                    <img src="https://placehold.co/1920x450/007bff/white?text=Selamat+Datang" class="d-block w-100" alt="Slider 1">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Selamat Datang di Dinas Sosial Riau</h5>
+                        <p>Melayani dengan hati, menjangkau seluruh lapisan masyarakat.</p>
+                    </div>
                 </div>
-            </div>
+            @endforelse
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+        
+        {{-- Tampilkan tombol navigasi hanya jika slide lebih dari 1 --}}
+        @if($sliders->count() > 1)
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        @endif
     </div>
 
-</div> <div class="container my-5">
+</div> <!-- Penutup container slider -->
+
+
+<!-- 2. Bagian Sambutan Kepala Dinas (Tidak diubah) -->
+<div class="container my-5">
     <div class="row align-items-center">
         <div class="col-lg-8">
             <small class="text-primary fw-bold text-uppercase">Profil</small>
@@ -122,6 +139,7 @@
     </div>
 </div>
 
+<!-- 3. Bagian Berita Terbaru (Tidak diubah) -->
 <div class="py-5" style="background-color: #ffffff;">
     <div class="container">
         <h2 class="section-title">Berita Terbaru</h2>
@@ -155,25 +173,17 @@
         <div class="p-4 rounded-3" style="background-color: var(--primary-color);">
             <h4 class="text-white fw-bold mb-3 text-center">Berita Lainnya</h4>
             <div class="row">
-                {{-- 
-                    ===== BAGIAN DIPERBARUI =====
-                --}}
                 
-                {{-- 1. Menggunakan take(5) untuk 5 berita --}}
                 @forelse($beritaLainnya->take(5) as $berita)
-                {{-- 2. Menggunakan col-lg (auto width) agar 5 kolom pas --}}
                 <div class="col-lg col-md-4 col-sm-6 mb-3 mb-lg-0">
                     <div class="card card-news h-100">
                         @if($berita->gambar)
-                            {{-- 3. Mengubah tinggi gambar menjadi 220px --}}
                             <img src="{{ asset('storage/' . $berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 220px; object-fit: cover;">
                         @else
                             <img src="https://placehold.co/300x220/e0e0e0/999?text=Berita" class="card-img-top" alt="Placeholder" style="height: 220px; object-fit: cover;">
                         @endif
                         <div class="card-body p-3">
-                            {{-- 4. Menghapus paragraf <p class="card-date"> --}}
                             
-                            {{-- 5. Menambah text-center dan mengubah text-dark menjadi text-primary (biru) --}}
                             <h6 class="card-title small fw-bold text-center">
                                 <a href="{{ route('public.berita.detail', $berita->id) }}" class="text-decoration-none text-primary stretched-link">
                                     {{ Str::limit($berita->judul, 50) }}
