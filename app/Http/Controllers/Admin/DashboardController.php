@@ -31,13 +31,10 @@ class DashboardController extends Controller
         $currentYear = Carbon::now()->year;
         $currentMonth = Carbon::now()->month;
 
-        // ▼▼▼ PERBAIKAN SEMENTARA UNTUK TES ▼▼▼
-        // Ambil tahun terlama dari DB (ini cara yang benar, tapi mungkin data Anda belum ada)
-        // $earliestYear = Berita::min(DB::raw('YEAR(created_at)')) ?? $currentYear;
-        
-        // PAKSA MUNDUR 5 TAHUN (Hapus/ubah baris ini jika data Anda sudah lengkap)
+
+;
+
         $earliestYear = $currentYear - 4; // Ini akan membuat range 5 tahun (misal: 2025 - 2021)
-        // ▲▲▲ AKHIR PERBAIKAN ▲▲▲
 
         
         // Buat range tahun (misal: [2025, 2024, 2023, 2022, 2021])

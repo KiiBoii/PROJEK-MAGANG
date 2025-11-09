@@ -3,7 +3,6 @@
 {{-- 1. CSS KUSTOM (Tidak ada perubahan) --}}
 @push('styles')
 <style>
-    /* Mengambil style dari halaman berita/home agar sama persis */
     .news-slider .carousel-item {
         height: 450px; /* Atur tinggi slider */
         background-color: #555;

@@ -3,7 +3,6 @@
 {{-- 1. CSS KUSTOM DITAMBAHKAN UNTUK SLIDER --}}
 @push('styles')
 <style>
-    /* Mengambil style dari halaman berita/home agar sama persis */
     .news-slider .carousel-item {
         height: 450px; /* Atur tinggi slider */
         background-color: #555;
@@ -325,9 +324,7 @@
             tab.show();
         }
 
-        // Script untuk memastikan tombol di Tab "Pelayanan Mandiri" mengaktifkan Tab yang benar
-        // [CATATAN] Kode ini sepertinya tidak menargetkan apa pun di HTML Anda saat ini (karena Anda menggunakan <button>),
-        // tapi saya biarkan untuk jaga-jaga jika Anda menambah <a data-bs-toggle="pill"> di tempat lain.
+
         document.querySelectorAll('a[data-bs-toggle="pill"]').forEach(function(element) {
             element.addEventListener('click', function (event) {
                 event.preventDefault();
