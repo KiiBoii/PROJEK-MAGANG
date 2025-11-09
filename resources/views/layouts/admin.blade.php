@@ -10,9 +10,12 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    {{-- Ini sudah benar, untuk menerima CSS dari create.blade.php --}}
+    @stack('styles')
 
     <style>
         :root {
@@ -294,23 +297,20 @@
                         <i class="bi bi-people-fill"></i> Pengelolaan Admin
                     </a>
                 </li>
-                <!-- ... Link menu lainnya ... -->
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('slider.index') ? 'active' : '' }}" href="{{ route('slider.index') }}">
+                        <i class="bi bi-collection-play-fill me-2"></i>
+                        Manajemen Slider
+                    </a>
+                </li>
+                <li class="nav-item">
+                    {{-- PERBAIKAN: Mengganti dokumen.index menjadi admin.dokumen.index --}}
+                    <a class="nav-link {{ request()->routeIs('admin.dokumen.index') ? 'active' : '' }}" href="{{ route('admin.dokumen.index') }}">
+                        <i class="bi bi-file-earmark-text-fill me-2"></i>
+                        Dokumen Publikasi
+                    </a>
+                </li>
 
-<li class="nav-item">
-    <a class="nav-link {{ request()->routeIs('slider.index') ? 'active' : '' }}" href="{{ route('slider.index') }}">
-        <i class="bi bi-collection-play-fill me-2"></i>
-        Manajemen Slider
-    </a>
-</li>
-<li class="nav-item">
-    {{-- PERBAIKAN: Mengganti dokumen.index menjadi admin.dokumen.index --}}
-    <a class="nav-link {{ request()->routeIs('admin.dokumen.index') ? 'active' : '' }}" href="{{ route('admin.dokumen.index') }}">
-        <i class="bi bi-file-earmark-text-fill me-2"></i>
-        Dokumen Publikasi
-    </a>
-</li>
-
-<!-- ... Link menu lainnya ... -->
             </ul>
 
             <ul class="list-unstyled components mt-auto pb-4">
@@ -325,24 +325,20 @@
             </ul>
         </nav>
         
-        <!-- Overlay untuk mobile -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <div id="content" class="main-content">
             <header class="main-header d-flex justify-content-between align-items-center">
                 
-                <!-- Tombol Toggle Mobile -->
                 <button class="btn sidebar-toggle" id="sidebarToggle" type="button">
                     <i class="bi bi-list"></i>
                 </button>
                 
-                <!-- Judul Halaman (Sesuai UI Karyawan.jpg) -->
                 <span class="page-title d-none d-lg-block">
                     {{-- Ini bisa dibuat dinamis nanti --}}
                     ADMIN DASHBOARD / PAGES
                 </span>
                 
-                <!-- Profile Dropdown -->
                 <div class="d-flex align-items-center">
                     <span class="navbar-text me-3 d-none d-md-block">
                         Halo, <strong>{{ Auth::user()->name }}</strong>
@@ -384,10 +380,17 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    {{-- ▼▼▼ PERBARUAN UTAMA ADA DI SINI ▼▼▼ --}}
+
+    {{-- 1. Muat jQuery (WAJIB PALING PERTAMA) --}}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    {{-- 2. Muat Bootstrap JS (setelah jQuery) --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    {{-- 3. @stack('scripts') akan memuat Summernote JS dan skrip inisialisasi SETELAH jQuery dan Bootstrap dimuat --}}
     @stack('scripts') 
 
     <script>

@@ -2,10 +2,21 @@
 
 {{-- 1. Tambahkan CSS untuk Summernote --}}
 @push('styles')
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css"
+          integrity="sha512-ngQ4IGzHQ3s/Hh8kMyG4FC74wzitukRMIcTOoKT3EyzFZCILOPF0twiXOQn75eDINUfKBYmzYn2AA8DkAk8veQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+
     <style>
+        /* Style Summernote agar seragam dan modern */
         .note-editor.note-frame {
             border-radius: 0.375rem;
+            border: 1px solid #ced4da;
+        }
+        .note-editor.note-frame:focus-within {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         .note-editable {
             min-height: 250px;
@@ -19,7 +30,7 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-            <ul>
+            <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -31,33 +42,39 @@
         <div class="card-body">
             <form action="{{ route('berita.update', $berita->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('PUT') {{-- PENTING: Untuk method UPDATE --}}
+                @method('PUT')
 
+                {{-- Judul --}}
                 <div class="mb-3">
                     <label for="judul" class="form-label">Judul Berita</label>
-                    <input type="text" class="form-control" id="judul" name="judul" value="{{ old('judul', $berita->judul) }}" required>
+                    <input type="text" class="form-control" id="judul" name="judul"
+                           value="{{ old('judul', $berita->judul) }}" required>
                 </div>
 
-                {{-- 2. UBAH ID TEXTAREA MENJADI 'summernote' --}}
+                {{-- Isi Berita --}}
                 <div class="mb-3">
                     <label for="summernote" class="form-label">Isi Berita</label>
                     <textarea class="form-control" id="summernote" name="isi" rows="8" required>{{ old('isi', $berita->isi) }}</textarea>
                 </div>
 
+                {{-- Gambar --}}
                 <div class="mb-3">
                     <label for="gambar" class="form-label">Gambar Berita (Biarkan kosong jika tidak ingin mengubah)</label>
                     <input type="file" class="form-control" id="gambar" name="gambar" accept="image/*">
                     <small class="text-muted">Max 2MB. Format: JPG, PNG, GIF</small>
+
                     @if ($berita->gambar)
-                        <div class="mt-2">
-                            <p>Gambar saat ini:</p>
-                            <img src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}" class="img-thumbnail" style="max-width: 200px;">
+                        <div class="mt-3">
+                            <p class="fw-semibold mb-1">Gambar saat ini:</p>
+                            <img src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}"
+                                 class="img-thumbnail" style="max-width: 200px;">
                         </div>
                     @endif
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Update Berita</button>
-                <a href="{{ route('berita.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                {{-- Tombol --}}
+                <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">Update Berita</button>
+                <a href="{{ route('berita.index') }}" class="btn btn-secondary ms-2 px-4 py-2 rounded-pill">Batal</a>
             </form>
         </div>
     </div>
@@ -66,13 +83,16 @@
 
 {{-- 3. Tambahkan Script untuk Summernote --}}
 @push('scripts')
-    {{-- Summernote memerlukan jQuery --}}
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.js"></script>
+    {{-- jQuery sudah ada di layout admin, jadi tidak perlu ditambahkan ulang --}}
+
+    {{-- Summernote JS (versi Bootstrap 5) --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"
+            integrity="sha512-6F1RVfnxCprKJmfulcxxym1Dar5FsT/V2jiEUvABiaEiFWoQ8yHvqRM/Slf0qJKiwin6IDQucjXuolCfCKnaJQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
 
     <script>
         $(document).ready(function() {
-            // Inisialisasi Summernote
             $('#summernote').summernote({
                 placeholder: 'Tulis isi berita lengkap di sini...',
                 tabsize: 2,

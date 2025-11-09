@@ -1,12 +1,17 @@
 @extends('layouts.admin')
 
-{{-- 1. Tambahkan CSS untuk Summernote --}}
+{{-- 1. Tambahkan CSS (Menggunakan link baru Anda) --}}
 @push('styles')
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" integrity="sha512-ngQ4IGzHQ3s/Hh8kMyG4FC74wzitukRMIcTOoKT3EyzFZCILOPF0twiXOQn75eDINUfKBYmzYn2AA8DkAk8veQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Mengatur tinggi editor summernote */
         .note-editor.note-frame {
             border-radius: 0.375rem; /* Menyesuaikan radius bootstrap */
+            border: 1px solid #ced4da; /* Menambahkan border default */
+        }
+        .note-editor.note-frame:focus-within {
+             border-color: #007bff; /* Warna border saat fokus */
+             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         .note-editable {
             min-height: 250px; /* Atur tinggi minimal editor */
@@ -38,12 +43,6 @@
                     <input type="text" class="form-control" id="judul" name="judul" value="{{ old('judul') }}" required>
                 </div>
 
-                {{-- 
-                    2. Ganti <textarea> biasa dengan id "summernote" 
-                    PENTING: Pastikan di halaman detail berita (berita_detail.blade.php),
-                    Anda menampilkan ini menggunakan {!! $berita->isi !!} (bukan {{ $berita->isi }})
-                    agar format HTML-nya terbaca.
-                --}}
                 <div class="mb-3">
                     <label for="summernote" class="form-label">Isi Berita</label>
                     <textarea class="form-control" id="summernote" name="isi" rows="10" required>{{ old('isi') }}</textarea>
@@ -55,32 +54,28 @@
                     <small class="text-muted">Max 2MB. Format: JPG, PNG, GIF</small>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Simpan Berita</button>
-                <a href="{{ route('berita.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                <button type="submit" class="btn btn-primary">Simpan Berita</button>
+                <a href="{{ route('berita.index') }}" class="btn btn-secondary ms-2">Batal</a>
             </form>
         </div>
     </div>
 </div>
 @endsection
 
-{{-- 3. Tambahkan Script untuk Summernote --}}
+{{-- 3. Tambahkan Script (Menggunakan link baru Anda) --}}
 @push('scripts')
-    {{-- Summernote memerlukan jQuery. Pastikan jQuery dimuat SEBELUM summernote. --}}
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    {{-- (jQuery sudah ada di layout admin.blade.php - Ini sudah benar) --}}
     
-    {{-- Pastikan layout admin Anda sudah memuat Bootstrap 5 JS (biasanya di layouts/admin.blade.php) 
-         karena Summernote BS5 membutuhkannya.
-    --}}
-    
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.js"></script>
+    {{-- Muat Summernote JS (Versi Bootstrap 5) --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js" integrity="sha512-6F1RVfnxCprKJmfulcxxym1Dar5FsT/V2jiEUvABiaEiFWoQ8yHvqRM/Slf0qJKiwin6IDQucjXuolCfCKnaJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         $(document).ready(function() {
-            // Inisialisasi Summernote pada ID #summernote
+            // Inisialisasi Summernote
             $('#summernote').summernote({
                 placeholder: 'Tulis isi berita lengkap di sini...',
                 tabsize: 2,
-                height: 250, // Atur tinggi editor
+                height: 250, 
                 toolbar: [
                     ['style', ['style']],
                     ['font', ['bold', 'italic', 'underline', 'clear']],

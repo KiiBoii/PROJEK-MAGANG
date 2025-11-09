@@ -1,11 +1,17 @@
 @extends('layouts.admin')
 
-{{-- 1. Tambahkan CSS untuk Summernote --}}
+{{-- 1. PERBAIKAN: Ganti link CDN & perbarui style --}}
 @push('styles')
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css" integrity="sha512-ngQ4IGzHQ3s/Hh8kMyG4FC74wzitukRMIcTOoKT3EyzFZCILOPF0twiXOQn75eDINUfKBYmzYn2AA8DkAk8veQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* Menyesuaikan style editor agar rapi */
         .note-editor.note-frame {
-            border-radius: 0.375rem;
+            border-radius: 0.375rem; 
+            border: 1px solid #ced4da; 
+        }
+        .note-editor.note-frame:focus-within {
+             border-color: #007bff;
+             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         .note-editable {
             min-height: 250px; 
@@ -29,7 +35,6 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            {{-- 2. TAMBAHKAN enctype="multipart/form-data" DI SINI --}}
             <form action="{{ route('pengumuman.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
@@ -38,31 +43,35 @@
                     <input type="text" class="form-control" id="judul" name="judul" value="{{ old('judul') }}" required>
                 </div>
 
-                {{-- 3. GANTI 'id="isi"' MENJADI 'id="summernote"' --}}
+                {{-- ID 'summernote' sudah benar --}}
                 <div class="mb-3">
                     <label for="summernote" class="form-label">Isi Pengumuman</label>
                     <textarea class="form-control" id="summernote" name="isi" rows="8" required>{{ old('isi') }}</textarea>
                 </div>
                 
-                {{-- 4. TAMBAHKAN BLOK INPUT GAMBAR --}}
                 <div class="mb-3">
                     <label for="gambar" class="form-label">Gambar (Opsional)</label>
                     <input type="file" class="form-control" id="gambar" name="gambar" accept="image/*">
                     <small class="text-muted">Max 2MB. Format: JPG, PNG, GIF</small>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Simpan Pengumuman</button>
-                <a href="{{ route('pengumuman.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                {{-- 2. PERBAIKAN: Hapus inline style agar konsisten dengan layout --}}
+                <button type="submit" class="btn btn-primary">Simpan Pengumuman</button>
+                <a href="{{ route('pengumuman.index') }}" class="btn btn-secondary ms-2">Batal</a>
             </form>
         </div>
     </div>
 </div>
 @endsection
 
-{{-- 5. Tambahkan Script untuk Summernote --}}
+{{-- 3. PERBAIKAN: Hapus jQuery & ganti link JS Summernote --}}
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs5.min.js"></script>
+    {{-- ▼▼▼ BARIS INI WAJIB DIHAPUS ▼▼▼ --}}
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> --}} 
+    
+    {{-- Menggunakan link JS dari CDN Cloudflare yang Anda temukan --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js" integrity="sha512-6F1RVfnxCprKJmfulcxxym1Dar5FsT/V2jiEUvABiaEiFWoQ8yHvqRM/Slf0qJKiwin6IDQucjXuolCfCKnaJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <script>
         $(document).ready(function() {
             // Inisialisasi Summernote
