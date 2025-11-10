@@ -135,13 +135,11 @@
         
         <div class="col-lg-8">
             
-            {{-- [PERBAIKAN] Konten ini dipindahkan ke ATAS tab list, dan BUKAN bagian dari tab-pane --}}
             <div>
                 <h2 class="section-title text-start ps-0 mb-4">Pelayanan Mandiri</h2>
                 <p class="text-muted mb-4">Temukan informasi layanan yang Anda butuhkan melalui tautan di bawah ini.</p>
             </div>
             
-            {{-- Navigasi Tabs: TIGA NAVIGASI UTAMA DI ATAS --}}
             <ul class="nav nav-pills nav-fill mb-4 p-2 bg-light rounded-3" id="serviceTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link fw-bold text-dark w-100 py-3" id="tab-dokumen" data-bs-toggle="pill" data-bs-target="#content-dokumen" type="button" role="tab" aria-controls="content-dokumen" aria-selected="false">
@@ -163,7 +161,6 @@
                     <h2 class="section-title text-start ps-0 mb-4">Dokumen Publikasi</h2>
                     <p class="text-muted mb-4">Unduh dokumen resmi yang diterbitkan oleh Dinas Sosial Provinsi Riau.</p>
 
-                    {{-- FITUR SEARCH DAN PER PAGE --}}
                     <div class="row mb-3 align-items-center">
                         <div class="col-md-6 d-flex align-items-center">
                             <label for="perPageDok" class="me-2">Tampilkan</label>
@@ -188,7 +185,6 @@
                         </div>
                     </div>
 
-                    {{-- TABEL DOKUMEN --}}
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="bg-light">
@@ -222,7 +218,6 @@
                         </table>
                     </div>
                     
-                    {{-- Pagination Links --}}
                     <div class="d-flex justify-content-center mt-4">
                         {{ $dokumens->links('pagination::bootstrap-5') }}
                     </div>
@@ -302,48 +297,49 @@
 
 @endsection
 
+{{-- ▼▼▼ JAVASCRIPT DIPERBARUI DI SINI ▼▼▼ --}}
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
+
+    /**
+     * Fungsi untuk membaca hash URL dan mengaktifkan tab yang sesuai.
+     */
+    function activateTabFromHash() {
         const urlParams = new URLSearchParams(window.location.search);
+        const urlHash = window.location.hash; // cth: #content-dokumen
         
         let tabToActivateId;
 
-        if (urlParams.has('cari') || urlParams.has('per_page')) {
-            // Jika ada parameter pencarian/pagination, buka tab 'Dokumen'
+        if (urlHash === '#content-dokumen') {
+            // Prioritas 1: Jika link memiliki hash #content-dokumen
+            tabToActivateId = 'tab-dokumen';
+        } else if (urlHash === '#content-bantuan') {
+            // Prioritas 2: Jika link memiliki hash #content-bantuan
+            tabToActivateId = 'tab-bantuan';
+        } else if (urlParams.has('cari') || urlParams.has('per_page')) {
+            // Prioritas 3: Jika ada parameter pencarian (untuk tab dokumen)
             tabToActivateId = 'tab-dokumen';
         } else {
-            // [PERBAIKAN] Jika tidak, buka tab 'Pusat Bantuan' sesuai permintaan Anda
+            // Default: Jika tidak ada hash atau parameter, buka tab Bantuan
             tabToActivateId = 'tab-bantuan';
         }
 
-        // Aktifkan tab yang sudah ditentukan
         const tabElement = document.getElementById(tabToActivateId);
         if (tabElement) {
-            const tab = new bootstrap.Tab(tabElement);
-            tab.show();
+            // Coba dapatkan instance Tab yang sudah ada, atau buat baru
+            const tabInstance = bootstrap.Tab.getInstance(tabElement) || new bootstrap.Tab(tabElement);
+            tabInstance.show();
         }
+    }
 
+    // 1. Panggil fungsi saat halaman pertama kali dimuat
+    activateTabFromHash();
 
-        document.querySelectorAll('a[data-bs-toggle="pill"]').forEach(function(element) {
-            element.addEventListener('click', function (event) {
-                event.preventDefault();
-                const targetId = this.getAttribute('data-bs-target');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    const navButton = document.querySelector(`button[data-bs-target="${targetId}"]`);
-                    if (navButton) {
-                         const tab = new bootstrap.Tab(navButton);
-                         tab.show();
-                    } else {
-                        const tab = new bootstrap.Tab(targetElement.closest('.tab-pane'));
-                        tab.show();
-                    }
-                }
-            });
-        });
+    // 2. TAMBAHAN: Panggil fungsi yang sama SETIAP KALI hash berubah
+    // Ini akan menangani klik navbar saat user sudah di halaman layanan
+    window.addEventListener('hashchange', activateTabFromHash);
 
-    });
+});
 </script>
 @endpush

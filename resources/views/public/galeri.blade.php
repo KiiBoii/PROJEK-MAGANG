@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-{{-- CSS Kustom (DITAMBAHKAN STYLE SLIDER DAN PAGINASI) --}}
+{{-- CSS Kustom (DITAMBAHKAN STYLE SLIDER, PAGINASI, DAN LIGHTBOX) --}}
 @push('styles')
 <style>
     /* === 1. CSS SLIDER (DARI HOME.BLADE.PHP) === */
@@ -52,7 +52,6 @@
         padding: 0.75rem 0;
         border-bottom: 1px solid #f0f0f0;
         cursor: pointer;
-        /* Hapus style link, ini adalah tombol */
         background-color: transparent; 
         text-align: left;
         width: 100%;
@@ -74,7 +73,7 @@
         color: var(--primary-color);
     }
 
-    /* 3. Style Kartu Galeri (dari "HOT NEWS") */
+    /* 3. Style Kartu Galeri */
     .card-news-hover {
         position: relative;
         overflow: hidden;
@@ -83,6 +82,7 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         background-color: #e0e0e0;
         margin-bottom: 1rem; /* Jarak untuk masonry */
+        cursor: pointer; /* [UBAH] Tambahkan cursor pointer */
     }
 
     .card-news-hover .card-img-top {
@@ -107,6 +107,8 @@
         padding: 1rem;
         opacity: 0;
         transition: opacity 0.4s ease;
+        /* [UBAH] Pastikan caption tidak bisa diklik */
+        pointer-events: none; 
     }
     .card-news-hover:hover .card-hover-caption {
         opacity: 1;
@@ -152,8 +154,6 @@
     .grid-item {
         width: 33.333%; /* 3 kolom */
         padding: 0.5rem; 
-        
-        /* Transisi CSS dihapus, diatur oleh JS Isotope */
     }
     .grid-item .card-news-hover {
         margin-bottom: 0; 
@@ -170,13 +170,10 @@
         }
     }
 
-    /* ▼▼▼ [BARU] CSS KUSTOM UNTUK PAGINASI (GAYA LINGKARAN) ▼▼▼ */
-    /* Wrapper untuk memberi scope pada style kita */
+    /* 5. CSS KUSTOM UNTUK PAGINASI (GAYA LINGKARAN) */
     .pagination-circles {
         margin-top: 1.5rem;
     }
-
-    /* Container utama pagination */
     .pagination-circles .pagination {
         display: flex;
         justify-content: center;
@@ -186,8 +183,6 @@
         list-style: none;
         margin: 0;
     }
-
-    /* Styling untuk SEMUA item, termasuk angka dan panah */
     .pagination-circles .page-link {
         display: flex;
         align-items: center;
@@ -203,8 +198,6 @@
         transition: all 0.2s ease-in-out;
         position: relative; /* Diperlukan untuk ::after */
     }
-
-    /* Styling KHUSUS untuk Panah (Previous/Next) */
     .pagination-circles .page-item:first-child .page-link,
     .pagination-circles .page-item:last-child .page-link {
         background-color: transparent; /* Panah tidak punya background lingkaran */
@@ -212,30 +205,22 @@
         color: #000; /* Warna panah hitam seperti di gambar */
         font-size: 1.5rem; /* Membuat panah lebih besar */
     }
-
-    /* Panah yang dinonaktifkan */
     .pagination-circles .page-item.disabled:first-child .page-link,
     .pagination-circles .page-item.disabled:last-child .page-link {
         color: #ccc; /* Panah disabled jadi abu-abu */
         background-color: transparent;
         border: none;
     }
-
-    /* Styling untuk Angka Halaman yang di-hover */
     .pagination-circles .page-item:not(:first-child):not(:last-child):not(.active) .page-link:hover {
         background-color: #e9ecef;
         border-color: #adb5bd;
     }
-
-    /* Styling untuk Halaman AKTIF (seperti '2' di gambar) */
     .pagination-circles .page-item.active .page-link {
         transform: scale(1.15); /* Sedikit lebih besar */
         background-color: #e0e0e0; /* Latar abu-abu sedikit lebih gelap */
         border: 1px solid #a0a0a0; /* Border lebih tegas */
         z-index: 1;
     }
-
-    /* Underline untuk halaman AKTIF */
     .pagination-circles .page-item.active {
         position: relative;
     }
@@ -250,15 +235,11 @@
         background-color: #b0b0b0; /* Warna underline abu-abu */
         border-radius: 2px;
     }
-
-    /* Styling untuk '...' (ellipsis) jika muncul */
     .pagination-circles .page-item.disabled:not(:first-child):not(:last-child) span.page-link {
         background-color: #f0f0f0;
         border-color: #e0e0e0;
         color: #333;
     }
-
-    /* Sembunyikan teks "Previous" & "Next" dari screen reader */
     .pagination-circles .page-link span[aria-hidden="true"] {
         display: none;
     }
@@ -266,15 +247,92 @@
         display: none;
     }
     /* ▲▲▲ AKHIR CSS KUSTOM PAGINASI ▲▲▲ */
+
+
+    /* ▼▼▼ [BARU] 6. CSS KUSTOM UNTUK LIGHTBOX ▼▼▼ */
+    .lightbox-overlay {
+        display: none; /* Sembunyi by default */
+        position: fixed;
+        z-index: 9999; /* Paling depan */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9); /* Latar "gelap" */
+        
+        /* Efek "buram" untuk browser modern */
+        @supports (backdrop-filter: blur(5px)) {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        overflow-y: auto; /* Izinkan scroll jika gambar sangat tinggi */
+        text-align: center;
+        padding: 2rem 1rem;
+        cursor: pointer; /* Menunjukkan bisa diklik untuk menutup */
+    }
+    .lightbox-content-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 4rem); /* Ambil tinggi penuh layar dikurangi padding */
+    }
+    .lightbox-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 85vh; /* Batas tinggi gambar */
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        animation: zoomIn 0.3s ease; /* Animasi saat muncul */
+        cursor: default; /* Kembalikan cursor normal di gambar */
+    }
+    .lightbox-caption {
+        margin: 10px auto 0;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        font-weight: 500;
+        font-size: 1rem;
+        animation: zoomIn 0.3s ease;
+        cursor: default; /* Kembalikan cursor normal di caption */
+    }
+    .lightbox-close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+        z-index: 10000;
+        line-height: 1;
+    }
+    .lightbox-close:hover,
+    .lightbox-close:focus {
+        color: #bbb;
+        text-decoration: none;
+    }
+    /* Animasi zoom sederhana */
+    @keyframes zoomIn {
+        from {transform: scale(0.8); opacity: 0;}
+        to {transform: scale(1); opacity: 1;}
+    }
+    /* ▲▲▲ AKHIR CSS LIGHTBOX ▲▲▲ */
+
 </style>
 @endpush
 
 @section('content')
 
-<!-- 1. Header Halaman (Slider) -->
 <div class="container my-5">
 
-    {{-- Slider ini sekarang akan menggunakan style .news-slider --}}
+    {{-- Slider --}}
     <div id="gallerySlider" class="carousel slide mb-5 news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000" style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
         
         <div class="carousel-indicators">
@@ -293,7 +351,8 @@
                 <img src="{{ $foto_slide->foto_path ? asset('storage/' . $foto_slide->foto_path) : 'https://placehold.co/1200x450/e0e0e0/999?text=Galeri' }}" class="d-block w-100" alt="{{ $foto_slide->judul_kegiatan }}">
                 
                 <div class="carousel-caption d-none d-md-block">
-                    <a href="#" class="text-decoration-none text-white stretched-link">
+                    {{-- [UBAH] Hapus stretched-link dari slider agar tidak bentrok --}}
+                    <a href="#" class="text-decoration-none text-white">
                         <h5>{{ $foto_slide->judul_kegiatan }}</h5>
                     </a>
                     <p>{{ $foto_slide->bidang }}</p>
@@ -321,16 +380,9 @@
     </div>
 
 
-    <!-- 2. Konten Galeri (Layout Diperbarui dengan Filter List) -->
     <div class="row">
 
-        <!-- A. Sidebar Filter (Kiri) - DIPERBARUI MENJADI BUTTON -->
         <div class="col-lg-3">
-            {{-- 
-                ===== PERUBAHAN DI SINI =====
-                Menghapus style="top: 100px;" agar sidebar tidak menabrak footer
-                jika konten galeri di sebelah kanan terlalu sedikit.
-            --}}
             <div class="card shadow-sm border-0" style="border-radius: 12px;">
                 <div class="card-body p-4 filter-sidebar">
                     <h5 class="fw-bold mb-3" style="color: var(--dark-blue);">Filter Bidang</h5>
@@ -359,7 +411,6 @@
             </div>
         </div>
 
-        <!-- B. Grid Galeri (Kanan) - DIPERBARUI DENGAN ISOTOPE -->
         <div class="col-lg-9">
             <h2 class="section-title">
                 Semua Kegiatan
@@ -371,18 +422,24 @@
                     @php $slug = Str::slug($foto->bidang); @endphp
 
                     <div class="grid-item {{ $slug }}">
-                        <div class="card card-news-hover"> 
-                            @if($foto->foto_path)
-                                <img src="{{ asset('storage/' . $foto->foto_path) }}" class="card-img-top" alt="{{ $foto->judul_kegiatan }}">
-                            @else
-                                <img src="https://placehold.co/300x250/e0e0e0/999?text=Foto" class="card-img-top" alt="Placeholder">
-                            @endif
+                        {{-- ▼▼▼ [UBAH] Wrapper card sekarang menjadi pemicu lightbox ▼▼▼ --}}
+                        <div class="card card-news-hover lightbox-trigger" 
+                             href="{{ $foto->foto_path ? asset('storage/' . $foto->foto_path) : 'https://placehold.co/800x600/e0e0e0/999?text=Foto' }}"
+                             data-caption="{{ $foto->judul_kegiatan }}"> 
+                        {{-- ▲▲▲ AKHIR UBAHAN ▲▲▲ --}}
+                            
+                            @php
+                                $fotoPath = $foto->foto_path ? asset('storage/' . $foto->foto_path) : 'https://placehold.co/300x250/e0e0e0/999?text=Foto';
+                            @endphp
+
+                            <img src="{{ $fotoPath }}" class="card-img-top" alt="{{ $foto->judul_kegiatan }}">
                             
                             @if($foto->bidang)
                                 <span class="gallery-bidang-badge">{{ $foto->bidang }}</span>
                             @endif
 
-                            <a href="#" class="stretched-link" aria-label="{{ $foto->judul_kegiatan }}"></a>
+                            {{-- [DIHAPUS] Link stretched-link dihapus karena card-nya sekarang adalah link --}}
+                            {{-- <a href="#" class="stretched-link" aria-label="{{ $foto->judul_kegiatan }}"></a> --}}
 
                             <div class="card-hover-caption">
                                 <h6>{{ $foto->judul_kegiatan }}</h6>
@@ -398,22 +455,26 @@
                 @endforelse
             </div>
 
-            {{-- ▼▼▼ [BARU] PAGINASI KUSTOM (GAYA LINGKARAN) ▼▼▼ --}}
-            {{-- Mengganti komentar paginasi yang dihapus dengan paginasi baru --}}
+            {{-- PAGINASI KUSTOM (GAYA LINGKARAN) --}}
             <div class="pagination-circles mt-5">
-                {{-- Pastikan variabel $galeris adalah object Paginator dari controller --}}
                 {!! $galeris->withQueryString()->links() !!}
             </div>
-            {{-- ▲▲▲ AKHIR PAGINASI KUSTOM ▲▲▲ --}}
 
-        </div> <!-- Penutup col-lg-9 -->
+        </div> </div> </div>
 
-    </div> <!-- Penutup .row -->
+{{-- ▼▼▼ [BARU] HTML UNTUK MODAL LIGHTBOX KUSTOM ▼▼▼ --}}
+<div id="imageLightbox" class="lightbox-overlay">
+    <span class="lightbox-close">&times;</span>
+    <div class="lightbox-content-wrapper">
+        <img class="lightbox-content" id="lightboxImage" alt="Gambar Galeri yang Diperbesar">
+    </div>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
+{{-- ▲▲▲ AKHIR HTML LIGHTBOX ▲▲▲ --}}
 
 @endsection
 
-{{-- JavaScript untuk ISOTOPE --}}
+{{-- JavaScript untuk ISOTOPE & LIGHTBOX BARU --}}
 @push('scripts')
 {{-- 1. Load library Isotope.js (sudah termasuk Masonry) --}}
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
@@ -422,6 +483,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
+        // --- Inisialisasi Isotope ---
         var grid = document.getElementById('gallery-grid');
         var iso;
 
@@ -437,32 +499,22 @@
                 masonry: {
                     columnWidth: '.grid-item'
                 },
-                
-                /* * === PERBAIKAN ANIMASI ===
-                 * Kita tentukan durasi, dan style hidden/visible
-                 * Ini akan menggantikan transisi CSS
-                 */
-                transitionDuration: '0.6s', // Durasi untuk perpindahan DAN fade
-                
-                // Style saat item disembunyikan
+                transitionDuration: '0.6s', 
                 hiddenStyle: {
                     opacity: 0,
                     transform: 'scale(0.8)'
                 },
-                // Style saat item ditampilkan
                 visibleStyle: {
                     opacity: 1,
                     transform: 'scale(1)'
                 }
-                /* === AKHIR PERBAIKAN === */
             });
         }
 
-        // Cek jika tidak ada gambar, langsung inisialisasi
+        // Tunggu semua gambar dimuat sebelum menjalankan Isotope
         if (totalImages === 0) {
             initIsotope();
         } else {
-            // Jika ada gambar, tunggu semua dimuat
             images.forEach(function(img) {
                 if (img.complete) {
                     imageLoaded();
@@ -476,10 +528,9 @@
         function imageLoaded() {
             loadedImages++;
             if (loadedImages === totalImages) {
-                initIsotope(); // Jalankan Isotope setelah semua gambar siap
+                initIsotope(); 
             }
         }
-
 
         // Logika untuk Tombol Filter
         var filterButtonGroup = document.getElementById('gallery-filter-buttons');
@@ -491,7 +542,7 @@
                 
                 var filterValue = event.target.getAttribute('data-filter');
                 if (iso) {
-                    iso.arrange({ filter: filterValue }); // Terapkan filter
+                    iso.arrange({ filter: filterValue }); 
                 }
 
                 var buttons = filterButtonGroup.querySelectorAll('button');
@@ -501,6 +552,75 @@
                 event.target.classList.add('active');
             });
         }
+        // --- Akhir Inisialisasi Isotope ---
+
+
+        // ▼▼▼ [BARU] LOGIKA UNTUK LIGHTBOX ▼▼▼
+        
+        // 1. Ambil elemen-elemen lightbox
+        const lightbox = document.getElementById('imageLightbox');
+        const lightboxImg = document.getElementById('lightboxImage');
+        const lightboxCap = document.getElementById('lightboxCaption');
+        const closeBtn = document.querySelector('.lightbox-close');
+
+        // 2. Ambil SEMUA pemicu (card) dari dalam grid
+        //    Kita gunakan #gallery-grid sebagai parent untuk event delegation
+        const gridContainer = document.getElementById('gallery-grid');
+        if (gridContainer) {
+            gridContainer.addEventListener('click', function(e) {
+                // Cari apakah yang diklik (atau parent-nya) adalah .lightbox-trigger
+                const trigger = e.target.closest('.lightbox-trigger');
+                
+                if (trigger) {
+                    e.preventDefault(); // Hentikan aksi default (jika ada)
+                    
+                    // Ambil data dari elemen card yang diklik
+                    const imgSrc = trigger.getAttribute('href');
+                    const imgCaption = trigger.getAttribute('data-caption');
+
+                    if (imgSrc && imgSrc !== '#') {
+                        lightboxImg.src = imgSrc; // Set sumber gambar
+                        lightboxCap.textContent = imgCaption; // Set caption
+                        lightbox.style.display = 'block'; // Tampilkan lightbox
+                        document.body.style.overflow = 'hidden'; // Mencegah body scroll
+                    }
+                }
+            });
+        }
+
+        // 3. Fungsi untuk menutup lightbox
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+            lightboxImg.src = ''; // Kosongkan src agar tidak "flash" gambar lama
+            document.body.style.overflow = 'auto'; // Kembalikan body scroll
+        }
+
+        // 4. Event listener untuk tombol close (X)
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Hentikan event klik agar tidak lari ke overlay
+                closeLightbox();
+            });
+        }
+
+        // 5. Event listener untuk klik di luar gambar (di overlay gelap)
+        if (lightbox) {
+            lightbox.addEventListener('click', function(e) {
+                // Hanya tutup jika yang diklik adalah overlay-nya, BUKAN gambar/caption
+                if (e.target === lightbox) { 
+                    closeLightbox();
+                }
+            });
+        }
+
+        // 6. Event listener untuk tombol 'Escape'
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape" && lightbox.style.display === 'block') {
+                closeLightbox();
+            }
+        });
+        
+        // ▲▲▲ AKHIR LOGIKA LIGHTBOX ▲▲▲
 
     });
 </script>

@@ -27,7 +27,7 @@
             background-color: #f4f7f6; /* Latar belakang abu-abu muda */
         }
 
-        /* Navbar Styling (Tidak diubah) */
+        /* Navbar Styling */
         .navbar-top {
             background-color: #f8f9fa;
             border-bottom: 1px solid #e0e0e0;
@@ -63,8 +63,36 @@
             color: var(--primary-color);
             border-bottom-color: var(--primary-color);
         }
+        
+        /* CSS UNTUK DROPDOWN HOVER */
+        .navbar-main .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: -3px; /* Sesuaikan agar menempel */
+            border-radius: 0 0 0.5rem 0.5rem; /* Sudut membulat di bawah */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+        }
+        /* Menghilangkan panah dropdown default */
+        .navbar-main .nav-item.dropdown > .nav-link::after {
+            display: none;
+        }
+        /* Style untuk item di dalam dropdown */
+        .navbar-main .dropdown-menu {
+            padding: 0;
+            border: none;
+        }
+        .navbar-main .dropdown-item {
+            color: var(--dark-blue);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+        }
+        .navbar-main .dropdown-item:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
 
-        /* Section Title Styling (Tidak diubah) */
+        /* Section Title Styling */
         .section-title {
             font-weight: 700;
             color: var(--dark-blue);
@@ -82,7 +110,7 @@
             border-radius: 2px;
         }
 
-        /* Card News Styling (Tidak diubah) */
+        /* Card News Styling */
         .card-news {
             border: none;
             border-radius: 12px;
@@ -100,42 +128,37 @@
             margin-bottom: 0.5rem;
         }
 
-        /* === FOOTER STYLING (UPDATED) === */
+        /* === FOOTER STYLING === */
         .footer-dark {
             background-color: var(--footer-bg);
-            color: #adb5bd; /* Teks abu-abu muda */
-            padding: 4rem 0 2rem 0; /* Padding atas/bawah disesuaikan */
-            border-top: 4px solid var(--primary-color); /* Garis biru di atas */
+            color: #adb5bd; 
+            padding: 4rem 0 2rem 0; 
+            border-top: 4px solid var(--primary-color); 
         }
-        
         .footer-dark h5 {
             color: #ffffff;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            position: relative; /* Untuk garis bawah */
-            padding-bottom: 10px; /* Jarak untuk garis bawah */
+            position: relative; 
+            padding-bottom: 10px; 
         }
-
-        /* Garis bawah judul H5 di footer */
         .footer-dark h5::after {
             content: '';
             display: block;
-            width: 100%; /* Lebar penuh seperti di gambar */
+            width: 100%; 
             height: 1px;
-            background-color: #6c757d; /* Garis abu-abu */
+            background-color: #6c757d; 
             position: absolute;
             bottom: 0;
             left: 0;
         }
-
-        /* Styling untuk info profil (alamat, email, telp) */
         .footer-dark .profile-list {
             list-style: none;
             padding-left: 0;
         }
         .footer-dark .profile-list li {
             display: flex;
-            align-items: flex-start; /* Agar ikon dan teks sejajar */
+            align-items: flex-start; 
             margin-bottom: 1rem;
             font-size: 0.95rem;
         }
@@ -143,46 +166,40 @@
             font-size: 1.1rem;
             margin-right: 12px;
             margin-top: 3px;
-            color: #ffffff; /* Ikon putih */
+            color: #ffffff; 
         }
-
-        /* Styling untuk peta (iframe atau img) */
         .footer-dark .map-placeholder {
             width: 100%;
-            height: 200px; /* Sesuaikan tinggi jika perlu */
+            height: 200px; 
             border-radius: 8px;
             object-fit: cover;
-            border: 0; /* Hapus border khusus untuk iframe */
+            border: 0; 
         }
-
-        /* Styling untuk ikon media sosial */
         .footer-dark .social-icons-footer a {
             display: inline-block;
-            width: 44px; /* Ukuran kotak ikon */
-            height: 44px; /* Ukuran kotak ikon */
-            line-height: 44px; /* Vertikal center */
+            width: 44px; 
+            height: 44px; 
+            line-height: 44px; 
             text-align: center;
-            border-radius: 8px; /* Kotak rounded */
-            background-color: #333; /* Latar belakang ikon */
-            color: #adb5bd; /* Warna ikon */
-            font-size: 1.25rem; /* Ukuran ikon */
-            margin: 0 5px; /* Jarak antar ikon */
+            border-radius: 8px; 
+            background-color: #333; 
+            color: #adb5bd; 
+            font-size: 1.25rem; 
+            margin: 0 5px; 
             transition: all 0.3s;
         }
         .footer-dark .social-icons-footer a:hover {
             background-color: var(--primary-color);
             color: #ffffff;
         }
-
-        /* Styling untuk bagian tengah (logo, tagline, copyright) */
         .footer-center-content {
             text-align: center;
-            border-top: 1px solid #333; /* Garis pemisah */
+            border-top: 1px solid #333; 
             padding-top: 2rem;
-            margin-top: 3rem; /* Jarak dari kolom di atasnya */
+            margin-top: 3rem; 
         }
         .footer-center-content .logo-img {
-            max-height: 70px; /* Ukuran logo */
+            max-height: 70px; 
             margin-bottom: 1rem;
         }
         .footer-center-content .logo-text {
@@ -196,7 +213,7 @@
             font-style: italic;
             color: #adb5bd;
             font-size: 0.9rem;
-            max-width: 700px; /* Batas lebar tagline */
+            max-width: 700px; 
             margin: 0 auto 1.5rem auto;
         }
         .footer-center-content .footer-copyright {
@@ -245,9 +262,22 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.berita') ? 'active' : '' }}" href="{{ route('public.berita') }}">Berita</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('public.layanan') ? 'active' : '' }}" href="{{ route('public.layanan') }}">Layanan Publik</a>
-                        </li>
+                        
+                        {{-- ▼▼▼ INI BAGIAN YANG DIUBAH ▼▼▼ --}}
+<li class="nav-item dropdown">
+    <a class="nav-link {{ request()->routeIs('public.layanan') ? 'active' : '' }}" href="{{ route('public.layanan') }}#content-bantuan">
+        Layanan Publik
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" href="{{ route('public.layanan') }}#content-dokumen">
+                Dokumen Publikasi
+            </a>
+        </li>
+    </ul>
+</li>
+                        {{-- ▲▲▲ AKHIR BAGIAN YANG DIUBAH ▲▲▲ --}}
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.galeri') ? 'active' : '' }}" href="{{ route('public.galeri') }}">Galeri</a>
                         </li>
@@ -320,7 +350,7 @@
                 <div class="logo-text">DINAS SOSIAL PROVINSI RIAU</div>
                 
                 <p class="footer-copyright">
-                    Copyright &copy; {{ date('Y') }} Dinas Sosial Provinsi Riau. All Rights Reserved.
+                    Copyright © {{ date('Y') }} Dinas Sosial Provinsi Riau. All Rights Reserved.
                 </p>
             </div>
         </div>
