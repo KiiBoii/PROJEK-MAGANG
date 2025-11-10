@@ -30,6 +30,10 @@ use App\Http\Middleware\PreventBackHistory;
 // === RUTE HALAMAN PUBLIK (TANPA LOGIN) ===
 Route::get('/', [PageController::class, 'home'])->name('public.home');
 Route::get('/profil', [PageController::class, 'profil'])->name('public.profil');
+
+// [BARU] Rute untuk halaman profil kepala dinas
+Route::get('/profil-kepala-dinas', [PageController::class, 'profilKadis'])->name('public.profil.kadis');
+
 Route::get('/berita', [PageController::class, 'berita'])->name('public.berita');
 Route::get('/berita/{id}', [PageController::class, 'showBerita'])->name('public.berita.detail');
 Route::get('/layanan-publik', [PageController::class, 'layanan'])->name('public.layanan');

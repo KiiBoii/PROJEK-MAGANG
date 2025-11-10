@@ -30,7 +30,8 @@ class User extends Authenticatable
         'departemen',
         'telepon',
         'alamat',
-        'role', // <-- 2. TAMBAHKAN 'role' AGAR BISA DISIMPAN -->
+        'role',
+        'foto', // [BARU] Tambahkan atribut foto
     ];
 
     /**

@@ -16,7 +16,8 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('karyawan.store') }}" method="POST">
+            {{-- [DIUBAH] Tambahkan enctype="multipart/form-data" untuk upload file --}}
+            <form action="{{ route('karyawan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -42,6 +43,13 @@
                     </select>
                 </div>
                 {{-- =================================== --}}
+
+                {{-- [BARU] Input untuk Foto Profil --}}
+                <div class="mb-3">
+                    <label for="foto" class="form-label">Foto Profil (Opsional)</label>
+                    <input class="form-control" type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/jpg">
+                    <small class="text-muted">Max: 2MB. Format: JPG, JPEG, PNG.</small>
+                </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>

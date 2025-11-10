@@ -16,7 +16,8 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST">
+            {{-- [DIUBAH] Tambahkan enctype="multipart/form-data" untuk upload file --}}
+            <form action="{{ route('karyawan.update', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -28,6 +29,36 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $karyawan->email) }}" required>
+                </div>
+
+                {{-- [BARU DITAMBAHKAN] Kolom untuk memilih Role --}}
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role (Peran)</label>
+                    <select class="form-select" id="role" name="role" required>
+                        <option value="" disabled>-- Pilih Peran --</option>
+                        @foreach($roleList as $key => $roleName)
+                            <option value="{{ $key }}" {{ old('role', $karyawan->role) == $key ? 'selected' : '' }}>
+                                {{ $roleName }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                {{-- ========================================== --}}
+
+                {{-- [BARU] Input untuk Foto Profil --}}
+                <div class="mb-3">
+                    <label for="foto" class="form-label">Foto Profil (Opsional)</label>
+                    
+                    {{-- [BARU] Tampilkan foto saat ini jika ada --}}
+                    @if($karyawan->foto)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $karyawan->foto) }}" alt="Foto {{ $karyawan->name }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <small class="text-muted">Upload file baru untuk mengganti foto di atas.</small>
+                    @endif
+                    
+                    <input class="form-control mt-2" type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/jpg">
+                    <small class="text-muted">Max: 2MB. Format: JPG, JPEG, PNG. Biarkan kosong jika tidak ingin mengubah foto.</small>
                 </div>
 
                 <div class="mb-3">

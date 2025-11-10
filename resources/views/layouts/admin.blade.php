@@ -345,11 +345,25 @@
                     </span>
                     <div class="dropdown">
                         <a class="d-block link-dark text-decoration-none dropdown-toggle" href="#" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF" alt="mdo" width="32" height="32" class="rounded-circle">
+                            
+                            {{-- ▼▼▼ INI ADALAH BAGIAN YANG DIUBAH ▼▼▼ --}}
+                            @if (Auth::user()->foto)
+                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" 
+                                     alt="{{ Auth::user()->name }}" 
+                                     width="32" height="32" 
+                                     class="rounded-circle" 
+                                     style="object-fit: cover;"> {{-- Tambahkan object-fit --}}
+                            @else
+                                {{-- Fallback jika tidak ada foto --}}
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF" 
+                                     alt="{{ Auth::user()->name }}" 
+                                     width="32" height="32" 
+                                     class="rounded-circle">
+                            @endif
+                            {{-- ▲▲▲ AKHIR DARI BAGIAN YANG DIUBAH ▲▲▲ --}}
+
                         </a>
                         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf

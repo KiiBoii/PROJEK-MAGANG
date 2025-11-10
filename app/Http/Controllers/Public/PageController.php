@@ -45,6 +45,21 @@ class PageController extends Controller
     }
 
     /**
+     * [BARU] Halaman Profil Kepala Dinas
+     */
+    public function profilKadis()
+    {
+        // [SARAN]
+        // Nanti Anda bisa mengambil data Kadis secara dinamis dari database
+        // $kadis = ProfilPejabat::where('jabatan', 'Kepala Dinas')->first();
+        
+        // Kirim data ke view
+        return view('public.profil-kadis' /*, [
+            'kadis' => $kadis 
+        ]*/);
+    }
+
+    /**
      * Halaman Berita
      */
     public function berita()
@@ -63,10 +78,10 @@ class PageController extends Controller
 
         // Ambil sisa Berita yang BUKAN topik (tag = null) untuk "Berita Lainnya"
         $beritas = Berita::with('user')
-                           ->whereNull('tag') // Hanya berita biasa
-                           ->whereNotIn('id', $hot_news_ids) // Lewati berita 'hot'
-                           ->latest()
-                           ->paginate(9); // Ambil 9 per halaman
+                            ->whereNull('tag') // Hanya berita biasa
+                            ->whereNotIn('id', $hot_news_ids) // Lewati berita 'hot'
+                            ->latest()
+                            ->paginate(9); // Ambil 9 per halaman
         
         // Ambil 5 Berita TERBARU yang MEMILIKI TAG (ini adalah Topik Lainnya)
         $topik_lainnya = Berita::with('user')
@@ -77,6 +92,7 @@ class PageController extends Controller
 
         return view('public.berita', compact('sliders', 'hot_news', 'beritas', 'topik_lainnya'));
     }
+    
 
     /**
      * Halaman Galeri
@@ -131,6 +147,7 @@ class PageController extends Controller
         $sliders = Slider::where('halaman', 'kontak')->where('is_visible', true)->latest()->get();
         return view('public.kontak', compact('sliders'));
     }
+    
 
     /**
      * Method untuk MENYIMPAN data dari form kontak
@@ -161,10 +178,10 @@ class PageController extends Controller
         //Ambil 5 berita acak (apapun tag-nya)
         // "semua berita yg eksis (selain berita yang sedang dibuka user)"
         $topik_lainnya = Berita::where('id', '!=', $id) // Jangan tampilkan berita yang sedang dibaca
-                                 ->inRandomOrder() // Ambil acak dari semua berita
-                                 ->take(5)
-                                 ->get();
-                                       
+                                    ->inRandomOrder() // Ambil acak dari semua berita
+                                    ->take(20)
+                                    ->get();
+                                    
         return view('public.berita_detail', compact('berita', 'topik_lainnya')); 
     }
 }

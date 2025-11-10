@@ -128,6 +128,22 @@
         border-radius: 12px;
         color: #aaa;
     }
+    /* Tambahan untuk teks judul di HOT NEWS agar bisa resize otomatis */
+.card-hover-caption h6 {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 0;
+    line-height: 1.4;
+    transform: translateY(15px);
+    transition: transform 0.4s ease 0.1s, font-size 0.2s ease;
+    font-size: clamp(0.8rem, 1vw + 0.6rem, 1rem); /* batas aman awal */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* maksimal 3 baris */
+    -webkit-box-orient: vertical;
+}
+
 </style>
 @endpush
 
@@ -372,5 +388,26 @@
     </div>
     
 </div>
+@push('scripts')
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const adjustFontSize = (element, maxHeight) => {
+        let fontSize = parseFloat(window.getComputedStyle(element).fontSize);
+        while (element.scrollHeight > maxHeight && fontSize > 10) {
+            fontSize -= 0.5;
+            element.style.fontSize = fontSize + "px";
+        }
+    };
+
+    document.querySelectorAll(".card-hover-caption h6").forEach(el => {
+        const caption = el.closest(".card-hover-caption");
+        if (caption) {
+            const availableHeight = caption.clientHeight * 0.35; // hanya bagian bawah yang dipakai
+            adjustFontSize(el, availableHeight);
+        }
+    });
+});
+</script>
+@endpush
 
 @endsection

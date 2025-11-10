@@ -13,10 +13,18 @@
     <div class="col-md-4 mb-4">
         <div class="card shadow-sm rounded-3 border-0">
             <div class="card-body text-center">
-                {{-- Foto Profil Placeholder --}}
-                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
-                    <span class="text-muted fs-5"><i class="bi bi-person"></i></span>
-                </div>
+                
+                {{-- [DIUBAH] Tampilkan foto jika ada, jika tidak, tampilkan placeholder --}}
+                @if ($karyawan->foto)
+                    <img src="{{ asset('storage/' . $karyawan->foto) }}" 
+                         class="rounded-circle mx-auto mb-3" 
+                         style="width: 80px; height: 80px; object-fit: cover;" 
+                         alt="{{ $karyawan->name }}">
+                @else
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                        <span class="text-muted fs-5"><i class="bi bi-person"></i></span>
+                    </div>
+                @endif
                 
                 <h5 class="card-title mb-1">{{ $karyawan->name }}</h5>
                 <p class="card-text text-muted mb-2">{{ $karyawan->jabatan ?? 'N/A' }}</p> {{-- Jabatan --}}

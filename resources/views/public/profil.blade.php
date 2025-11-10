@@ -123,7 +123,7 @@
             </ul>
         </div>
         <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
-            <img src="https://placehold.co/600x400/e0e0e0/999?text=Foto+Gedung" class="img-fluid rounded-3 shadow-sm" alt="Gedung Dinas Sosial Riau">
+            <img src="https://awsimages.detik.net.id/community/media/visual/2020/12/29/tugu-zapin-ikon-kota-pekanbaru-1_169.jpeg?w=1200" class="img-fluid rounded-3 shadow-sm" alt="Gedung Dinas Sosial Riau">
         </div>
     </div>
 </div>

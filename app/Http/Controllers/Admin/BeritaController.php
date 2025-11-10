@@ -35,10 +35,13 @@ class BeritaController extends Controller
             $query->where('tag', $tag);
         }
 
-
-        $beritas = $query->with('user')->latest()->get();
+        // ▼▼▼ INI ADALAH SATU-SATUNYA BARIS YANG DIUBAH ▼▼▼
+        // Mengganti .get() menjadi .paginate(9)
+        $beritas = $query->with('user')->latest()->paginate(9);
+        // ▲▲▲ ======================================== ▲▲▲
 
         if ($request->wantsJson() || $request->is('api/*')) {
+            // Respon JSON sekarang juga akan otomatis ter-paginasi
             return response()->json($beritas);
         }
 
@@ -115,7 +118,7 @@ class BeritaController extends Controller
         return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
-   
+    
     public function destroy(Request $request, Berita $berita)
     {
         if ($berita->gambar) {

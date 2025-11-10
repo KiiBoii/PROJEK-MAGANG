@@ -129,7 +129,7 @@
                         Masa Jabatan: 2023 - Sekarang
                     </p>
                     <div class="d-flex">
-                        <a href="#" class="btn btn-primary btn-sm rounded-pill me-2">Baca Lebih Lanjut</a>
+                        <a href="{{ route('public.profil.kadis') }}" class="btn btn-primary btn-sm rounded-pill me-2">Baca Lebih Lanjut</a>
                         <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="bi bi-twitter-x"></i></a>
                         <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill mx-2"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="bi bi-facebook"></i></a>
@@ -145,8 +145,7 @@
         <div class="col-lg-4" data-aos="fade-left" data-aos-offset="100" data-aos-delay="200">
             <h5 class="fw-bold mb-3">Video Kegiatan Kepala Dinas</h5>
             <div class="ratio ratio-16x9 rounded-3 shadow-sm">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=example" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+<iframe src="https://www.youtube.com/embed/pFnJ97g-wSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>            </div>
         </div>
     </div>
 </div>
