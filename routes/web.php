@@ -52,15 +52,21 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout')->middl
 
 
 // === GRUP UNTUK SEMUA HALAMAN ADMIN ===
-Route::middleware(['auth', 'role:admin,berita', PreventBackHistory::class])->prefix('admin')->group(function () {
+// ▼▼▼ PERUBAHAN DI SINI ▼▼▼
+Route::middleware(['auth', 'role:admin,redaktur', PreventBackHistory::class])->prefix('admin')->group(function () {
     
-    // --- Rute yang bisa diakses KEDUA role (Admin & Berita) ---
+    
+    // --- Rute yang bisa diakses KEDUA role (Admin & Redaktur) ---
     Route::resource('berita', BeritaController::class)->parameter('berita', 'berita');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // [DIPINDAHKAN] Dashboard sekarang bisa diakses oleh admin dan redaktur
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/admin/dashboard/chart-data', [App\Http\Controllers\Admin\DashboardController::class, 'getChartData'])->name('admin.dashboard.chartData');
+    Route::get('/dashboard/activities', [App\Http\Controllers\Admin\DashboardController::class, 'allActivities'])->name('admin.dashboard.activities');
 
     // --- Rute yang HANYA bisa diakses oleh 'admin' ---
     Route::middleware('role:admin')->group(function () {
@@ -71,8 +77,7 @@ Route::resource('dokumen', DokumenController::class)
     ->names('admin.dokumen');
 
         
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/admin/dashboard/chart-data', [App\Http\Controllers\Admin\DashboardController::class, 'getChartData'])->name('admin.dashboard.chartData');
+        // [DIPINDAHKAN] Route dashboard sudah dipindah ke atas
         
         Route::resource('galeri', GaleriController::class);
         Route::resource('pengumuman', PengumumanController::class);

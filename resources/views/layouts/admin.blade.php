@@ -265,6 +265,8 @@
                 <h4>DINSOS RIAU</h4>
             </div>
             <ul class="list-unstyled components">
+                
+                {{-- ITEM INI SELALU TAMPIL --}}
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                         <i class="bi bi-grid-fill"></i> Dashboard
@@ -275,6 +277,11 @@
                         <i class="bi bi-newspaper"></i> Berita
                     </a>
                 </li>
+
+                {{-- ▼▼▼ KONDISI DIMULAI DI SINI ▼▼▼ --}}
+                {{-- Tampilkan item ini HANYA JIKA BUKAN redaktur --}}
+                @unless(Auth::user()->role == 'redaktur')
+                
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('galeri.*') ? 'active' : '' }}" href="{{ route('galeri.index') }}">
                         <i class="bi bi-images"></i> Galeri Kegiatan
@@ -310,6 +317,9 @@
                         Dokumen Publikasi
                     </a>
                 </li>
+
+                @endunless
+                {{-- ▲▲▲ AKHIR DARI KONDISI ▲▲▲ --}}
 
             </ul>
 

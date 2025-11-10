@@ -5,7 +5,7 @@
     <h3 class="mb-4">Dashboard Admin</h3>
 
     <div class="row">
-        {{-- Card Statistik (Tidak Berubah) --}}
+        {{-- Card Berita (Selalu Tampil) --}}
         <div class="col-md-3 col-sm-6 mb-4">
             <div class="card bg-primary text-white h-100">
                 <div class="card-body">
@@ -22,6 +22,10 @@
                 </div>
             </div>
         </div>
+
+        {{-- Tampilkan card berikut HANYA jika BUKAN redaktur --}}
+        @if(Auth::user()->role != 'redaktur')
+        
         <div class="col-md-3 col-sm-6 mb-4">
             <div class="card bg-success text-white h-100">
                 <div class="card-body">
@@ -58,6 +62,10 @@
                 </div>
             </div>
         </div>
+
+        @endif 
+        {{-- ▲▲▲ AKHIR KONDISI ▲▲▲ --}}
+
     </div>
 
     <div class="row">
@@ -82,13 +90,11 @@
                             <label for="chartMonth" class="form-label small">Bulan</label>
                             <select class="form-select form-select-sm" id="chartMonth">
                                 
-                                {{-- ▼▼▼ PERBAIKAN: Ganti @for dengan @foreach ▼▼▼ --}}
                                 @foreach ($availableMonths as $month)
                                     <option value="{{ $month['value'] }}" {{ $month['value'] == $currentMonth ? 'selected' : '' }}>
                                         {{ $month['name'] }}
                                     </option>
                                 @endforeach
-                                {{-- ▲▲▲ AKHIR PERBAIKAN ▲▲▲ --}}
 
                             </select>
                         </div>
@@ -117,7 +123,7 @@
             </div>
         </div>
 
-        {{-- Kartu Aktivitas (Tidak Berubah) --}}
+        {{-- Kartu Aktivitas --}}
         <div class="col-lg-6 mb-4">
             <div class="card h-100">
                 <div class="card-header">Aktivitas Terbaru</div>
@@ -144,6 +150,15 @@
                         @endforelse
                     </ul>
                 </div>
+                
+                {{-- ▼▼▼ TAMBAHKAN BAGIAN INI ▼▼▼ --}}
+                <div class="card-footer text-center bg-white border-top-0 pt-0">
+                    <a href="{{ route('admin.dashboard.activities') }}" class="small text-decoration-none">
+                        Lihat Selengkapnya <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                {{-- ▲▲▲ AKHIR TAMBAHAN ▲▲▲ --}}
+
             </div>
         </div>
     </div>
@@ -151,121 +166,132 @@
 </div>
 @endsection
 
-{{-- Skrip JavaScript (Tidak Berubah dari kode sebelumnya, sudah benar) --}}
+{{-- Skrip JavaScript (Dengan perbaikan kecil) --}}
 @push('scripts')
 {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         
-        // --- 1. Inisialisasi Elemen ---
-        const ctx = document.getElementById('contentChart').getContext('2d');
-        const chartTitle = document.getElementById('chartTitle');
-        
-        // Elemen Filter Baru
-        const filterTypeSelect = document.getElementById('chartFilterType');
-        const monthSelect = document.getElementById('chartMonth');
-        const yearSelect = document.getElementById('chartYear');
-        const monthWrapper = document.getElementById('monthFilterWrapper');
-        const yearWrapper = document.getElementById('yearFilterWrapper');
-        const applyButton = document.getElementById('applyChartFilter');
+        // ▼▼▼ TAMBAHKAN PENGECEKAN INI ▼▼▼
+        // Ini untuk memastikan script chart hanya berjalan di halaman dashboard
+        // dan tidak error di halaman 'activities' baru Anda.
+        const chartCanvas = document.getElementById('contentChart');
+        if (chartCanvas) { 
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
-        // --- 2. Ambil Data AWAL (dari render Blade) ---
-        const initialLabels = {!! json_encode($chartLabels) !!};
-        const initialData = {!! json_encode($chartData) !!};
+            // --- 1. Inisialisasi Elemen ---
+            const ctx = chartCanvas.getContext('2d'); // <-- Ganti ke chartCanvas
+            const chartTitle = document.getElementById('chartTitle');
+            
+            // Elemen Filter Baru
+            const filterTypeSelect = document.getElementById('chartFilterType');
+            const monthSelect = document.getElementById('chartMonth');
+            const yearSelect = document.getElementById('chartYear');
+            const monthWrapper = document.getElementById('monthFilterWrapper');
+            const yearWrapper = document.getElementById('yearFilterWrapper');
+            const applyButton = document.getElementById('applyChartFilter');
 
-        // --- 3. Konfigurasi Awal Chart ---
-        const chartConfig = {
-            type: 'line',
-            data: {
-                labels: initialLabels,
-                datasets: [{
-                    label: 'Jumlah Berita Dibuat',
-                    data: initialData,
-                    fill: true,
-                    borderColor: 'rgb(0, 123, 255)',
-                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { stepSize: 1 } // Hanya angka bulat
+            // --- 2. Ambil Data AWAL (dari render Blade) ---
+            const initialLabels = {!! json_encode($chartLabels) !!};
+            const initialData = {!! json_encode($chartData) !!};
+
+            // --- 3. Konfigurasi Awal Chart ---
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: initialLabels,
+                    datasets: [{
+                        label: 'Jumlah Berita Dibuat',
+                        data: initialData,
+                        fill: true,
+                        borderColor: 'rgb(0, 123, 255)',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 } // Hanya angka bulat
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        // --- 4. Buat Chart (simpan di variabel global 'myChart') ---
-        let myChart = new Chart(ctx, chartConfig);
+            // --- 4. Buat Chart (simpan di variabel global 'myChart') ---
+            let myChart = new Chart(ctx, chartConfig);
 
-        // --- 5. Fungsi untuk Update Chart (AJAX) ---
-        async function fetchAndUpdateChart() {
-            // Ambil nilai filter saat ini
-            const filter = filterTypeSelect.value;
-            const month = monthSelect.value;
-            const year = yearSelect.value;
+            // --- 5. Fungsi untuk Update Chart (AJAX) ---
+            async function fetchAndUpdateChart() {
+                // Ambil nilai filter saat ini
+                const filter = filterTypeSelect.value;
+                const month = monthSelect.value;
+                const year = yearSelect.value;
 
-            // Buat query string
-            const queryParams = new URLSearchParams({
-                filter: filter,
-                month: month,
-                year: year
-            });
-            
-            try {
-                // Tampilkan status loading
-                chartTitle.textContent = 'Memuat data...';
-                applyButton.disabled = true; // Nonaktifkan tombol saat loading
+                // Buat query string
+                const queryParams = new URLSearchParams({
+                    filter: filter,
+                    month: month,
+                    year: year
+                });
                 
-                // Panggil endpoint controller
-                const response = await fetch(`{{ route('admin.dashboard.chartData') }}?${queryParams}`);
-                if (!response.ok) {
-                    throw new Error('Gagal mengambil data dari server.');
+                try {
+                    // Tampilkan status loading
+                    chartTitle.textContent = 'Memuat data...';
+                    applyButton.disabled = true; // Nonaktifkan tombol saat loading
+                    
+                    // Panggil endpoint controller
+                    // Pastikan route 'admin.dashboard.chartData' ada di web.php
+                    const response = await fetch(`{{ route('admin.dashboard.chartData') }}?${queryParams}`);
+                    if (!response.ok) {
+                        throw new Error('Gagal mengambil data dari server.');
+                    }
+                    
+                    const newData = await response.json();
+
+                    // Perbarui data dan judul di chart
+                    myChart.data.labels = newData.labels;
+                    myChart.data.datasets[0].data = newData.data;
+                    myChart.update();
+                    chartTitle.textContent = newData.title; // Ambil judul dinamis dari controller
+
+                } catch (error) {
+                    console.error('Error fetching chart data:', error);
+                    chartTitle.textContent = 'Gagal memuat data chart.';
+                } finally {
+                    applyButton.disabled = false; // Aktifkan kembali tombol
                 }
+            }
+
+            // --- 6. Event Listener untuk Tombol Terapkan ---
+            applyButton.addEventListener('click', fetchAndUpdateChart);
+
+            // --- 7. Event Listener untuk Mengatur Tampilan Filter ---
+            filterTypeSelect.addEventListener('change', function () {
+                const selectedFilter = this.value;
                 
-                const newData = await response.json();
+                if (selectedFilter === 'harian') {
+                    // Harian: Tampilkan Bulan dan Tahun
+                    monthWrapper.style.display = 'block';
+                    yearWrapper.style.display = 'block';
+                } else if (selectedFilter === 'bulanan') {
+                    // Bulanan: Sembunyikan Bulan, Tampilkan Tahun
+                    monthWrapper.style.display = 'none';
+                    yearWrapper.style.display = 'block';
+                } else if (selectedFilter === 'tahunan') {
+                    // Tahunan: Sembunyikan Bulan dan Tahun
+                    monthWrapper.style.display = 'none';
+                    yearWrapper.style.display = 'none';
+                }
+            });
 
-                // Perbarui data dan judul di chart
-                myChart.data.labels = newData.labels;
-                myChart.data.datasets[0].data = newData.data;
-                myChart.update();
-                chartTitle.textContent = newData.title; // Ambil judul dinamis dari controller
-
-            } catch (error) {
-                console.error('Error fetching chart data:', error);
-                chartTitle.textContent = 'Gagal memuat data chart.';
-            } finally {
-                applyButton.disabled = false; // Aktifkan kembali tombol
-            }
-        }
-
-        // --- 6. Event Listener untuk Tombol Terapkan ---
-        applyButton.addEventListener('click', fetchAndUpdateChart);
-
-        // --- 7. Event Listener untuk Mengatur Tampilan Filter ---
-        filterTypeSelect.addEventListener('change', function () {
-            const selectedFilter = this.value;
-            
-            if (selectedFilter === 'harian') {
-                // Harian: Tampilkan Bulan dan Tahun
-                monthWrapper.style.display = 'block';
-                yearWrapper.style.display = 'block';
-            } else if (selectedFilter === 'bulanan') {
-                // Bulanan: Sembunyikan Bulan, Tampilkan Tahun
-                monthWrapper.style.display = 'none';
-                yearWrapper.style.display = 'block';
-            } else if (selectedFilter === 'tahunan') {
-                // Tahunan: Sembunyikan Bulan dan Tahun
-                monthWrapper.style.display = 'none';
-                yearWrapper.style.display = 'none';
-            }
-        });
-
+        // ▼▼▼ TAMBAHKAN PENUTUP IF ▼▼▼
+        } // akhir dari if (chartCanvas)
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
     });
 </script>
 @endpush

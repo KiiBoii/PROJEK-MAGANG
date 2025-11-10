@@ -12,8 +12,20 @@
     @foreach ($karyawans as $karyawan)
     <div class="col-md-4 mb-4">
         <div class="card shadow-sm rounded-3 border-0">
-            <div class="card-body text-center">
+            {{-- [DIUBAH] Tambahkan position: relative agar badge bisa diposisikan --}}
+            <div class="card-body text-center" style="position: relative;">
                 
+                {{-- [BARU] Badge Role di sudut kanan atas --}}
+                <span style="position: absolute; top: 1rem; right: 1rem; font-size: 0.75rem;" 
+                      class="badge 
+                             @if($karyawan->role == 'admin') bg-danger
+                             @elseif($karyawan->role == 'redaktur') bg-info text-dark
+                             @else bg-secondary
+                             @endif">
+                    {{-- Tampilkan nama role dengan huruf kapital di awal --}}
+                    {{ ucfirst($karyawan->role) }}
+                </span>
+
                 {{-- [DIUBAH] Tampilkan foto jika ada, jika tidak, tampilkan placeholder --}}
                 @if ($karyawan->foto)
                     <img src="{{ asset('storage/' . $karyawan->foto) }}" 

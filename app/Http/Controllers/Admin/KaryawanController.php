@@ -14,7 +14,7 @@ class KaryawanController extends Controller
     // === TAMBAHAN: DEFINISI DAFTAR ROLE ===
     private $roleList = [
         'admin' => 'Admin Utama',
-        'berita' => 'Admin Konten Berita',
+        'redaktur' => 'Admin Konten Berita',
         // Tambahkan role lain jika diperlukan di sini
     ];
 

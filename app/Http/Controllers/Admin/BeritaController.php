@@ -7,14 +7,27 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth; // Pastikan Auth di-import
 
 class BeritaController extends Controller
 {
 
     public function index(Request $request)
     {
+        // ▼▼▼ TAMBAHAN LOGIKA ROLE ▼▼▼
+        $user = Auth::user();
+        $isRedaktur = ($user->role == 'redaktur');
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
+
         $query = Berita::query();
+
+        // ▼▼▼ TAMBAHKAN KONDISI INI ▼▼▼
+        // Jika yang login adalah redaktur, filter query agar hanya
+        // menampilkan berita dengan user_id miliknya.
+        if ($isRedaktur) {
+            $query->where('user_id', $user->id);
+        }
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         // --- Logika Filter Tanggal ---
         if ($request->filled('tanggal')) {
@@ -28,20 +41,16 @@ class BeritaController extends Controller
             }
         }
         
-
         if ($request->filled('tag')) {
             $tag = $request->input('tag');
-            // Logika Anda sebelumnya mencari di 'isi', saya ubah mencari di kolom 'tag'
             $query->where('tag', $tag);
         }
 
-        // ▼▼▼ INI ADALAH SATU-SATUNYA BARIS YANG DIUBAH ▼▼▼
-        // Mengganti .get() menjadi .paginate(9)
+        // Query ini sekarang sudah terfilter berdasarkan role (jika redaktur)
+        // dan filter tanggal/tag.
         $beritas = $query->with('user')->latest()->paginate(9);
-        // ▲▲▲ ======================================== ▲▲▲
-
+       
         if ($request->wantsJson() || $request->is('api/*')) {
-            // Respon JSON sekarang juga akan otomatis ter-paginasi
             return response()->json($beritas);
         }
 
@@ -57,20 +66,19 @@ class BeritaController extends Controller
 
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'tag' => 'nullable|string|in:info,layanan,kegiatan', // Opsional, tapi harus salah satu dari 3 nilai ini
+            'tag' => 'nullable|string|in:info,layanan,kegiatan', 
         ]);
-
 
         if ($request->hasFile('gambar')) {
             $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public');
         }
 
-        $validated['user_id'] = Auth::id();
+        // Ini sudah benar, otomatis menyimpan user_id si pembuat
+        $validated['user_id'] = Auth::id(); 
 
         Berita::create($validated);
 
@@ -86,15 +94,27 @@ class BeritaController extends Controller
 
     public function edit(Berita $berita)
     {
+        // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
+        // Cek apakah user adalah redaktur dan apakah berita ini BUKAN miliknya
+        $user = Auth::user();
+        if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
+            // Jika bukan, lempar kembali ke index dengan pesan error
+            return redirect()->route('berita.index')->with('error', 'Anda tidak diizinkan mengedit berita ini.');
+        }
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         return view('admin.berita.edit', compact('berita'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, Berita $berita)
     {
+        // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
+        $user = Auth::user();
+        if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
+            return redirect()->route('berita.index')->with('error', 'Anda tidak diizinkan memperbarui berita ini.');
+        }
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -102,7 +122,6 @@ class BeritaController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'tag' => 'nullable|string|in:info,layanan,kegiatan', 
         ]);
- 
 
         if ($request->hasFile('gambar')) {
             if ($berita->gambar) {
@@ -110,8 +129,6 @@ class BeritaController extends Controller
             }
             $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public');
         }
-
-
 
         $berita->update($validated);
 
@@ -121,6 +138,16 @@ class BeritaController extends Controller
     
     public function destroy(Request $request, Berita $berita)
     {
+        // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
+        $user = Auth::user();
+        if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
+            if ($request->wantsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Anda tidak diizinkan menghapus berita ini.'], 403); // 403 Forbidden
+            }
+            return redirect()->route('berita.index')->with('error', 'Anda tidak diizinkan menghapus berita ini.');
+        }
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
+
         if ($berita->gambar) {
             Storage::disk('public')->delete($berita->gambar);
         }
