@@ -62,7 +62,8 @@ class KaryawanController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('karyawan.index')->with('success', 'Admin/Karyawan berhasil ditambahkan.');
+        // ▼▼▼ PERBAIKAN 1 ▼▼▼
+        return redirect()->route('admin.karyawan.index')->with('success', 'Admin/Karyawan berhasil ditambahkan.');
     }
 
     public function show(User $karyawan)
@@ -113,7 +114,8 @@ class KaryawanController extends Controller
 
         $karyawan->update($validated);
 
-        return redirect()->route('karyawan.index')->with('success', 'Data Admin/Karyawan berhasil diperbarui.');
+        // ▼▼▼ PERBAIKAN 2 ▼▼▼
+        return redirect()->route('admin.karyawan.index')->with('success', 'Data Admin/Karyawan berhasil diperbarui.');
     }
 
 
@@ -126,6 +128,7 @@ class KaryawanController extends Controller
 
         $karyawan->delete();
 
-        return redirect()->route('karyawan.index')->with('success', 'Admin/Karyawan berhasil dihapus.');
+        // ▼▼▼ PERBAIKAN 3 (Ini yang menyebabkan error Anda) ▼▼▼
+        return redirect()->route('admin.karyawan.index')->with('success', 'Admin/Karyawan berhasil dihapus.');
     }
 }

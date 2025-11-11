@@ -49,7 +49,7 @@ class BeritaController extends Controller
         // Query ini sekarang sudah terfilter berdasarkan role (jika redaktur)
         // dan filter tanggal/tag.
         $beritas = $query->with('user')->latest()->paginate(9);
-       
+        
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json($beritas);
         }
@@ -82,7 +82,8 @@ class BeritaController extends Controller
 
         Berita::create($validated);
 
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan.');
+        // ▼▼▼ PERBAIKAN 1 (Ini yang menyebabkan error Anda) ▼▼▼
+        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
 
 
@@ -99,7 +100,8 @@ class BeritaController extends Controller
         $user = Auth::user();
         if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
             // Jika bukan, lempar kembali ke index dengan pesan error
-            return redirect()->route('berita.index')->with('error', 'Anda tidak diizinkan mengedit berita ini.');
+            // ▼▼▼ PERBAIKAN 2 ▼▼▼
+            return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan mengedit berita ini.');
         }
         // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
@@ -112,7 +114,8 @@ class BeritaController extends Controller
         // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
         $user = Auth::user();
         if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
-            return redirect()->route('berita.index')->with('error', 'Anda tidak diizinkan memperbarui berita ini.');
+            // ▼▼▼ PERBAIKAN 3 ▼▼▼
+            return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan memperbarui berita ini.');
         }
         // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
@@ -132,7 +135,8 @@ class BeritaController extends Controller
 
         $berita->update($validated);
 
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui.');
+        // ▼▼▼ PERBAIKAN 4 ▼▼▼
+        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
     
@@ -144,7 +148,8 @@ class BeritaController extends Controller
             if ($request->wantsJson() || $request->is('api/*')) {
                 return response()->json(['message' => 'Anda tidak diizinkan menghapus berita ini.'], 403); // 403 Forbidden
             }
-            return redirect()->route('berita.index')->with('error', 'Anda tidak diizinkan menghapus berita ini.');
+            // ▼▼▼ PERBAIKAN 5 ▼▼▼
+            return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan menghapus berita ini.');
         }
         // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
@@ -158,6 +163,7 @@ class BeritaController extends Controller
             return response()->json(['message' => 'Berita berhasil dihapus.']);
         }
 
-        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus.');
+        // ▼▼▼ PERBAIKAN 6 ▼▼▼
+        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
     }
 }

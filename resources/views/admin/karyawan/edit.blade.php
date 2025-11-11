@@ -61,15 +61,27 @@
                     <small class="text-muted">Max: 2MB. Format: JPG, JPEG, PNG. Biarkan kosong jika tidak ingin mengubah foto.</small>
                 </div>
 
+                {{-- ▼▼▼ BLOK PASSWORD DIPERBARUI ▼▼▼ --}}
                 <div class="mb-3">
                     <label for="password" class="form-label">Password (Biarkan kosong jika tidak ingin mengubah)</label>
-                    <input type="password" class="form-control" id="password" name="password">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password" name="password">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
                 </div>
+                {{-- ▲▲▲ AKHIR BLOK PASSWORD ▲▲▲ --}}
 
                 <div class="mb-3">
                     <label for="jabatan" class="form-label">Jabatan</label>
@@ -98,3 +110,40 @@
     </div>
 </div>
 @endsection
+
+{{-- ▼▼▼ TAMBAHKAN SCRIPT DI SINI ▼▼▼ --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        // Fungsi generik untuk toggle password
+        function setupPasswordToggle(inputId, toggleId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleButton = document.getElementById(toggleId);
+
+            if (passwordInput && toggleButton) {
+                toggleButton.addEventListener('click', function () {
+                    // Cek tipe input saat ini
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Ganti ikon mata
+                    const icon = this.querySelector('i');
+                    if (type === 'password') {
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    } else {
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    }
+                });
+            }
+        }
+
+        // Terapkan ke kedua bidang password
+        setupPasswordToggle('password', 'togglePassword');
+        setupPasswordToggle('password_confirmation', 'togglePasswordConfirmation');
+
+    });
+</script>
+@endpush
