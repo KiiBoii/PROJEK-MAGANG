@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0">Manajemen Slider</h3>
-        <a href="{{ route('slider.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
+        <a href="{{ route('admin.slider.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
             Tambah Slide Baru
         </a>
     </div>
@@ -30,7 +30,7 @@
     {{-- === 1. FORM FILTER === --}}
     <div class="card shadow-sm rounded-3 border-0 mb-4">
         <div class="card-body">
-            <form action="{{ route('slider.index') }}" method="GET" class="d-flex align-items-center">
+            <form action="{{ route('admin.slider.index') }}" method="GET" class="d-flex align-items-center">
                 <label for="halaman" class="form-label me-2 mb-0">Filter:</label>
                 <select class="form-select" name="halaman" id="halaman" style="width: 250px;" onchange="this.form.submit()">
                     <option value="">Semua Halaman</option>
@@ -43,7 +43,7 @@
                 </select>
                 {{-- Tampilkan tombol Reset hanya jika filter aktif --}}
                 @if ($selectedHalaman)
-                    <a href="{{ route('slider.index') }}" class="btn btn-link ms-2">Reset</a>
+                    <a href="{{ route('admin.slider.index') }}" class="btn btn-link ms-2">Reset</a>
                 @endif
             </form>
         </div>
@@ -67,7 +67,7 @@
                             <span class="badge bg-secondary">{{ $slide->halaman }}</span>
                             
                             {{-- Tombol Toggle Status --}}
-                            <form action="{{ route('slider.toggle', $slide->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('admin.slider.toggle', $slide->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('PATCH')
                                 @if ($slide->is_visible)
@@ -87,10 +87,10 @@
                             <hr>
                             <div class="d-flex justify-content-between">
                                 {{-- Tombol Edit --}}
-                                <a href="{{ route('slider.edit', $slide->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill w-100 me-1">Edit</a>
+                                <a href="{{ route('admin.slider.edit', $slide->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill w-100 me-1">Edit</a>
                                 
                                 {{-- Tombol Hapus --}}
-                                <form action="{{ route('slider.destroy', $slide->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus slide ini?');" class="d-inline w-100 ms-1">
+                                <form action="{{ route('admin.slider.destroy', $slide->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus slide ini?');" class="d-inline w-100 ms-1">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100">

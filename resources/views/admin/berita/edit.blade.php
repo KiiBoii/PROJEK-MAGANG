@@ -40,7 +40,7 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('berita.update', $berita->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.berita.update', $berita->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -88,7 +88,7 @@
 
                 {{-- PERBARUAN: Tombol disamakan dengan create.blade.php --}}
                 <button type="submit" class="btn btn-primary">Update Berita</button>
-                <a href="{{ route('berita.index') }}" class="btn btn-secondary ms-2">Batal</a>
+                <a href="{{ route('admin.berita.index') }}" class="btn btn-secondary ms-2">Batal</a>
             </form>
         </div>
     </div>

@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="mb-0">Pengelolaan Admin</h3>
-    <a href="{{ route('karyawan.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
+    <a href="{{ route('admin.karyawan.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
         Tambah Admin
     </a>
 </div>
@@ -50,12 +50,12 @@
                 </ul>
                 
                 <div class="d-flex justify-content-between mt-3">
-                    <form action="{{ route('karyawan.destroy', $karyawan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus karyawan ini?');">
+                    <form action="{{ route('admin.karyawan.destroy', $karyawan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus karyawan ini?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Hapus</button>
                     </form>
-                    <a href="{{ route('karyawan.edit', $karyawan->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">Edit</a>
+                    <a href="{{ route('admin.karyawan.edit', $karyawan->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">Edit</a>
                 </div>
             </div>
         </div>

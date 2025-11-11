@@ -3,7 +3,8 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="mb-0">List Pengumuman</h3>
-    <a href="{{ route('pengumuman.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
+    {{-- ▼▼▼ PERBAIKAN 1 ▼▼▼ --}}
+    <a href="{{ route('admin.pengumuman.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
         Tambah Pengumuman
     </a>
 </div>
@@ -43,12 +44,14 @@
                         {{ $pengumuman->created_at->format('d/m/Y H:i') }}
                     </small>
                     <div class="d-flex justify-content-between">
-                        <form action="{{ route('pengumuman.destroy', $pengumuman->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?');">
+                        {{-- ▼▼▼ PERBAIKAN 2 ▼▼▼ --}}
+                        <form action="{{ route('admin.pengumuman.destroy', $pengumuman->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengumuman ini?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Hapus</button>
                         </form>
-                        <a href="{{ route('pengumuman.edit', $pengumuman->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">Edit</a>
+                        {{-- ▼▼▼ PERBAIKAN 3 ▼▼▼ --}}
+                        <a href="{{ route('admin.pengumuman.edit', $pengumuman->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">Edit</a>
                     </div>
                 </div>
             </div>

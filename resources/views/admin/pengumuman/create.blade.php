@@ -35,7 +35,7 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('pengumuman.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.pengumuman.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -57,7 +57,7 @@
 
                 {{-- 2. PERBAIKAN: Hapus inline style agar konsisten dengan layout --}}
                 <button type="submit" class="btn btn-primary">Simpan Pengumuman</button>
-                <a href="{{ route('pengumuman.index') }}" class="btn btn-secondary ms-2">Batal</a>
+                <a href="{{ route('admin.pengumuman.index') }}" class="btn btn-secondary ms-2">Batal</a>
             </form>
         </div>
     </div>

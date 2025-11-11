@@ -17,7 +17,7 @@
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
             {{-- [DIUBAH] Tambahkan enctype="multipart/form-data" untuk upload file --}}
-            <form action="{{ route('karyawan.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.karyawan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -82,7 +82,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Simpan Admin</button>
-                <a href="{{ route('karyawan.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
             </form>
         </div>
     </div>

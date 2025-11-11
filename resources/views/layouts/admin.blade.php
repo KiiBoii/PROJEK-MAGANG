@@ -268,12 +268,14 @@
                 
                 {{-- ITEM INI SELALU TAMPIL --}}
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                    {{-- ▼▼▼ PERBAIKAN 1 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
                         <i class="bi bi-grid-fill"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('berita.*') ? 'active' : '' }}" href="{{ route('berita.index') }}">
+                    {{-- ▼▼▼ PERBAIKAN 2 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}" href="{{ route('admin.berita.index') }}">
                         <i class="bi bi-newspaper"></i> Berita
                     </a>
                 </li>
@@ -283,35 +285,40 @@
                 @unless(Auth::user()->role == 'redaktur')
                 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('galeri.*') ? 'active' : '' }}" href="{{ route('galeri.index') }}">
+                    {{-- ▼▼▼ PERBAIKAN 3 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}" href="{{ route('admin.galeri.index') }}">
                         <i class="bi bi-images"></i> Galeri Kegiatan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('pengumuman.*') ? 'active' : '' }}" href="{{ route('pengumuman.index') }}">
+                    {{-- ▼▼▼ PERBAIKAN 4 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.pengumuman.*') ? 'active' : '' }}" href="{{ route('admin.pengumuman.index') }}">
                         <i class="bi bi-megaphone-fill"></i> Pengumuman
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('pengaduan.index') ? 'active' : '' }}" href="{{ route('pengaduan.index') }}">
+                    {{-- ▼▼▼ PERBAIKAN 5 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.pengaduan.*') ? 'active' : '' }}" href="{{ route('admin.pengaduan.index') }}">
                         <i class="bi bi-chat-left-text-fill"></i> Pengaduan Masuk
                     </a>
                 </li>
                 
                 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('karyawan.*') ? 'active' : '' }}" href="{{ route('karyawan.index') }}">
+                    {{-- ▼▼▼ PERBAIKAN 6 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.karyawan.*') ? 'active' : '' }}" href="{{ route('admin.karyawan.index') }}">
                         <i class="bi bi-people-fill"></i> Pengelolaan Admin
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('slider.index') ? 'active' : '' }}" href="{{ route('slider.index') }}">
+                    {{-- ▼▼▼ PERBAIKAN 7 ▼▼▼ --}}
+                    <a class="nav-link {{ request()->routeIs('admin.slider.*') ? 'active' : '' }}" href="{{ route('admin.slider.index') }}">
                         <i class="bi bi-collection-play-fill me-2"></i>
                         Manajemen Slider
                     </a>
                 </li>
                 <li class="nav-item">
-                    {{-- PERBAIKAN: Mengganti dokumen.index menjadi admin.dokumen.index --}}
+                    {{-- PERBAIKAN: Kode Anda sudah benar di sini, tidak perlu diubah --}}
                     <a class="nav-link {{ request()->routeIs('admin.dokumen.index') ? 'active' : '' }}" href="{{ route('admin.dokumen.index') }}">
                         <i class="bi bi-file-earmark-text-fill me-2"></i>
                         Dokumen Publikasi
@@ -325,6 +332,7 @@
 
             <ul class="list-unstyled components mt-auto pb-4">
                 <li class="logout-link">
+                    {{-- Link logout sudah benar (di luar grup 'admin.') --}}
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
                         <button type="submit" class="nav-link btn btn-link text-start w-100">
@@ -375,6 +383,7 @@
                         </a>
                         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
                             <li>
+                                {{-- Link logout sudah benar --}}
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">

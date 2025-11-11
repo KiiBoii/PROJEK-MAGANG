@@ -7,7 +7,8 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">List Berita</h4>
-        <a href="{{ route('berita.create') }}" class="btn btn-primary">
+        {{-- ▼▼▼ PERBAIKAN 1 ▼▼▼ --}}
+        <a href="{{ route('admin.berita.create') }}" class="btn btn-primary">
             <i class="bi bi-upload me-1"></i> Upload Berita
         </a>
     </div>
@@ -20,9 +21,10 @@
                 {{ request('tanggal') ? ucwords(str_replace('_', ' ', request('tanggal'))) : 'Tanggal' }}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuTanggal">
-                <li><a class="dropdown-item" href="{{ route('berita.index', array_merge(request()->query(), ['tanggal' => 'hari_ini'])) }}">Hari Ini</a></li>
-                <li><a class="dropdown-item" href="{{ route('berita.index', array_merge(request()->query(), ['tanggal' => '7_hari'])) }}">7 Hari Terakhir</a></li>
-                <li><a class="dropdown-item" href="{{ route('berita.index', array_merge(request()->query(), ['tanggal' => 'bulan_ini'])) }}">Bulan Ini</a></li>
+                {{-- ▼▼▼ PERBAIKAN 2 ▼▼▼ --}}
+                <li><a class="dropdown-item" href="{{ route('admin.berita.index', array_merge(request()->query(), ['tanggal' => 'hari_ini'])) }}">Hari Ini</a></li>
+                <li><a class="dropdown-item" href="{{ route('admin.berita.index', array_merge(request()->query(), ['tanggal' => '7_hari'])) }}">7 Hari Terakhir</a></li>
+                <li><a class="dropdown-item" href="{{ route('admin.berita.index', array_merge(request()->query(), ['tanggal' => 'bulan_ini'])) }}">Bulan Ini</a></li>
             </ul>
         </div>
 
@@ -32,14 +34,16 @@
                 {{ request('tag') ? ucfirst(request('tag')) : 'Tag Berita' }}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuTag">
-                <li><a class="dropdown-item" href="{{ route('berita.index', array_merge(request()->query(), ['tag' => 'info'])) }}">Info</a></li>
-                <li><a class="dropdown-item" href="{{ route('berita.index', array_merge(request()->query(), ['tag' => 'layanan'])) }}">Layanan</a></li>
-                <li><a class="dropdown-item" href="{{ route('berita.index', array_merge(request()->query(), ['tag' => 'kegiatan'])) }}">Kegiatan</a></li>
+                {{-- ▼▼▼ PERBAIKAN 3 ▼▼▼ --}}
+                <li><a class="dropdown-item" href="{{ route('admin.berita.index', array_merge(request()->query(), ['tag' => 'info'])) }}">Info</a></li>
+                <li><a class="dropdown-item" href="{{ route('admin.berita.index', array_merge(request()->query(), ['tag' => 'layanan'])) }}">Layanan</a></li>
+                <li><a class="dropdown-item" href="{{ route('admin.berita.index', array_merge(request()->query(), ['tag' => 'kegiatan'])) }}">Kegiatan</a></li>
             </ul>
         </div>
 
         @if(request('tanggal') || request('tag'))
-        <a href="{{ route('berita.index') }}" class="btn btn-light">
+        {{-- ▼▼▼ PERBAIKAN 4 ▼▼▼ --}}
+        <a href="{{ route('admin.berita.index') }}" class="btn btn-light">
             <i class="bi bi-x-circle"></i> Reset Filter
         </a>
         @endif
@@ -77,14 +81,16 @@
 
                     <hr class="mt-auto"> 
                     <div class="d-flex justify-content-between">
-                        <form action="{{ route('berita.destroy', $berita->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
+                        {{-- ▼▼▼ PERBAIKAN 5 ▼▼▼ --}}
+                        <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
                                 <i class="bi bi-trash me-1"></i> Hapus
                             </button>
                         </form>
-                        <a href="{{ route('berita.edit', $berita->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">
+                        {{-- ▼▼▼ PERBAIKAN 6 ▼▼▼ --}}
+                        <a href="{{ route('admin.berita.edit', $berita->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">
                             <i class="bi bi-pencil me-1"></i> Edit
                         </a>
                     </div>
@@ -96,7 +102,8 @@
             <div class="alert alert-secondary text-center" role="alert">
                 Tidak ada berita yang ditemukan.
                 @if(request('tanggal') || request('tag'))
-                    <a href="{{ route('berita.index') }}" class="alert-link">Reset filter</a>
+                    {{-- ▼▼▼ PERBAIKAN 7 ▼▼▼ --}}
+                    <a href="{{ route('admin.berita.index') }}" class="alert-link">Reset filter</a>
                 @else
                     Belum ada berita yang dipublikasikan.
                 @endif

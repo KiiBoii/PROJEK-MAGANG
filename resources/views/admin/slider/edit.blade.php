@@ -16,7 +16,7 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('slider.update', $slider->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.slider.update', $slider->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 
@@ -61,7 +61,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Update Slide</button>
-                <a href="{{ route('slider.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                <a href="{{ route('admin.slider.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
             </form>
         </div>
     </div>

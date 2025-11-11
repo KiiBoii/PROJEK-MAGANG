@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\PengaduanController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\PengumumanController;
 use App\Http\Controllers\Admin\SliderController; 
-use App\Http\Controllers\Admin\DokumenController; // <--- INI SUDAH BENAR
+use App\Http\Controllers\Admin\DokumenController;
 // --- IMPORT CONTROLLER PUBLIC ---
 use App\Http\Controllers\Public\PageController;
 
@@ -30,10 +30,7 @@ use App\Http\Middleware\PreventBackHistory;
 // === RUTE HALAMAN PUBLIK (TANPA LOGIN) ===
 Route::get('/', [PageController::class, 'home'])->name('public.home');
 Route::get('/profil', [PageController::class, 'profil'])->name('public.profil');
-
-// [BARU] Rute untuk halaman profil kepala dinas
 Route::get('/profil-kepala-dinas', [PageController::class, 'profilKadis'])->name('public.profil.kadis');
-
 Route::get('/berita', [PageController::class, 'berita'])->name('public.berita');
 Route::get('/berita/{id}', [PageController::class, 'showBerita'])->name('public.berita.detail');
 Route::get('/layanan-publik', [PageController::class, 'layanan'])->name('public.layanan');
@@ -52,8 +49,11 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout')->middl
 
 
 // === GRUP UNTUK SEMUA HALAMAN ADMIN ===
-// ▼▼▼ PERUBAHAN DI SINI ▼▼▼
-Route::middleware(['auth', 'role:admin,redaktur', PreventBackHistory::class])->prefix('admin')->group(function () {
+// Menggunakan prefix 'admin' dan nama 'admin.'
+Route::middleware(['auth', 'role:admin,redaktur', PreventBackHistory::class])
+    ->prefix('admin')
+    ->name('admin.') // <-- Menambahkan 'admin.' sebagai awalan nama
+    ->group(function () {
     
     
     // --- Rute yang bisa diakses KEDUA role (Admin & Redaktur) ---
@@ -63,21 +63,34 @@ Route::middleware(['auth', 'role:admin,redaktur', PreventBackHistory::class])->p
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // [DIPINDAHKAN] Dashboard sekarang bisa diakses oleh admin dan redaktur
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/admin/dashboard/chart-data', [App\Http\Controllers\Admin\DashboardController::class, 'getChartData'])->name('admin.dashboard.chartData');
-    Route::get('/dashboard/activities', [App\Http\Controllers\Admin\DashboardController::class, 'allActivities'])->name('admin.dashboard.activities');
+    
+    // ▼▼▼ BLOK PERBAIKAN DASHBOARD ▼▼▼
+    // URL: /admin/dashboard
+    // NAMA: admin.dashboard
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'); 
+    
+    // URL: /admin/dashboard/chart-data
+    // NAMA: admin.dashboard.chartData
+    Route::get('dashboard/chart-data', [DashboardController::class, 'getChartData'])->name('dashboard.chartData');
+    
+    // URL: /admin/dashboard/activities
+    // NAMA: admin.dashboard.activities
+    Route::get('dashboard/activities', [DashboardController::class, 'allActivities'])->name('dashboard.activities');
+    
+    // URL: /admin/dashboard/contributors
+    // NAMA: admin.dashboard.contributors
+    Route::get('dashboard/contributors', [DashboardController::class, 'allContributors'])->name('dashboard.contributors');
+    // ▲▲▲ AKHIR BLOK PERBAIKAN ▲▲▲
+
 
     // --- Rute yang HANYA bisa diakses oleh 'admin' ---
     Route::middleware('role:admin')->group(function () {
-
-        // PERBAIKAN: Hapus 'Admin\' karena sudah di-import di atas
-Route::resource('dokumen', DokumenController::class)
-    ->parameters(['dokumen' => 'dokumen'])
-    ->names('admin.dokumen');
-
         
-        // [DIPINDAHKAN] Route dashboard sudah dipindah ke atas
+        // PERBAIKAN: Hapus 'Admin\' karena sudah di-import di atas
+        Route::resource('dokumen', DokumenController::class)
+            ->parameters(['dokumen' => 'dokumen'])
+            ->names('dokumen'); // <-- Nama sudah otomatis jadi 'admin.dokumen'
+
         
         Route::resource('galeri', GaleriController::class);
         Route::resource('pengumuman', PengumumanController::class);

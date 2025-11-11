@@ -16,7 +16,7 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('galeri.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.galeri.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -57,7 +57,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Upload Foto</button>
-                <a href="{{ route('galeri.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                <a href="{{ route('admin.galeri.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
             </form>
         </div>
     </div>

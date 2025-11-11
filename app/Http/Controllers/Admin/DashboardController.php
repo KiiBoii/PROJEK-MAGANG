@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request; // ▼▼▼ PASTIKAN REQUEST DI-IMPORT ▼▼▼
+use Illuminate\Http\Request; 
 use App\Models\Berita;
 use App\Models\Galeri;
 use App\Models\Kontak;
 use App\Models\Pengumuman;
 use App\Models\Slider;
-use Illuminate\Support\Facades\DB;
+use App\Models\User; 
+use Illuminate\Support\Facades\DB; 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
@@ -24,7 +25,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $isRedaktur = ($user->role == 'redaktur'); 
+        $isRedaktur = ($user->role == 'redaktur');  
         
         // === 1. DATA CARD STATISTIK ===
         if ($isRedaktur) {
@@ -46,7 +47,7 @@ class DashboardController extends Controller
         $currentMonth = Carbon::now()->month;
 
         $earliestYear = $currentYear - 4; 
-        $availableYears = range($currentYear, $earliestYear);  
+        $availableYears = range($currentYear, $earliestYear);   
         
         $availableMonths = [];
         for ($m = 1; $m <= 12; $m++) {
@@ -62,7 +63,7 @@ class DashboardController extends Controller
             $chartLabels[] = Carbon::create(null, $month)->format('M');
             
             $beritaChartQuery = Berita::whereYear('created_at', $currentYear)
-                                    ->whereMonth('created_at', $month);
+                                        ->whereMonth('created_at', $month);
             
             if ($isRedaktur) {
                  $beritaChartQuery->where('user_id', $user->id);
@@ -88,16 +89,16 @@ class DashboardController extends Controller
             $item->jenis_aktivitas = 'Berita Baru';
             $item->judul_aktivitas = $item->judul;
             $item->icon = 'bi-newspaper';
-            $item->route = route('berita.index');
+            $item->route = route('admin.berita.index');
             $item->userName = $item->user->name ?? 'Sistem';
             return $item;
         });
-
+        
         $galeriActivities = $galeriQuery->latest()->take(5)->get()->map(function ($item) {
             $item->jenis_aktivitas = 'Galeri Baru';
             $item->judul_aktivitas = $item->judul_kegiatan;
             $item->icon = 'bi-images';
-            $item->route = route('galeri.index');
+            $item->route = route('admin.galeri.index');
             $item->userName = $item->user->name ?? 'Sistem';
             return $item;
         });
@@ -106,7 +107,7 @@ class DashboardController extends Controller
             $item->jenis_aktivitas = 'Pengumuman Baru';
             $item->judul_aktivitas = $item->judul;
             $item->icon = 'bi-megaphone';
-            $item->route = route('pengumuman.index');
+            $item->route = route('admin.pengumuman.index');
             $item->userName = $item->user->name ?? 'Sistem';
             return $item;
         });
@@ -115,7 +116,7 @@ class DashboardController extends Controller
             $item->jenis_aktivitas = 'Pengaduan Baru';
             $item->judul_aktivitas = 'Pesan dari ' . $item->nama;
             $item->icon = 'bi-chat-left-text';
-            $item->route = route('pengaduan.index');
+            $item->route = route('admin.pengaduan.index');
             $item->userName = $item->nama;
             return $item;
         });
@@ -127,12 +128,27 @@ class DashboardController extends Controller
         
         $recentActivities = $allActivities->sortByDesc('created_at')->take(5);
 
+        // === 4. QUERY PERINGKAT BERITA (TOP 5 UNTUK DASHBOARD) ===
+        $topBeritaUsers = [];
+        if (Auth::user()->role == 'admin') { 
+            
+            $beritaTable = (new Berita)->getTable(); 
+            $fotoColumn = 'foto'; 
 
-        // === 4. KIRIM SEMUA DATA KE VIEW ===
+            $topBeritaUsers = User::select('users.name', "users.{$fotoColumn}", DB::raw("COUNT({$beritaTable}.id) as total_berita"))
+                ->join($beritaTable, 'users.id', '=', "{$beritaTable}.user_id")
+                ->groupBy('users.id', 'users.name', "users.{$fotoColumn}") 
+                ->orderByDesc('total_berita')
+                ->take(5) 
+                ->get();
+        }
+
+        // === 5. KIRIM SEMUA DATA KE VIEW ===
         return view('admin.dashboard', compact(
             'totalBerita', 'totalGaleri', 'totalPengaduan', 'totalPengumuman', 'totalSlider',
             'chartLabels', 'chartData', 'availableYears', 'currentYear', 'availableMonths', 'currentMonth',
-            'recentActivities' 
+            'recentActivities',
+            'topBeritaUsers' 
         ));
     }
 
@@ -203,14 +219,13 @@ class DashboardController extends Controller
 
     /**
      * Menampilkan halaman semua aktivitas (untuk "Lihat Selengkapnya").
-     * ▼▼▼ METHOD INI DIUPDATE ▼▼▼
+     * (Tidak ada perubahan di method ini)
      */
-    public function allActivities(Request $request) // <-- Tambahkan Request $request
+    public function allActivities(Request $request) 
     {
         $user = Auth::user();
         $isRedaktur = ($user->role == 'redaktur');
 
-        // ▼▼▼ AMBIL INPUT FILTER ▼▼▼
         $day = $request->input('day');
         $month = $request->input('month');
         $year = $request->input('year');
@@ -228,7 +243,6 @@ class DashboardController extends Controller
             $pengaduanQuery->whereRaw('1 = 0'); 
         }
 
-        // ▼▼▼ TERAPKAN FILTER TANGGAL JIKA ADA ▼▼▼
         if ($day) {
             $beritaQuery->whereDay('created_at', $day);
             $galeriQuery->whereDay('created_at', $day);
@@ -247,30 +261,28 @@ class DashboardController extends Controller
             $pengumumanQuery->whereYear('created_at', $year);
             $pengaduanQuery->whereYear('created_at', $year);
         }
-        // ▲▲▲ AKHIR FILTER TANGGAL ▲▲▲
         
-        // Ambil SEMUA data (tanpa ->take(5))
         $beritaActivities = $beritaQuery->latest()->get()->map(function ($item) {
             $item->jenis_aktivitas = 'Berita Baru'; $item->judul_aktivitas = $item->judul;
-            $item->icon = 'bi-newspaper'; $item->route = route('berita.index');
+            $item->icon = 'bi-newspaper'; $item->route = route('admin.berita.index');
             $item->userName = $item->user->name ?? 'Sistem'; return $item;
         });
 
         $galeriActivities = $galeriQuery->latest()->get()->map(function ($item) {
             $item->jenis_aktivitas = 'Galeri Baru'; $item->judul_aktivitas = $item->judul_kegiatan;
-            $item->icon = 'bi-images'; $item->route = route('galeri.index');
+            $item->icon = 'bi-images'; $item->route = route('admin.galeri.index');
             $item->userName = $item->user->name ?? 'Sistem'; return $item;
         });
 
         $pengumumanActivities = $pengumumanQuery->latest()->get()->map(function ($item) {
             $item->jenis_aktivitas = 'Pengumuman Baru'; $item->judul_aktivitas = $item->judul;
-            $item->icon = 'bi-megaphone'; $item->route = route('pengumuman.index');
+            $item->icon = 'bi-megaphone'; $item->route = route('admin.pengumuman.index');
             $item->userName = $item->user->name ?? 'Sistem'; return $item;
         });
 
         $pengaduanActivities = $pengaduanQuery->latest()->get()->map(function ($item) {
             $item->jenis_aktivitas = 'Pengaduan Baru'; $item->judul_aktivitas = 'Pesan dari ' . $item->nama;
-            $item->icon = 'bi-chat-left-text'; $item->route = route('pengaduan.index');
+            $item->icon = 'bi-chat-left-text'; $item->route = route('admin.pengaduan.index');
             $item->userName = $item->nama; return $item;
         });
         
@@ -278,7 +290,7 @@ class DashboardController extends Controller
             ->merge($galeriActivities)
             ->merge($pengumumanActivities)
             ->merge($pengaduanActivities)
-            ->sortByDesc('created_at'); // Urutkan berdasarkan tanggal
+            ->sortByDesc('created_at'); 
 
         // === BUAT PAGINATION MANUAL ===
         $perPage = 15;
@@ -290,13 +302,11 @@ class DashboardController extends Controller
             $allActivitiesCollection->count(),
             $perPage,
             $currentPage,
-            ['path' => Paginator::resolveCurrentPath()] // Gunakan path saat ini
+            ['path' => Paginator::resolveCurrentPath()]
         );
 
-        // ▼▼▼ TAMBAHKAN FILTER KE LINK PAGINASI ▼▼▼
         $paginatedActivities->appends($request->query());
 
-        // ▼▼▼ SIAPKAN DATA FILTER UNTUK VIEW ▼▼▼
         $currentYear = Carbon::now()->year;
         $availableYears = range($currentYear, $currentYear - 4);
         $availableMonths = [];
@@ -308,7 +318,6 @@ class DashboardController extends Controller
         }
         $filters = ['day' => $day, 'month' => $month, 'year' => $year];
 
-        // ▼▼▼ KIRIM DATA BARU KE VIEW ▼▼▼
         return view('admin.activities', [
             'allActivities' => $paginatedActivities,
             'availableMonths' => $availableMonths,
@@ -316,4 +325,79 @@ class DashboardController extends Controller
             'filters' => $filters
         ]);
     }
+
+    
+    // ▼▼▼ METHOD HALAMAN PERINGKAT LENGKAP (DIPERBARUI) ▼▼▼
+    /**
+     * Menampilkan halaman semua kontributor.
+     */
+    public function allContributors(Request $request) // <-- 1. Tambahkan Request $request
+    {
+        // Pastikan hanya admin yang bisa akses
+        if (Auth::user()->role != 'admin') {
+            abort(403, 'Akses ditolak.');
+        }
+
+        // ▼▼▼ 2. Ambil nilai filter dari request ▼▼▼
+        $day = $request->input('day');
+        $month = $request->input('month');
+        $year = $request->input('year');
+        // ▲▲▲ Akhir tambahan 2 ▲▲▲
+
+        $beritaTable = (new Berita)->getTable(); 
+        $fotoColumn = 'foto';
+
+        // ▼▼▼ 3. Mulai query builder (tanpa ->get()) ▼▼▼
+        $query = User::select('users.name', "users.{$fotoColumn}", DB::raw("COUNT({$beritaTable}.id) as total_berita"))
+            ->join($beritaTable, 'users.id', '=', "{$beritaTable}.user_id");
+
+        // ▼▼▼ 4. Terapkan filter JIKA ada ▼▼▼
+        // Kita perlu `{$beritaTable}.created_at` untuk menghindari error "ambiguous column"
+        if ($day) {
+            $query->whereDay("{$beritaTable}.created_at", $day);
+        }
+        if ($month) {
+            $query->whereMonth("{$beritaTable}.created_at", $month);
+        }
+        if ($year) {
+            $query->whereYear("{$beritaTable}.created_at", $year);
+        }
+        // ▲▲▲ Akhir tambahan 4 ▲▲▲
+
+        // ▼▼▼ 5. Selesaikan query dan ->get() ▼▼▼
+        $allRankedUsers = $query->groupBy('users.id', 'users.name', "users.{$fotoColumn}") 
+            ->orderByDesc('total_berita')
+            ->get();
+        // ▲▲▲ Akhir perubahan 5 ▲▲▲
+
+        // Pisahkan Top 3 dan sisanya
+        $top3Contributors = $allRankedUsers->take(3);
+        $remainingContributors = $allRankedUsers->skip(3);
+
+        // ▼▼▼ 6. Siapkan data untuk dropdown filter di view ▼▼▼
+        $currentYear = Carbon::now()->year;
+        $availableYears = range($currentYear, $currentYear - 4); 
+        $availableMonths = [];
+        for ($m = 1; $m <= 12; $m++) {
+            $availableMonths[] = [
+                'value' => $m,
+                'name' => Carbon::create(null, $m)->format('F')
+            ];
+        }
+        // Simpan filter yang sedang aktif
+        $filters = ['day' => $day, 'month' => $month, 'year' => $year];
+        // ▲▲▲ Akhir tambahan 6 ▲▲▲
+        
+        // ▼▼▼ 7. Kirim data baru ke view ▼▼▼
+        return view('admin.contributors', compact(
+            'top3Contributors', 
+            'remainingContributors', 
+            'fotoColumn',
+            'availableMonths',      // <-- Data baru
+            'availableYears',       // <-- Data baru
+            'filters'               // <-- Data baru
+        ));
+        // ▲▲▲ Akhir perubahan 7 ▲▲▲
+    }
+    // ▲▲▲ AKHIR METHOD BARU ▲▲A
 }

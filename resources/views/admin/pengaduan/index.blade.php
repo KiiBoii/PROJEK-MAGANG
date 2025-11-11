@@ -119,7 +119,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     {{-- Form Hapus di dalam dropdown --}}
-                                    <form action="{{ route('pengaduan.destroy', $pengaduan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pesan ini?');">
+                                    <form action="{{ route('admin.pengaduan.destroy', $pengaduan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pesan ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="dropdown-item text-danger">

@@ -35,7 +35,7 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.berita.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -68,7 +68,7 @@
                 {{-- ▲▲▲ AKHIR PERBARUAN ▲▲▲ --}}
 
                 <button type="submit" class="btn btn-primary">Simpan Berita</button>
-                <a href="{{ route('berita.index') }}" class="btn btn-secondary ms-2">Batal</a>
+                <a href="{{ route('admin.berita.index') }}" class="btn btn-secondary ms-2">Batal</a>
             </form>
         </div>
     </div>
