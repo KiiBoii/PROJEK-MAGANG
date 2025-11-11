@@ -143,13 +143,38 @@
         display: none;
     }
     /* ▲▲▲ AKHIR CSS KUSTOM PAGINASI ▲▲▲ */
+
+    {{-- ▼▼▼ [BARU] STYLE TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+    #backToTopBtn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        visibility: hidden; /* Sembunyi secara default */
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s ease-in-out;
+        
+        /* Menggunakan style Bootstrap */
+        padding: 0.5rem 1rem; 
+        font-size: 1.25rem; 
+        width: 58px; 
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #backToTopBtn.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    {{-- ▲▲▲ AKHIR STYLE TOMBOL BACK TO TOP ▲▲▲ --}}
 </style>
 @endpush
 
 
 @section('content')
 
-<!-- 1. Header Halaman (DIGANTI DENGAN SLIDER) -->
 <div class="container my-5">
     
     <div id="pengumumanSlider" class="carousel slide news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000"
@@ -202,11 +227,7 @@
         
     </div>
 
-</div> <!-- Penutup container slider -->
-
-
-<!-- 2. Konten Pengumuman (DIPERBARUI) -->
-<div class="container my-5">
+</div> <div class="container my-5">
     <div class="row justify-content-center">
         {{-- Diubah ke col-lg-10 agar lebih lebar untuk 2 kolom --}}
         <div class="col-lg-10">
@@ -247,14 +268,52 @@
                 @endforelse
             </div>
 
-            <!-- Paginasi -->
             {{-- ▼▼▼ [BARU] PAGINASI KUSTOM (GAYA LINGKARAN) ▼▼▼ --}}
-            <div class="pagination-circles mt-4">
-                {!! $pengumumans->withQueryString()->links() !!}
-            </div>
+<div class="d-flex justify-content-center mt-4">
+    {!! $pengumumans->withQueryString()->links('vendor.pagination.custom-circle') !!}
+</div>
             {{-- ▲▲▲ AKHIR PAGINASI KUSTOM ▲▲▲ --}}
         </div>
     </div>
 </div>
 
+{{-- ▼▼▼ [BARU] HTML TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+<a href="#" id="backToTopBtn" class="btn btn-primary btn-lg rounded-circle shadow" title="Kembali ke atas">
+    <i class="bi bi-arrow-up"></i>
+</a>
+{{-- ▲▲▲ AKHIR HTML TOMBOL BACK TO TOP ▲▲▲ --}}
+
 @endsection
+
+{{-- ▼▼▼ [BARU] SCRIPT UNTUK TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var mybutton = document.getElementById("backToTopBtn");
+
+        if (mybutton) {
+            // Tampilkan/sembunyikan tombol
+            window.onscroll = function() {
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                
+                // Tampilkan tombol setelah scroll 300px
+                if (scrollTop > 300) { 
+                    mybutton.classList.add("show");
+                } else {
+                    mybutton.classList.remove("show");
+                }
+            };
+
+            // Scroll ke atas saat diklik
+            mybutton.onclick = function(e) {
+                e.preventDefault(); // Mencegah URL berubah menjadi #
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Animasi scroll halus
+                });
+            }
+        }
+    });
+</script>
+@endpush
+{{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}

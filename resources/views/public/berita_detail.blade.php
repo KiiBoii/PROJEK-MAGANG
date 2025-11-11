@@ -69,6 +69,32 @@
     .sidebar-card .list-unstyled .badge {
         font-size: 0.7rem;
     }
+
+    {{-- ▼▼▼ [BARU] STYLE TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+    #backToTopBtn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        visibility: hidden; /* Sembunyi secara default */
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s ease-in-out;
+        
+        /* Menggunakan style Bootstrap */
+        padding: 0.5rem 1rem; /* Sesuaikan padding untuk btn-lg */
+        font-size: 1.25rem; /* Sesuaikan font-size untuk btn-lg */
+        width: 58px; /* Pastikan bulat sempurna untuk btn-lg */
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #backToTopBtn.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    {{-- ▲▲▲ AKHIR STYLE TOMBOL BACK TO TOP ▲▲▲ --}}
 </style>
 @endpush
 
@@ -158,4 +184,41 @@
     </div>
 </div>
 
+{{-- ▼▼▼ [BARU] HTML TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+<a href="#" id="backToTopBtn" class="btn btn-primary btn-lg rounded-circle shadow" title="Kembali ke atas">
+    <i class="bi bi-arrow-up"></i>
+</a>
+{{-- ▲▲▲ AKHIR HTML TOMBOL BACK TO TOP ▲▲▲ --}}
+
 @endsection
+
+{{-- ▼▼▼ [BARU] SCRIPT UNTUK TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var mybutton = document.getElementById("backToTopBtn");
+
+        // Tampilkan/sembunyikan tombol
+        window.onscroll = function() {
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            
+            // Tampilkan tombol setelah scroll 300px
+            if (scrollTop > 300) { 
+                mybutton.classList.add("show");
+            } else {
+                mybutton.classList.remove("show");
+            }
+        };
+
+        // Scroll ke atas saat diklik
+        mybutton.onclick = function(e) {
+            e.preventDefault(); // Mencegah URL berubah menjadi #
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Animasi scroll halus
+            });
+        }
+    });
+</script>
+@endpush
+{{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}

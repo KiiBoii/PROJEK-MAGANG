@@ -31,8 +31,14 @@ use App\Http\Middleware\PreventBackHistory;
 Route::get('/', [PageController::class, 'home'])->name('public.home');
 Route::get('/profil', [PageController::class, 'profil'])->name('public.profil');
 Route::get('/profil-kepala-dinas', [PageController::class, 'profilKadis'])->name('public.profil.kadis');
+
+// --- Grup Halaman Berita (URUTAN DIPERBAIKI) ---
 Route::get('/berita', [PageController::class, 'berita'])->name('public.berita');
+// Route 'topik' yang spesifik HARUS ada SEBELUM route '{id}'
+Route::get('/berita/topik', [PageController::class, 'topik'])->name('public.berita.topik');
 Route::get('/berita/{id}', [PageController::class, 'showBerita'])->name('public.berita.detail');
+// --- Akhir Grup Berita ---
+
 Route::get('/layanan-publik', [PageController::class, 'layanan'])->name('public.layanan');
 Route::get('/galeri', [PageController::class, 'galeri'])->name('public.galeri');
 Route::get('/pengumuman', [PageController::class, 'pengumuman'])->name('public.pengumuman');
@@ -42,6 +48,7 @@ Route::post('/kontak', [PageController::class, 'storeKontak'])->name('public.kon
 
 // === RUTE AUTENTIKASI KUSTOM (LOGIN/LOGOUT) ===
 Route::middleware('guest')->group(function () {
+    // (Spasi yang salah ' ' sudah diperbaiki menjadi spasi biasa)
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
 });

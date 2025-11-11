@@ -324,6 +324,32 @@
         to {transform: scale(1); opacity: 1;}
     }
     /* ▲▲▲ AKHIR CSS LIGHTBOX ▲▲▲ */
+    
+    {{-- ▼▼▼ [BARU] STYLE TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+    #backToTopBtn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000; /* z-index lebih rendah dari lightbox (9999) tapi di atas konten (10) */
+        visibility: hidden; /* Sembunyi secara default */
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s ease-in-out;
+        
+        /* Menggunakan style Bootstrap */
+        padding: 0.5rem 1rem; 
+        font-size: 1.25rem; 
+        width: 58px; 
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #backToTopBtn.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    {{-- ▲▲▲ AKHIR STYLE TOMBOL BACK TO TOP ▲▲▲ --}}
 
 </style>
 @endpush
@@ -460,7 +486,9 @@
                 {!! $galeris->withQueryString()->links() !!}
             </div>
 
-        </div> </div> </div>
+        </div>
+    </div>
+</div>
 
 {{-- ▼▼▼ [BARU] HTML UNTUK MODAL LIGHTBOX KUSTOM ▼▼▼ --}}
 <div id="imageLightbox" class="lightbox-overlay">
@@ -471,6 +499,12 @@
     <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
 {{-- ▲▲▲ AKHIR HTML LIGHTBOX ▲▲▲ --}}
+
+{{-- ▼▼▼ [BARU] HTML TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+<a href="#" id="backToTopBtn" class="btn btn-primary btn-lg rounded-circle shadow" title="Kembali ke atas">
+    <i class="bi bi-arrow-up"></i>
+</a>
+{{-- ▲▲▲ AKHIR HTML TOMBOL BACK TO TOP ▲▲▲ --}}
 
 @endsection
 
@@ -621,6 +655,33 @@
         });
         
         // ▲▲▲ AKHIR LOGIKA LIGHTBOX ▲▲▲
+        
+        {{-- ▼▼▼ [BARU] SCRIPT UNTUK TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+        var mybutton = document.getElementById("backToTopBtn");
+
+        if (mybutton) {
+            // Tampilkan/sembunyikan tombol
+            window.onscroll = function() {
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                
+                // Tampilkan tombol setelah scroll 300px
+                if (scrollTop > 300) { 
+                    mybutton.classList.add("show");
+                } else {
+                    mybutton.classList.remove("show");
+                }
+            };
+
+            // Scroll ke atas saat diklik
+            mybutton.onclick = function(e) {
+                e.preventDefault(); // Mencegah URL berubah menjadi #
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Animasi scroll halus
+                });
+            }
+        }
+        {{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}
 
     });
 </script>

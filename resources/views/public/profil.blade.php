@@ -50,13 +50,38 @@
             opacity: 0;
             transition-property: opacity, transform;
         }
+        
+        {{-- ▼▼▼ [BARU] STYLE TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+        #backToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            visibility: hidden; /* Sembunyi secara default */
+            opacity: 0;
+            transition: visibility 0.3s, opacity 0.3s ease-in-out;
+            
+            /* Menggunakan style Bootstrap */
+            padding: 0.5rem 1rem; /* Sesuaikan padding untuk btn-lg */
+            font-size: 1.25rem; /* Sesuaikan font-size untuk btn-lg */
+            width: 58px; /* Pastikan bulat sempurna untuk btn-lg */
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #backToTopBtn.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        {{-- ▲▲▲ AKHIR STYLE TOMBOL BACK TO TOP ▲▲▲ --}}
     </style>
 @endpush
 
 
 @section('content')
 
-<!-- 1. Header Slider -->
 <div class="container my-5">
     <div id="profilHeader" class="carousel slide news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000"
          style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
@@ -101,7 +126,6 @@
 </div>
 
 
-<!-- 2. Sejarah -->
 <div class="container my-5" data-aos="fade-up" data-aos-duration="1000">
     <div class="row align-items-center">
         <div class="col-lg-7" data-aos="fade-right" data-aos-delay="100">
@@ -129,7 +153,6 @@
 </div>
 
 
-<!-- 3. Visi & Misi -->
 <div class="py-5 bg-white" data-aos="fade-up" data-aos-duration="1000">
     <div class="container">
         <h2 class="section-title mb-5 text-center">Visi dan Misi</h2>
@@ -162,12 +185,17 @@
 </div>
 
 
-<!-- 4. Struktur Organisasi -->
 <div class="container my-5 text-center" data-aos="zoom-in" data-aos-duration="1000">
     <h2 class="section-title mb-4">Struktur Organisasi</h2>
     <img src="https://diskominfotik.riau.go.id/wp-content/uploads/2025/10/Struktur-Organisasi-Diskominfotik-01-Oktober-2025.png" class="img-fluid rounded-3 shadow-sm" alt="Struktur Organisasi Dinas Sosial Riau">
     <p class="text-muted mt-3">Bagan Struktur Organisasi Dinas Sosial Provinsi Riau Tahun 2025</p>
 </div>
+
+{{-- ▼▼▼ [BARU] HTML TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+<a href="#" id="backToTopBtn" class="btn btn-primary btn-lg rounded-circle shadow" title="Kembali ke atas">
+    <i class="bi bi-arrow-up"></i>
+</a>
+{{-- ▲▲▲ AKHIR HTML TOMBOL BACK TO TOP ▲▲▲ --}}
 
 @endsection
 
@@ -185,4 +213,33 @@
             });
         });
     </script>
+    
+    {{-- ▼▼▼ [BARU] SCRIPT UNTUK TOMBOL BACK TO TOP (DITAMBAHKAN) ▼▼▼ --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var mybutton = document.getElementById("backToTopBtn");
+
+            // Tampilkan/sembunyikan tombol
+            window.onscroll = function() {
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                
+                // Tampilkan tombol setelah scroll 300px
+                if (scrollTop > 300) { 
+                    mybutton.classList.add("show");
+                } else {
+                    mybutton.classList.remove("show");
+                }
+            };
+
+            // Scroll ke atas saat diklik
+            mybutton.onclick = function(e) {
+                e.preventDefault(); // Mencegah URL berubah menjadi #
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Animasi scroll halus
+                });
+            }
+        });
+    </script>
+    {{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}
 @endpush
