@@ -106,7 +106,7 @@
                     <img src="{{ asset('storage/' . $slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ $slider->judul }}</h5>
-                        <p>{{ $slider->keterangan }}</p>
+<p>{{ Str::limit(strip_tags($slider->keterangan), 100) }}</p>
                     </div>
                 </div>
             @empty

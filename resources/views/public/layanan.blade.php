@@ -164,17 +164,21 @@
                     <div class="row mb-3 align-items-center">
                         <div class="col-md-6 d-flex align-items-center">
                             <label for="perPageDok" class="me-2">Tampilkan</label>
+                            
+                            {{-- ▼▼▼ PERBAIKAN 1 DI SINI ▼▼▼ --}}
                             <select id="perPageDok" class="form-select form-select-sm w-auto" onchange="window.location.href = this.value;">
                                 @php
                                     $currentPage = $dokumens->perPage();
                                     $currentUrl = request()->fullUrlWithoutQuery(['per_page', 'cari']);
                                 @endphp
                                 @foreach ([10, 25, 50] as $size)
-                                    <option value="{{ $currentUrl }}?per_page={{ $size }}{{ request('cari') ? '&cari=' . request('cari') : '' }}" {{ $currentPage == $size ? 'selected' : '' }}>
+                                    <option value="{{ $currentUrl }}?per_page={{ $size }}{{ request('cari') ? '&cari=' . request('cari') : '' }}#content-dokumen" {{ $currentPage == $size ? 'selected' : '' }}>
                                         {{ $size }}
                                     </option>
                                 @endforeach
                             </select>
+                            {{-- ▲▲▲ AKHIR PERBAIKAN 1 ▲▲▲ --}}
+
                             <span class="ms-2">data per halaman</span>
                         </div>
                         <div class="col-md-6">
@@ -218,9 +222,11 @@
                         </table>
                     </div>
                     
+                    {{-- ▼▼▼ PERBAIKAN 2 DI SINI ▼▼▼ --}}
                     <div class="d-flex justify-content-center mt-4">
-                        {{ $dokumens->links('pagination::bootstrap-5') }}
+                        {{ $dokumens->fragment('content-dokumen')->links('pagination::bootstrap-5') }}
                     </div>
+                    {{-- ▲▲▲ AKHIR PERBAIKAN 2 ▲▲▲ --}}
 
                 </div>
                 
