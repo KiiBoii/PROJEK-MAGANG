@@ -27,9 +27,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{-- Gunakan $dokumens->items() saat menggunakan pagination manual atau sesuaikan jika perlu --}}
+                        {{-- Jika menggunakan paginate() standar, $loop->iteration perlu disesuaikan --}}
                         @forelse($dokumens as $dokumen)
                         <tr id="dokumen-{{ $dokumen->id }}"> {{-- Tambahkan ID untuk JS --}}
-                            <td>{{ $loop->iteration }}</td>
+                            {{-- Penomoran untuk pagination: ($dokumens->currentPage() - 1) * $dokumens->perPage() + $loop->iteration --}}
+                            <td>{{ ($dokumens->currentPage() - 1) * $dokumens->perPage() + $loop->iteration }}</td>
                             <td>{{ $dokumen->judul }}</td>
                             <td>{{ $dokumen->keterangan }}</td>
                             <td>{{ $dokumen->file_name }}</td>
@@ -50,10 +53,17 @@
                         <tr>
                             <td colspan="6" class="text-center">Belum ada dokumen yang diunggah.</td>
                         </tr>
-                        @endforelse
+@endforelse
                     </tbody>
                 </table>
             </div>
+
+            {{-- 🔸 GUNAKAN PAGINATION CUSTOM (TELAH DITAMBAHKAN) --}}
+            <div class="d-flex justify-content-center mt-4">
+                {{-- Menggunakan $dokumens (sesuai variabel di controller) --}}
+                {!! $dokumens->withQueryString()->links('vendor.pagination.custom-circle') !!}
+            </div>
+            
         </div>
     </div>
 </div>
@@ -64,7 +74,14 @@
 {{-- 
 <script>
     $(document).ready(function() {
-        $('#dokumenTable').DataTable();
+        // Hati-hati: DataTables bawaan mungkin konflik dengan pagination Laravel.
+        // Jika Anda menggunakan DataTables untuk sorting/search sisi klien, pastikan pagination DataTables dimatikan
+        // atau gunakan DataTables server-side processing.
+        // 
+        // $('#dokumenTable').DataTable({
+        //     "paging": false, // Matikan paging DataTables agar pagination Laravel bekerja
+        //     "info": false 
+        // });
     });
 </script> 
 --}}

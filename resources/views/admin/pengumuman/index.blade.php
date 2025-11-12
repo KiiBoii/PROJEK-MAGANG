@@ -63,4 +63,8 @@
     </div>
     @endforelse
 </div>
+{{-- 🔸 PAGINATION CUSTOM DITAMBAHKAN DI SINI 🔸 --}}
+<div class="d-flex justify-content-center mt-4">
+    {!! $pengumumans->withQueryString()->links('vendor.pagination.custom-circle') !!}
+</div>
 @endsection

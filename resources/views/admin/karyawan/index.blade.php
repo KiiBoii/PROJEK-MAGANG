@@ -126,4 +126,8 @@
     @endforelse {{-- <--- Akhir dari @forelse --}}
 
 </div> {{-- Akhir dari .row --}}
+{{-- 🔸 PAGINATION CUSTOM DITAMBAHKAN DI SINI 🔸 --}}
+<div class="d-flex justify-content-center mt-4">
+    {!! $karyawans->withQueryString()->links('vendor.pagination.custom-circle') !!}
+</
 @endsection

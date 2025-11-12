@@ -24,7 +24,8 @@ class GaleriController extends Controller
 
     public function index()
     {
-        $galeris = Galeri::latest()->get();
+        // PERUBAHAN: Mengganti get() dengan paginate(9) sesuai permintaan
+        $galeris = Galeri::latest()->paginate(9);
         return view('admin.galeri.index', compact('galeris'));
     }
 

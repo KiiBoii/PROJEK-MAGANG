@@ -520,7 +520,7 @@
     {{-- Saya ganti div lama dengan div .pagination-circles --}}
     <div class="pagination-circles">
         {{-- Saya tambahkan withQueryString() untuk jaga-jaga jika ada filter --}}
-        {!! $beritas->withQueryString()->links() !!}
+        {!! $beritas->withQueryString()->links('vendor.pagination.custom-circle') !!}
     </div>
     {{-- ▲▲▲ AKHIR PAGINASI KUSTOM ▲▲▲ --}}
     

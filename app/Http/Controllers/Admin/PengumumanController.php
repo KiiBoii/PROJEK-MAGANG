@@ -15,7 +15,10 @@ class PengumumanController extends Controller
     {
         //Tambahkan with('user') untuk mengambil data user (Karyawan)
         // Ini untuk memperbaiki N+1 Query di halaman index
-        $pengumumans = Pengumuman::with('user')->latest()->get();
+        
+        // PERUBAHAN: Mengganti get() dengan paginate(9) untuk pagination
+        $pengumumans = Pengumuman::with('user')->latest()->paginate(9); 
+        
         return view('admin.pengumuman.index', compact('pengumumans'));
     }
 

@@ -30,7 +30,8 @@ class SliderController extends Controller
             $query->where('halaman', $request->halaman);
         }
 
-        $sliders = $query->latest()->get();
+        // PERUBAHAN: Mengganti get() dengan paginate(9)
+        $sliders = $query->latest()->paginate(9);
         
         //Kirim $halamanList dan halaman yg dipilih ke view
         return view('admin.slider.index', [

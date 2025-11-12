@@ -46,7 +46,7 @@ class KaryawanController extends Controller
         }
 
         // 5. Eksekusi query dengan urutan terbaru
-        $karyawans = $query->latest()->get();
+$karyawans = $query->latest()->paginate(9);
 
         // 6. Kirim data ke view, termasuk data untuk mengisi form filter
         return view('admin.karyawan.index', [

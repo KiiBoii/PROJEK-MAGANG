@@ -78,4 +78,8 @@
         </div>
     @endif
 </div>
+{{-- 🔸 PAGINATION CUSTOM DITAMBAHKAN DI SINI 🔸 --}}
+<div class="d-flex justify-content-center mt-4">
+    {!! $galeris->withQueryString()->links('vendor.pagination.custom-circle') !!}
+</div>
 @endsection

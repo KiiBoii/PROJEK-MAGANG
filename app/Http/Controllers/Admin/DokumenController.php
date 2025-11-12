@@ -17,7 +17,10 @@ class DokumenController extends Controller
      */
     public function index()
     {
-        $dokumens = Dokumen::latest()->get();
+        // PERUBAHAN: Mengganti get() dengan paginate() agar pagination berfungsi
+        // Angka 15 adalah jumlah item per halaman, bisa disesuaikan
+        $dokumens = Dokumen::latest()->paginate(10); 
+        
         return view('admin.dokumen.index', compact('dokumens'));
     }
 
