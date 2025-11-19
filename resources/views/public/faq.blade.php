@@ -136,7 +136,7 @@
 <div class="container my-5" data-aos="fade-in" data-aos-duration="1000">
     
     <div id="heroSlider" class="carousel slide news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000" 
-         style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+          style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
         
         <!-- Indicators (Dibuat dinamis) -->
         <div class="carousel-indicators">
@@ -190,7 +190,7 @@
     <div class="row mb-5" data-aos="fade-up">
         <div class="col-12">
             <h2 class="section-title">
-                Pusat Bantuan (FAQ)
+                Pertanyaan yang Sering Diajukan (FAQ)
             </h2>
         </div>
     </div>
@@ -201,77 +201,153 @@
         <div class="col-lg-8" data-aos="fade-right" data-aos-delay="100">
             
             <p class="text-muted mb-4 fs-5" style="max-width: 90%;">
-                Temukan jawaban cepat untuk pertanyaan yang sering diajukan seputar layanan kami.
+                Temukan jawaban cepat seputar data, bansos, dan layanan Dinas Sosial.
             </p>
             
             <div class="accordion" id="faqAccordion">
                 
-                {{-- 
-                    CATATAN: 
-                    Ini adalah data statis berdasarkan contoh Anda.
-                    Nantinya, Anda bisa mengganti ini dengan loop Blade, contoh:
-                    @foreach($faqs as $faq)
-                        <div class="accordion-item" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
-                           ...
-                           <h5>{{ $faq->pertanyaan }}</h5>
-                           ...
-                           <div>{{ $faq->jawaban }}</div>
-                           ...
-                        </div>
-                    @endforeach
-                --}}
-                
+                {{-- ▼▼▼ KONTEN FAQ BARU DIMASUKKAN DI SINI ▼▼▼ --}}
+
                 <div class="accordion-item" data-aos="fade-up" data-aos-delay="200">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Bagaimana cara mendaftar Bantuan Sosial?
+                    <h2 class="accordion-header" id="headingFAQ1">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ1" aria-expanded="false" aria-controls="collapseFAQ1">
+                            1. Data apa yang digunakan untuk sasaran program intervensi penanganan kemiskinan?
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div id="collapseFAQ1" class="accordion-collapse collapse" aria-labelledby="headingFAQ1" data-bs-parent="#faqAccordion">
                         <div class="accordion-body text-muted">
-                            Pendaftaran Bantuan Sosial dilakukan melalui Data Terpadu Kesejahteraan Sosial (DTKS). Silakan mendaftar ke kantor desa/lurah setempat dengan membawa dokumen kependudukan seperti KTP dan Kartu Keluarga (KK) untuk diusulkan ke dalam sistem DTKS.
+                            Disebutkan pada pasal 10 ayat 3 UU No 13 Tahun 2011 semua program bantuan dan atau pemberdayaan pemerintah dalam rangka penanganan fakir miskin harus berdasarkan Data Terpadu. Sedangkan berdasarkan Inpres No 4 Tahun 2025, saat ini yang digunakan adalah Data Tunggal Sosial dan Ekonomi Nasional (DTSEN).
                         </div>
                     </div>
                 </div>
                 
                 <div class="accordion-item" data-aos="fade-up" data-aos-delay="250">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Apa saja syarat untuk mendapatkan rehabilitasi sosial?
+                    <h2 class="accordion-header" id="headingFAQ2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ2" aria-expanded="false" aria-controls="collapseFAQ2">
+                            2. Apa itu bantuan sosial (bansos)?
                         </button>
                     </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div id="collapseFAQ2" class="accordion-collapse collapse" aria-labelledby="headingFAQ2" data-bs-parent="#faqAccordion">
                         <div class="accordion-body text-muted">
-                            Syarat utama adalah termasuk dalam kategori Pemerlu Pelayanan Kesejahteraan Sosial (PPKS), seperti anak terlantar, lansia, penyandang disabilitas, atau korban bencana. Anda dapat mengajukan permohonan ke Dinas Sosial setempat untuk dievaluasi lebih lanjut.
+                            Bansos merupakan program pemerintah yang bisa berupa bantuan uang/barang/pembiayaan untuk membantu masyarakat yang membutuhkan dan melindungi dari risiko sosial. Tujuannya secara langsung untuk memenuhi dan menjamin kebutuhan dasar, mendorong kemandirian, meningkatkan taraf hidup penerima bansos, dan secara tidak langsung menjaga stabilitas ekonomi nasional.
+                            <br><br>
+                            Sifat bantuan sosial pada dasarnya *tidak terus-menerus* dan *selektif*. Namun pada keadaan tertentu, bantuan sosial dapat diberikan secara berkelanjutan hingga penerima tidak lagi berada dalam risiko sosial (dengan evaluasi kelayakan secara berkala). Pemberian bantuan juga disesuaikan dengan prioritas kebijakan pembangunan serta kemampuan keuangan pemerintah baik pusat maupun daerah. Oleh karena itu, kepesertaan bantuan sosial bersifat sementara dan bisa berubah apabila ada perubahan kebijakan alokasi anggaran, perubahan kriteria dan perubahan/pembaharuan data sasaran.
                         </div>
                     </div>
                 </div>
                 
                 <div class="accordion-item" data-aos="fade-up" data-aos-delay="300">
-                    <h2 class="accordion-header" id="headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Bagaimana cara melaporkan pengaduan?
+                    <h2 class="accordion-header" id="headingFAQ3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ3" aria-expanded="false" aria-controls="collapseFAQ3">
+                            3. Apa saja jenis bansos reguler Kemensos dan kriteria penerimanya?
                         </button>
                     </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div id="collapseFAQ3" class="accordion-collapse collapse" aria-labelledby="headingFAQ3" data-bs-parent="#faqAccordion">
                         <div class="accordion-body text-muted">
-                            Anda dapat menggunakan tautan "Kirim Masukan" di samping untuk diarahkan ke halaman kontak kami. Selain itu, Anda juga bisa mengirimkan email langsung ke <a href="mailto:info@dinsos.riau.go.id">info@dinsos.riau.go.id</a> atau menghubungi kami melalui media sosial yang tertera di bagian bawah situs.
+                            <p class="fw-bold mb-1">Penerima Bantuan Iuran Jaminan Kesehatan (PBI JK)</p>
+                            <p>Bantuan berupa pembiayaan iuran yang dibayarkan langsung kepada BPJS Kesehatan (tidak diberikan kepada penerima dalam bentuk uang). Penerima PBI JK dapat menggunakan layanan kesehatan di fasilitas kesehatan mitra BPJS Kesehatan secara gratis sesuai ketentuan yang berlaku.
+                            <br>Kriteria: Masuk **DTSEN Desil 1-5**.</p>
+                            
+                            <p class="fw-bold mb-1">SEMBAKO</p>
+                            <p>Bantuan berupa uang sebesar Rp 200.000/bulan yang dapat diterimakan dalam beberapa periode sekaligus, disalurkan melalui HIMBARA yang ditunjuk. Penerima baru akan melalui proses pembukaan rekening kolektif (Burekol) yang akan disertai dengan distribusi / pembagian Kartu Keluarga Sejahtera (KKS) sebagai alat transaksi / pencairan.
+                            <br>Kriteria: Masuk **DTSEN Desil 1-5**.</p>
+
+                            <p class="fw-bold mb-1">Program Keluarga Harapan (PKH)</p>
+                            <p>Bantuan tunai bersyarat berupa uang dengan besaran sesuai jenis komponen yang dimiliki. Bantuan disalurkan melalui HIMBARA yang ditunjuk. Penerima PKH wajib mengikuti kegiatan rutin Pertemuan Peningkatan Kemampuan Keluarga (P2K2).
+                            <br>Kriteria: Keluarga yang masuk **DTSEN Desil 1-4**, serta memiliki *minimal satu* dari komponen berikut:</p>
+                            <ul>
+                                <li>**Komponen Kesehatan**: Apabila dalam keluarga terdapat ibu hamil dan atau anak usia dini (di bawah 7 tahun / belum sekolah).</li>
+                                <li>**Komponen Pendidikan**: Apabila dalam keluarga terdapat anak sekolah dasar (SD), anak sekolah menengah pertama (SMP), anak sekolah menengah atas (SMA).</li>
+                                <li>**Komponen Kesejahteraan Sosial**: Apabila dalam keluarga terdapat lanjut usia atau penyandang Disabilitas (Kepdirjen Perlinsos No 9/3/HK.01/1/2025).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="350">
+                    <h2 class="accordion-header" id="headingFAQ4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ4" aria-expanded="false" aria-controls="collapseFAQ4">
+                            4. Bagaimana cara mengetahui status keberadaan seseorang/keluarga dalam DTSEN?
+                        </button>
+                    </h2>
+                    <div id="collapseFAQ4" class="accordion-collapse collapse" aria-labelledby="headingFAQ4" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Untuk mengetahui status keberadaan seseorang/keluarga dalam DTSEN yaitu melakukan pengecekan berbasis NIK melalui akun aplikasi SIKS-NG. Hal tersebut dapat dilakukan melalui petugas/operator kalurahan/kelurahan setempat dan atau petugas/operator Dinas Sosial Kabupaten/Kota setempat dengan menunjukkan KTP/KK.
                         </div>
                     </div>
                 </div>
 
-                <div class="accordion-item" data-aos="fade-up" data-aos-delay="350">
-                    <h2 class="accordion-header" id="headingFour">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            Di mana saya bisa mengunduh dokumen publikasi?
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="400">
+                    <h2 class="accordion-header" id="headingFAQ5">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ5" aria-expanded="false" aria-controls="collapseFAQ5">
+                            5. Jika menemui keluarga miskin yang saat akan dilakukan pengusulan bansos ternyata diketahui belum masuk DTSEN, apa yang harus dilakukan?
                         </button>
                     </h2>
-                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div id="collapseFAQ5" class="accordion-collapse collapse" aria-labelledby="headingFAQ5" data-bs-parent="#faqAccordion">
                         <div class="accordion-body text-muted">
-                            Semua dokumen publikasi seperti laporan, peraturan, dan pengumuman tersedia di menu <a href="{{ route('public.layanan') }}#content-dokumen">Layanan Publik</a> pada bagian "Dokumen Publikasi".
+                            Sebagaimana disebutkan dalam pasal 9 ayat 1 UU No 13 Tahun 2011, bahwa seorang fakir miskin yang belum terdata dapat secara aktif mendaftarkan diri kepada lurah atau kepala desa atau nama lain yang sejenis di tempat tinggalnya.
+                            <br><br>
+                            Kementerian Sosial telah menyediakan kebijakan, mekanisme dan sistem untuk mengelola tatacara penyampaian data usulan dari daerah. Di mana setiap data usulan harus melalui proses finalisasi secara berjenjang oleh Lurah dan Bupati/Walikota (Permensos No 3 Tahun 2025). Di wilayah DIY, mekanisme pengusulan ke dalam data terpadu / DTSEN dilakukan melalui Musyawarah Kelurahan/Kalurahan (Pergub DIY No 63 Tahun 2023).
                         </div>
                     </div>
                 </div>
+
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="450">
+                    <h2 class="accordion-header" id="headingFAQ6">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ6" aria-expanded="false" aria-controls="collapseFAQ6">
+                            6. Data/informasi apa saja yang harus diisikan pada saat melakukan proses usulan data/proses usulan pembaharuan data?
+                        </button>
+                    </h2>
+                    <div id="collapseFAQ6" class="accordion-collapse collapse" aria-labelledby="headingFAQ6" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Pada saat melakukan usulan baru (belum masuk DTSEN), di aplikasi SIKS-NG akan ada tahap pengisian data mencakup **39 variabel** yang dikelompokkan menjadi dua kategori utama: 13 variabel individu dan 26 variabel keluarga. Variabel-variabel ini digunakan untuk mengumpulkan data kondisi sosial dan ekonomi masyarakat agar penyaluran bantuan sosial menjadi lebih tepat sasaran.
+                            <br><br>
+                            Selain itu petugas/operator juga harus melengkapi dengan foto-foto dan geotag lokasi rumah individu/keluarga yang akan diusulkan tersebut. Pengisian data dilakukan melalui akun SIKS-NG atau SIKSMA oleh Petugas/Operator/Pendamping sosial yang ditunjuk dengan datang berkunjung ke alamat rumah sesuai KTP.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="500">
+                    <h2 class="accordion-header" id="headingFAQ7">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ7" aria-expanded="false" aria-controls="collapseFAQ7">
+                            7. Apa yang sebaiknya dilakukan apabila kita menemui seseorang/keluarga (dalam 1 kelurahan/kalurahan yang sama) yang terlihat mampu/kaya tetapi ternyata masih mendapatkan bansos?
+                        </button>
+                    </h2>
+                    <div id="collapseFAQ7" class="accordion-collapse collapse" aria-labelledby="headingFAQ7" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Sebagai upaya melibatkan partisipasi masyarakat dalam menjaga ketepatan sasaran bantuan sosial, Kementerian Sosial RI telah menyediakan mobile App Cek Bansos (dapat diunduh melalui Playstore). Untuk dapat digunakan, pengguna harus membuat akun terlebih dahulu dengan mengisikan data diri dan keluarga sesuai KTP dan KK terbaru.
+                            <br><br>
+                            Info lebih lanjut tentang pemanfaatan mobile app Cek Bansos dapat diketahui melalui tautan video dari akun Youtube resmi Pusdatin Kesos berikut: 
+                            <ul>
+                                <li><a href="#" class="text-decoration-none">Aplikasi Cek Bansos Menu Usul dan Sanggah</a></li>
+                                <li><a href="#" class="text-decoration-none">Usulan Bantuan Sosial Melalui Aplikasi Cek Bansos</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item" data-aos="fade-up" data-aos-delay="550">
+                    <h2 class="accordion-header" id="headingFAQ8">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFAQ8" aria-expanded="false" aria-controls="collapseFAQ8">
+                            8. Apa saja yang dapat menyebabkan kepesertaan bansos nonaktif?
+                        </button>
+                    </h2>
+                    <div id="collapseFAQ8" class="accordion-collapse collapse" aria-labelledby="headingFAQ8" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Kepesertaan bansos dapat berhenti / nonaktif karena hal-hal berikut:
+                            <ul>
+                                <li>Pada saat dilakukan verifikasi/groundcheck, alamat tidak ditemukan</li>
+                                <li>Pada saat dilakukan verifikasi/groundcheck, individu tidak ditemukan</li>
+                                <li>Meninggal dunia</li>
+                                <li>Memiliki pekerjaan sebagai ASN/TNI/POLRI/Pegawai BUMN/Pegawai BUMD/Pejabat Negara</li>
+                                <li>Merupakan anggota keluarga dari ASN/TNI/POLRI/Pegawai BUMN/Pegawai BUMD/Pejabat Negara</li>
+                                <li>Tidak lagi sesuai kriteria (masuk dalam Desil 6-10 DTSEN)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                {{-- ▲▲▲ AKHIR KONTEN FAQ BARU ▲▲▲ --}}
 
             </div>
 
@@ -321,9 +397,9 @@
         // Tunggu hingga seluruh halaman (termasuk gambar) dimuat
         window.addEventListener('load', function() {
             AOS.init({
-                duration: 800,   // Durasi animasi dalam milidetik
-                once: true,      // [BERBEDA] Animasi hanya terjadi SEKALI
-                offset: 100,     // Jarak (px) dari bagian bawah layar sebelum animasi dimulai
+                duration: 800,   // Durasi animasi dalam milidetik
+                once: true,      // [BERBEDA] Animasi hanya terjadi SEKALI
+                offset: 100,     // Jarak (px) dari bagian bawah layar sebelum animasi dimulai
                 easing: 'ease-out-cubic', // Jenis easing
             });
         });
@@ -358,4 +434,3 @@
     </script>
     {{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}
 @endpush
-

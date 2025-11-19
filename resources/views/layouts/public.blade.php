@@ -72,25 +72,72 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             border: 1px solid #e0e0e0;
         }
-        /* Menghilangkan panah dropdown default */
-        .navbar-main .nav-item.dropdown > .nav-link::after {
-            display: none;
+        /* Menambahkan ikon panah ke dropdown level 1 */
+        .navbar-main .nav-item.dropdown .nav-link::after {
+            display: inline-block;
+            margin-left: .255em;
+            vertical-align: .255em;
+            content: "";
+            border-top: .3em solid;
+            border-right: .3em solid transparent;
+            border-bottom: 0;
+            border-left: .3em solid transparent;
         }
         /* Style untuk item di dalam dropdown */
         .navbar-main .dropdown-menu {
             padding: 0;
             border: none;
+            /* 👇👇👇 UKURAN DROPDOWN DIPERKECIL (280px - 320px) 👇👇👇 */
+            min-width: 280px; 
+            max-width: 320px; 
+            /* 👆👆👆 AKHIR UKURAN DROPDOWN DIPERKECIL 👆👆👆 */
         }
         .navbar-main .dropdown-item {
             color: var(--dark-blue);
             font-weight: 500;
             padding: 0.75rem 1rem;
             transition: all 0.2s ease;
+            white-space: normal; 
         }
         .navbar-main .dropdown-item:hover {
             background-color: var(--primary-color);
             color: #ffffff;
         }
+        
+        /* === STYLE UNTUK DROPDOWN MULTI-LEVEL (PPID > Daftar Info Publik) === */
+        .dropdown-submenu {
+            position: relative;
+        }
+        /* Tampilkan Sub-menu Level 2 saat hover di Sub-menu Level 1 */
+        .dropdown-submenu:hover > .dropdown-menu {
+            display: block;
+        }
+        .dropdown-submenu > .dropdown-menu {
+            top: 0;
+            left: 100%; 
+            margin-top: -6px;
+            margin-left: -1px;
+            border-radius: .25rem;
+            display: none; /* Sembunyikan secara default */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+            min-width: 300px; /* Lebar sub-dropdown sedikit lebih besar */
+            max-width: 400px; 
+        }
+        /* Tambahkan panah kanan untuk submenu */
+        .dropdown-submenu > a::after {
+            display: block;
+            content: "\f285"; /* Ikon Chevron Right dari Bootstrap Icons */
+            font-family: 'bootstrap-icons';
+            float: right;
+            margin-top: 2px;
+            color: #6c757d;
+        }
+        .dropdown-submenu:hover > a::after {
+            color: #ffffff; /* Ubah warna panah saat hover */
+        }
+        /* === AKHIR STYLE DROPDOWN MULTI-LEVEL === */
+
 
         /* Section Title Styling */
         .section-title {
@@ -199,14 +246,12 @@
             margin-top: 3rem; 
         }
         
-        /* ▼▼▼ PERUBAHAN CSS DI SINI ▼▼▼ */
         .footer-center-content .logo-img {
             max-height: 70px; 
             margin-bottom: 1rem;
-            width: auto; /* [BARU] Menjaga rasio aspek logo */
-            border-radius: 0; /* [BARU] Menghapus paksa border radius */
+            width: auto; 
+            border-radius: 0; 
         }
-        /* ▲▲▲ AKHIR PERUBAHAN CSS ▲▲▲ */
         
         .footer-center-content .logo-text {
             color: #fff;
@@ -269,23 +314,64 @@
                             <a class="nav-link {{ request()->routeIs('public.berita') ? 'active' : '' }}" href="{{ route('public.berita') }}">Berita</a>
                         </li>
                         
+                        {{-- ▼▼▼ MENU PPID DROPDOWN (2-Tingkat) ▼▼▼ --}}
                         <li class="nav-item dropdown">
-                            <a class="nav-link {{ request()->routeIs('public.layanan') ? 'active' : '' }}" href="{{ route('public.layanan') }}#content-bantuan">
+                            <a class="nav-link {{ request()->routeIs('public.ppid') || request()->is('*ppid*') ? 'active' : '' }}" href="#" id="ppidDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                PPID
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="ppidDropdown">
+                                
+                                {{-- Submenu: Daftar Informasi Publik (Level 2) --}}
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item" href="#">
+                                        Daftar Informasi Publik
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {{-- 12 Sub-Submenu PDF --}}
+                                        <li><a class="dropdown-item" href="#">1. Rehabilitasi Sosial dasar Lanjut Usia Telantar di Dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="#">2. Rehabilitasi Sosial Dasar Anak Telantar dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="#">3. Rehabilitasi Sosial Dasar Penyandang Disabilitas Fisik, Sensorik Telantar di dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="#">4. Rehabilitasi Sosial Dasar Penyandang Disabilitas Mental Telantar</a></li>
+                                        <li><a class="dropdown-item" href="#">5. Rehabilitasi Sosial Gelandang dan Pengemis Dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="#">6. Standar Pelayanan Rehabilitasi Sosial Bagi Anak Nakal, Anak Berhadapan Hukum (ABH), Diluar Hiv/Aids dan Napza di Dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="#">7. Penanganan Perlindungan Sosial Korban Bencana Alam dan Bencana Sosial</a></li>
+                                        <li><a class="dropdown-item" href="#">8. Pemberian Izin Pengangkatan Anak</a></li>
+                                        <li><a class="dropdown-item" href="#">9. PENERBITAN TANDA DAFTAR LEMBAGA KESEJAHTERAAN SOSIAL (LKS)</a></li>
+                                        <li><a class="dropdown-item" href="#">10. Pemulangan warga imigran korban tindak kekerasan dari titik debarkasi di daerah Provinsi untuk di pulangkan ke Daerah Kab/ Kota Asal</a></li>
+                                        <li><a class="dropdown-item" href="#">11. Pengaduan Masyarakat, Monitoring dan Evaluasi Program Keluarga Harapan (PKH).</a></li>
+                                        <li><a class="dropdown-item" href="#">12. Pertimbangan teknis Undian Gratis Berhadiah (UGB) dan Pengumpulan Uang atau Barang (PUB)</a></li>
+                                        {{-- Catatan: Ganti `#` dengan route atau URL yang mengarah ke PDF terkait --}}
+                                    </ul>
+                                </li>
+                                {{-- Contoh item PPID lain (opsional) --}}
+                                <li><a class="dropdown-item" href="#">Visi Misi PPID</a></li>
+                                <li><a class="dropdown-item" href="#">Prosedur Permohonan Informasi</a></li>
+                            </ul>
+                        </li>
+                        {{-- ▲▲▲ AKHIR MENU PPID DROPDOWN ▲▲▲ --}}
+                        
+                        {{-- ▼▼▼ MENU LAYANAN PUBLIK (DROPDOWN dengan ANCHOR) ▼▼▼ --}}
+                        <li class="nav-item dropdown">
+                            {{-- Link utama mengarah ke halaman layanan --}}
+                            <a class="nav-link {{ request()->routeIs('public.layanan') ? 'active' : '' }}" href="{{ route('public.layanan') }}" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Layanan Publik
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                                 <li>
+                                    {{-- Mengarahkan ke halaman layanan dengan anchor #content-bantuan --}}
                                     <a class="dropdown-item" href="{{ route('public.layanan') }}#content-bantuan">
                                         Pusat Bantuan (FAQ)
                                     </a>
                                 </li>
                                 <li>
+                                    {{-- Mengarahkan ke halaman layanan dengan anchor #content-dokumen --}}
                                     <a class="dropdown-item" href="{{ route('public.layanan') }}#content-dokumen">
                                         Dokumen Publikasi
                                     </a>
                                 </li>
                             </ul>
                         </li>
+                        {{-- ▲▲▲ AKHIR MENU LAYANAN PUBLIK ▲▲▲ --}}
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.galeri') ? 'active' : '' }}" href="{{ route('public.galeri') }}">Galeri</a>
@@ -294,9 +380,12 @@
                             <a class="nav-link {{ request()->routeIs('public.pengumuman') ? 'active' : '' }}" href="{{ route('public.pengumuman') }}">Pengumuman</a>
                         </li>
                         
+                        {{-- ▼▼▼ MENU FAQ (LINK TERPISAH) ▼▼▼ --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.faq') ? 'active' : '' }}" href="{{ route('public.faq') }}">FAQ</a>
                         </li>
+                        {{-- ▲▲▲ AKHIR MENU FAQ (LINK TERPISAH) ▼▼▼ --}}
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.kontak') ? 'active' : '' }}" href="{{ route('public.kontak') }}">Kontak</a>
                         </li>
@@ -335,10 +424,10 @@
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <h5>LOKASI</h5>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63834.790313990954!2d101.43211943053905!3d0.48666664207182264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31d5aebcc272c77b%3A0x7b45c35bb6d8f1b8!2sDinas%20Sosial%20Provinsi%20Riau!5e0!3m2!1sid!2sid!4v1762851919935!5m2!1sid!2sid" 
-                            class="map-placeholder" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
+                                class="map-placeholder" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
                 <div class="col-lg-4 col-md-12 mb-4">
@@ -356,10 +445,7 @@
                     "Mewujudkan manajemen penyelenggaraan pemerintahan yang baik (good governance), efektif dan efisien, professional, transparan dan akuntabel."
                 </p>
                 
-                {{-- ▼▼▼ PERUBAHAN HTML DI SINI ▼▼▼ --}}
-                {{-- Class "rounded-circle" telah dihapus --}}
                 <img src="{{ asset('images/logo_pemprov.png') }}" alt="Logo Pemprov Riau" class="logo-img">
-                {{-- ▲▲▲ AKHIR PERUBAHAN HTML ▲▲▲ --}}
 
                 <div class="logo-text">DINAS SOSIAL PROVINSI RIAU</div>
                 
@@ -370,6 +456,48 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {{-- Tambahkan kembali script hover multi-level untuk PPID --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Script ini menangani hover untuk dropdown multi-level (dropdown-submenu)
+            const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu');
+
+            dropdownSubmenus.forEach(function(el) {
+                // Tampilkan submenu saat mouse enter
+                el.addEventListener('mouseenter', function() {
+                    const submenu = this.querySelector('.dropdown-menu');
+                    if (submenu) {
+                        submenu.style.display = 'block';
+                    }
+                });
+
+                // Sembunyikan submenu saat mouse leave
+                el.addEventListener('mouseleave', function() {
+                    const submenu = this.querySelector('.dropdown-menu');
+                    if (submenu) {
+                        // Gunakan timeout agar ada sedikit jeda sebelum menghilang
+                        setTimeout(() => {
+                             // Hanya sembunyikan jika mouse tidak berada di atas submenu
+                            if (!submenu.matches(':hover')) {
+                                submenu.style.display = 'none';
+                            }
+                        }, 100); 
+                    }
+                });
+
+                // Mencegah navigasi link utama sub-dropdown saat diklik
+                const anchor = el.querySelector('a');
+                if (anchor) {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                    });
+                }
+            });
+        });
+    </script>
+
     @stack('scripts')
+    
 </body>
 </html>
