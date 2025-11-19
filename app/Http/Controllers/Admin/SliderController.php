@@ -17,7 +17,8 @@ class SliderController extends Controller
         'profil', 
         'pengumuman', 
         'kontak', 
-        'layanan'
+        'layanan',
+        'faq'
     ];
 
 

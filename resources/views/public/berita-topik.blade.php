@@ -299,7 +299,7 @@
     {{-- PAGINASI KUSTOM (GAYA LINGKARAN) --}}
     <div class="pagination-circles">
         {{-- Paginasi ini untuk $semua_topik --}}
-        {!! $semua_topik->withQueryString()->->links('vendor.pagination.custom-circle') !!}
+        {!! $semua_topik->withQueryString()->links('vendor.pagination.custom-circle') !!}
     </div>
     
 </div>

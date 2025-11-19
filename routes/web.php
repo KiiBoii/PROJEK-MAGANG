@@ -42,6 +42,10 @@ Route::get('/berita/{id}', [PageController::class, 'showBerita'])->name('public.
 Route::get('/layanan-publik', [PageController::class, 'layanan'])->name('public.layanan');
 Route::get('/galeri', [PageController::class, 'galeri'])->name('public.galeri');
 Route::get('/pengumuman', [PageController::class, 'pengumuman'])->name('public.pengumuman');
+
+// <-- RUTE BARU DITAMBAHKAN -->
+Route::get('/faq', [PageController::class, 'faq'])->name('public.faq');
+
 Route::get('/kontak', [PageController::class, 'kontak'])->name('public.kontak');
 Route::post('/kontak', [PageController::class, 'storeKontak'])->name('public.kontak.store');
 
@@ -65,6 +69,10 @@ Route::middleware(['auth', 'role:admin,redaktur', PreventBackHistory::class])
     
     // --- Rute yang bisa diakses KEDUA role (Admin & Redaktur) ---
     Route::resource('berita', BeritaController::class)->parameter('berita', 'berita');
+    
+    // ▼▼▼ RUTE BARU UNTUK TOGGLE STATUS BERITA ▼▼▼
+    Route::patch('berita/{berita}/toggle', [BeritaController::class, 'toggleStatus'])->name('berita.toggle');
+    // ▲▲▲ AKHIR RUTE BARU ▲▲▲
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

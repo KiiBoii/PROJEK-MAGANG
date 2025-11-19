@@ -293,6 +293,10 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.pengumuman') ? 'active' : '' }}" href="{{ route('public.pengumuman') }}">Pengumuman</a>
                         </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('public.faq') ? 'active' : '' }}" href="{{ route('public.faq') }}">FAQ</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.kontak') ? 'active' : '' }}" href="{{ route('public.kontak') }}">Kontak</a>
                         </li>

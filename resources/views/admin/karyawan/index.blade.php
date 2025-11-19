@@ -99,17 +99,61 @@
                 </ul>
                 
                 <div class="d-flex justify-content-between mt-3" style="position: absolute; bottom: 1rem; left: 1rem; right: 1rem;">
-                    <form action="{{ route('admin.karyawan.destroy', $karyawan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus karyawan ini?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Hapus</button>
-                    </form>
+                    
+                    {{-- ▼▼▼ PERUBAHAN: Tombol Pemicu Modal ▼▼▼ --}}
+                    <button type="button" class="btn btn-outline-danger btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $karyawan->id }}">
+                        Hapus
+                    </button>
+                    
+                    {{-- ▼▼▼ Tombol Edit ▼▼▼ --}}
                     <a href="{{ route('admin.karyawan.edit', $karyawan->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">Edit</a>
                 </div>
             </div>
         </div>
     </div>
     
+    {{-- ▼▼▼ TAMBAHAN: Modal Konfirmasi Hapus (Desain Baru) ▼▼▼ --}}
+    <div class="modal fade" id="deleteModal{{ $karyawan->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $karyawan->id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            
+            <div class="modal-content">
+                
+                {{-- Header: Dibuat borderless, hanya berisi tombol close --}}
+                <div class="modal-header border-bottom-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                {{-- Body: Konten terpusat dengan ikon peringatan --}}
+                <div class="modal-body text-center pt-0">
+                    {{-- Ikon Peringatan --}}
+                    <div class="text-danger mb-3" style="font-size: 3.5rem;">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                    <h4 class="mb-3">Anda Yakin?</h4>
+                    <p class="text-muted">Anda akan menghapus pengguna:</p>
+                    <p class="fw-bold mb-0">"{{ $karyawan->name }}"</p>
+                    <p class="text-danger small mt-3">Tindakan ini tidak dapat dibatalkan.</p>
+                </div>
+                
+                {{-- Footer: Dibuat borderless dan terpusat --}}
+                <div class="modal-footer border-top-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    
+                    {{-- Form Hapus --}}
+                    <form action="{{ route('admin.karyawan.destroy', $karyawan->id) }}" method="POST" class="m-0">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-1"></i> Ya, Hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{-- ▲▲▲ AKHIR MODAL ▲▲▲ --}}
+
     {{-- [DIUBAH] Pesan jika tidak ada data --}}
     @empty
     <div class="col-12">
@@ -126,8 +170,9 @@
     @endforelse {{-- <--- Akhir dari @forelse --}}
 
 </div> {{-- Akhir dari .row --}}
+
 {{-- 🔸 PAGINATION CUSTOM DITAMBAHKAN DI SINI 🔸 --}}
 <div class="d-flex justify-content-center mt-4">
-    {!! $karyawans->withQueryString()->links('vendor.pagination.custom-circle') !!}
-</
+    {!! $karyawans->withQueryString()->links('vendor.pagination.custom-circle') !!}
+</div> {{-- <-- Penutup div yang hilang --}}
 @endsection

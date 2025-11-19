@@ -3,34 +3,13 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="mb-0">Galeri Kegiatan</h3>
-    {{-- ▼▼▼ PERBAIKAN 1 ▼▼▼ --}}
     <a href="{{ route('admin.galeri.create') }}" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 20px;">
         Upload Photo
     </a>
 </div>
 
 <div class="row">
-    {{-- Filtering, Anda bisa tambahkan di sini jika perlu --}}
-    {{-- <div class="col-12 mb-3 d-flex">
-        <div class="dropdown me-2">
-            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownTanggal" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 15px;">
-                Tanggal
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownTanggal">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-            </ul>
-        </div>
-        <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownTagBerita" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 15px;">
-                Tag Berita
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownTagBerita">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-            </ul>
-        </div>
-    </div> --}}
+    {{-- Filtering bisa ditambahkan di sini --}}
 
     @foreach ($galeris as $foto)
     <div class="col-md-4 col-sm-6 mb-4">
@@ -44,31 +23,71 @@
             @endif
             <div class="card-body d-flex flex-column">
                 
-                {{-- === TAMBAHKAN BARIS INI === --}}
                 <span class="badge bg-primary align-self-start mb-2">
                     {{ $foto->bidang ?? 'Umum' }}
                 </span>
-                {{-- === AKHIR TAMBAHAN === --}}
 
                 <h5 class="card-title">{{ $foto->judul_kegiatan }}</h5>
                 <small class="text-muted">{{ $foto->created_at->format('d/m/Y') }}</small>
                 
-                {{-- Mendorong tombol ke bawah --}}
                 <div class="mt-auto"> 
                     <hr>
                     <div class="d-flex justify-content-between">
-                        {{-- ▼▼▼ PERBAIKAN 2 ▼▼▼ --}}
-                        <form action="{{ route('admin.galeri.destroy', $foto->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus foto ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">Hapus</button>
-                        </form>
-                        {{-- ▼▼▼ PERBAIKAN 3 ▼▼▼ --}}
+                        
+                        {{-- ▼▼▼ PERUBAHAN: Tombol Pemicu Modal ▼▼▼ --}}
+                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $foto->id }}">
+                            Hapus
+                        </button>
+                        
+                        {{-- ▼▼▼ Tombol Edit ▼▼▼ --}}
                         <a href="{{ route('admin.galeri.edit', $foto->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill">Edit</a>
                     </div>
                 </div>
             </div>
         </div>
+
+        {{-- ▼▼▼ TAMBAHAN: Modal Konfirmasi Hapus (Desain Baru) ▼▼▼ --}}
+        <div class="modal fade" id="deleteModal{{ $foto->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $foto->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                
+                <div class="modal-content">
+                    
+                    {{-- Header: Dibuat borderless, hanya berisi tombol close --}}
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    {{-- Body: Konten terpusat dengan ikon peringatan --}}
+                    <div class="modal-body text-center pt-0">
+                        {{-- Ikon Peringatan --}}
+                        <div class="text-danger mb-3" style="font-size: 3.5rem;">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                        <h4 class="mb-3">Anda Yakin?</h4>
+                        <p class="text-muted">Anda akan menghapus foto kegiatan:</p>
+                        <p class="fw-bold mb-0">"{{ $foto->judul_kegiatan }}"</p>
+                        <p class="text-danger small mt-3">Tindakan ini tidak dapat dibatalkan.</p>
+                    </div>
+                    
+                    {{-- Footer: Dibuat borderless dan terpusat --}}
+                    <div class="modal-footer border-top-0 justify-content-center pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                        
+                        {{-- Form Hapus --}}
+                        <form action="{{ route('admin.galeri.destroy', $foto->id) }}" method="POST" class="m-0">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-1"></i> Ya, Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {{-- ▲▲▲ AKHIR MODAL ▲▲▲ --}}
+
     </div>
     @endforeach
 
@@ -78,7 +97,7 @@
         </div>
     @endif
 </div>
-{{-- 🔸 PAGINATION CUSTOM DITAMBAHKAN DI SINI 🔸 --}}
+{{-- 🔸 PAGINATION CUSTOM --}}
 <div class="d-flex justify-content-center mt-4">
     {!! $galeris->withQueryString()->links('vendor.pagination.custom-circle') !!}
 </div>

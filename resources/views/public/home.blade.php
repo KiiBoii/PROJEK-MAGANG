@@ -146,7 +146,7 @@
             <h2 class="fw-bold mb-3" style="color: #0d47a1;">KEPALA DINAS</h2>
             
             <div class="d-flex mb-3">
-                <img src="https://placehold.co/150x150/e0e0e0/333?text=FOTO+KADIS" class="rounded-circle" alt="Foto Kepala Dinas" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="{{ asset('images/Miyabi_mcd.jpg') }}" class="rounded-circle" alt="Foto Kepala Dinas" style="width: 150px; height: 150px; object-fit: cover;">
                 <div class="ms-4">
                     <h4 class="fw-bold mb-1">Nama Kepala Dinas, S.H., M.Si.</h4>
                     <p class="text-muted mb-2">Kepala Dinas Sosial Provinsi Riau</p>

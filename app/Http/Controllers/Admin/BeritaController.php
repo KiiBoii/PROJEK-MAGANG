@@ -166,4 +166,24 @@ class BeritaController extends Controller
         // ▼▼▼ PERBAIKAN 6 ▼▼▼
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
     }
+
+    /**
+     * [BARU] Method untuk toggle status visible (tampil/sembunyi)
+     * Pastikan Anda sudah menambahkan kolom 'is_visible' (boolean) ke tabel 'beritas'
+     */
+    public function toggleStatus(Berita $berita)
+    {
+        // Keamanan: Cek apakah user adalah redaktur dan apakah berita ini BUKAN miliknya
+        $user = Auth::user();
+        if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
+            return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan mengubah status berita ini.');
+        }
+
+        // Ganti status (dari true jadi false, atau false jadi true)
+        // Pastikan kolom 'is_visible' ada di tabel 'beritas'
+        $berita->is_visible = !$berita->is_visible;
+        $berita->save();
+
+        return back()->with('success', 'Status berita berhasil diubah.');
+    }
 }

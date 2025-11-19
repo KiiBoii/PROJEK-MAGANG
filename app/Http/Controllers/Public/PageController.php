@@ -25,6 +25,7 @@ class PageController extends Controller
         
         $semuaBeritaBaru = Berita::with('user')
                                     ->whereNull('tag') 
+                                    ->where('is_visible', true) // <-- DITAMBAHKAN
                                     ->latest()
                                     ->take(6)
                                     ->get();
@@ -69,6 +70,7 @@ class PageController extends Controller
         // Ambil 6 Berita TERBARU yang BUKAN topik (tag = null) untuk "Hot News"
         $hot_news = Berita::with('user')
                             ->whereNull('tag') // Hanya berita biasa
+                            ->where('is_visible', true) // <-- DITAMBAHKAN
                             ->latest()
                             ->take(6)
                             ->get();
@@ -79,16 +81,18 @@ class PageController extends Controller
         // Ambil sisa Berita yang BUKAN topik (tag = null) untuk "Berita Lainnya"
         $beritas = Berita::with('user')
                             ->whereNull('tag') // Hanya berita biasa
+                            ->where('is_visible', true) // <-- DITAMBAHKAN
                             ->whereNotIn('id', $hot_news_ids) // Lewati berita 'hot'
                             ->latest()
                             ->paginate(9); // Ambil 9 per halaman
         
         // Ambil 5 Berita TERBARU yang MEMILIKI TAG (ini adalah Topik Lainnya)
         $topik_lainnya = Berita::with('user')
-                                        ->whereNotNull('tag') // HANYA berita yang punya tag
-                                        ->latest()
-                                        ->take(5) // Ambil 5 topik terbaru
-                                        ->get();
+                                    ->whereNotNull('tag') // HANYA berita yang punya tag
+                                    ->where('is_visible', true) // <-- DITAMBAHKAN
+                                    ->latest()
+                                    ->take(5) // Ambil 5 topik terbaru
+                                    ->get();
 
         return view('public.berita', compact('sliders', 'hot_news', 'beritas', 'topik_lainnya'));
     }
@@ -105,6 +109,7 @@ class PageController extends Controller
         // 1. Ambil 3 Berita 'Topik' terbaru untuk slider (Ini sudah benar)
         $sliders = Berita::with('user')
                             ->whereNotNull('tag') // HANYA berita yang punya tag
+                            ->where('is_visible', true) // <-- DITAMBAHKAN
                             ->latest()
                             ->take(3) // Ambil 3 saja
                             ->get();
@@ -112,6 +117,7 @@ class PageController extends Controller
         // 2. Konten Utama: Ambil SEMUA berita yang punya TAG
         $semua_topik = Berita::with('user')
                                 ->whereNotNull('tag') // HANYA berita yang punya tag
+                                ->where('is_visible', true) // <-- DITAMBAHKAN
                                 // ▼▼▼ PASTIKAN BARIS DI BAWAH INI DIHAPUS ▼▼▼
                                 // ->whereNotIn('id', $sliders->pluck('id')) 
                                 // ▲▲▲ JANGAN GUNAKAN whereNotIn() ▲▲▲
@@ -121,6 +127,7 @@ class PageController extends Controller
         // 3. Sidebar: Ambil 5 Berita terbaru TANPA tag (Ini sudah benar)
         $berita_terbaru_sidebar = Berita::with('user')
                                         ->whereNull('tag') // Hanya berita biasa
+                                        ->where('is_visible', true) // <-- DITAMBAHKAN
                                         ->latest()
                                         ->take(5) // Ambil 5 berita terbaru
                                         ->get();
@@ -137,7 +144,8 @@ class PageController extends Controller
         $sliders = Slider::where('halaman', 'galeri')->where('is_visible', true)->latest()->get();
         $bidangList = Galeri::whereNotNull('bidang')->where('bidang', '!=', '')->distinct()->pluck('bidang');
         
-        $query = Galeri::with('user');
+        // Asumsi: Galeri juga punya kolom is_visible
+        $query = Galeri::with('user')->where('is_visible', true); // <-- DITAMBAHKAN
 
         if ($request->has('bidang') && $request->bidang != '') {
             $query->where('bidang', $request->bidang);
@@ -147,7 +155,7 @@ class PageController extends Controller
         // Mengganti ->get() menjadi ->paginate() agar paginasi di view berfungsi.
         // Saya set 9 item per halaman, Anda bisa ubah angkanya.
         // $galeris = $query->latest()->get(); // <-- Kode lama
-        $galeris = $query->latest()->paginate(9)->withQueryString(); // <-- Kode baru
+        $galeris = $query->latest()->paginate()->withQueryString(); // <-- Kode baru
         // ▲▲▲ AKHIR PERUBAHAN ▲▲▲
 
         return view('public.galeri', compact('sliders', 'galeris', 'bidangList'));
@@ -160,7 +168,10 @@ class PageController extends Controller
     {
 
         $sliders = Slider::where('halaman', 'layanan')->where('is_visible', true)->latest()->get();
-        $query = Dokumen::query();
+        
+        // Asumsi: Dokumen juga punya kolom is_visible
+        $query = Dokumen::query()->where('is_visible', true); // <-- DITAMBAHKAN
+
         if ($request->filled('cari')) {
             $query->where('judul', 'like', '%' . $request->cari . '%')
                     ->orWhere('keterangan', 'like', '%' . $request->cari . '%');
@@ -178,11 +189,36 @@ class PageController extends Controller
 
         $sliders = Slider::where('halaman', 'pengumuman')->where('is_visible', true)->latest()->get();
         
+        // Asumsi: Pengumuman juga punya kolom is_visible
         // ▼▼▼ PERUBAHAN DI SINI (10 -> 9) ▼▼▼
-        $pengumumans = Pengumuman::with('user')->latest()->paginate(10);
+        $pengumumans = Pengumuman::with('user')
+                                ->where('is_visible', true) // <-- DITAMBAHKAN
+                                ->latest()
+                                ->paginate(10);
         // ▲▲▲ AKHIR PERUBAHAN ▲▲▲
         
         return view('public.pengumuman', compact('sliders', 'pengumumans'));
+    }
+
+    /**
+     * [BARU] Halaman FAQ (Pusat Bantuan)
+     */
+    public function faq()
+    {
+        // ▼▼▼ PERUBAHAN DI SINI ▼▼▼
+        // Mengambil data slider untuk halaman 'faq'. 
+        // Anda bisa ganti 'faq' dengan 'layanan' jika ingin slidernya sama
+        // dengan halaman layanan.
+        $sliders = Slider::where('halaman', 'faq')  // [OPSIONAL] Fallback ke slider 'layanan'
+                         ->where('is_visible', true)
+                         ->latest()
+                         ->get();
+        
+        // Anda bisa juga mengambil data FAQ dinamis dari DB di sini
+        // $faqs = FaqModel::where('is_visible', true)->get();
+        
+        return view('public.faq', compact('sliders' /*, 'faqs' */));
+        // ▲▲▲ AKHIR PERUBAHAN ▲▲▲
     }
 
     /**
@@ -221,11 +257,13 @@ class PageController extends Controller
      */
     public function showBerita($id)
     {
-        $berita = Berita::with('user')->findOrFail($id);
+        // Ini akan otomatis gagal (404) jika 'is_visible' = false
+        $berita = Berita::with('user')->where('is_visible', true)->findOrFail($id); // <-- DITAMBAHKAN
 
         //Ambil 5 berita acak (apapun tag-nya)
         // "semua berita yg eksis (selain berita yang sedang dibuka user)"
         $topik_lainnya = Berita::where('id', '!=', $id) // Jangan tampilkan berita yang sedang dibaca
+                                        ->where('is_visible', true) // <-- DITAMBAHKAN
                                         ->inRandomOrder() // Ambil acak dari semua berita
                                         ->take(20)
                                         ->get();

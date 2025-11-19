@@ -107,14 +107,11 @@
                         <div class="mt-auto">
                             <hr>
                             <div class="d-flex justify-content-between">
-                                {{-- Tombol Hapus (Gaya "Berita") --}}
-                                <form action="{{ route('admin.slider.destroy', $slide->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus slide ini?');" class="d-inline w-100 me-1">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100">
-                                        <i class="bi bi-trash me-1"></i> Hapus
-                                    </button>
-                                </form>
+                                
+                                {{-- ▼▼▼ PERUBAHAN: Tombol Pemicu Modal ▼▼▼ --}}
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill w-100 me-1" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $slide->id }}">
+                                    <i class="bi bi-trash me-1"></i> Hapus
+                                </button>
                                 
                                 {{-- Tombol Edit (Gaya "Berita") --}}
                                 <a href="{{ route('admin.slider.edit', $slide->id) }}" class="btn btn-outline-secondary btn-sm rounded-pill w-100 ms-1">
@@ -126,6 +123,49 @@
                     </div>
                 </div>
             </div>
+
+            {{-- ▼▼▼ TAMBAHAN: Modal Konfirmasi Hapus (Desain Baru) ▼▼▼ --}}
+            <div class="modal fade" id="deleteModal{{ $slide->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $slide->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    
+                    <div class="modal-content">
+                        
+                        {{-- Header: Dibuat borderless, hanya berisi tombol close --}}
+                        <div class="modal-header border-bottom-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        {{-- Body: Konten terpusat dengan ikon peringatan --}}
+                        <div class="modal-body text-center pt-0">
+                            {{-- Ikon Peringatan --}}
+                            <div class="text-danger mb-3" style="font-size: 3.5rem;">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            </div>
+                            <h4 class="mb-3">Anda Yakin?</h4>
+                            <p class="text-muted">Anda akan menghapus slide:</p>
+                            <p class="fw-bold mb-0">"{{ $slide->judul }}"</p>
+                            <p class="text-danger small mt-3">Tindakan ini tidak dapat dibatalkan.</p>
+                        </div>
+                        
+                        {{-- Footer: Dibuat borderless dan terpusat --}}
+                        <div class="modal-footer border-top-0 justify-content-center pb-4">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                            
+                            {{-- Form Hapus --}}
+                            <form action="{{ route('admin.slider.destroy', $slide->id) }}" method="POST" class="m-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="bi bi-trash me-1"></i> Ya, Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {{-- ▲▲▲ AKHIR MODAL ▲▲▲ --}}
+
         @empty
             <div class="col-12">
                 {{-- ▼▼▼ PERUBAHAN 4: Alert Kosong (Gaya "Berita") ▼▼▼ --}}

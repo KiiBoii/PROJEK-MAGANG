@@ -483,7 +483,7 @@
 
             {{-- PAGINASI KUSTOM (GAYA LINGKARAN) --}}
             <div class="pagination-circles mt-5">
-                {!! $galeris->withQueryString()->->links('vendor.pagination.custom-circle') !!}
+                {!! $galeris->withQueryString()->links('vendor.pagination.custom-circle') !!}
             </div>
 
         </div>

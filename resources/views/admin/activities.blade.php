@@ -10,7 +10,7 @@
                 <div class="card-header">Daftar Aktivitas</div>
                 <div class="card-body">
 
-                    {{-- ▼▼▼ TAMBAHKAN FORM FILTER DI SINI ▼▼▼ --}}
+                    {{-- ▼▼▼ FORM FILTER ▼▼▼ --}}
                     <form method="GET" action="{{ route('admin.dashboard.activities') }}" class="mb-3">
                         <div class="row g-2">
                             <div class="col-md-3">
@@ -86,16 +86,20 @@
                     </ul>
                 </div>
 
-                {{-- Tampilkan Link Pagination --}}
-                @if ($allActivities->hasPages())
-                    <div class="card-footer">
-                        {{-- Link ini akan otomatis membawa filter (day, month, year) --}}
-                        {{ $allActivities->links() }}
-                    </div>
-                @endif
+                {{-- Tampilkan Link Pagination (LAMA DIHAPUS) --}}
+                {{-- Blok @if ($allActivities->hasPages()) ... @endif telah dihapus dari sini --}}
 
             </div>
         </div>
     </div>
+
+    {{-- ▼▼▼ PERUBAHAN: PAGINATION CUSTOM DITAMBAHKAN DI SINI ▼▼▼ --}}
+    {{-- 🔸 GUNAKAN PAGINATION CUSTOM --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{-- Menggunakan variabel $allActivities --}}
+        {!! $allActivities->withQueryString()->links('vendor.pagination.custom-circle') !!}
+    </div>
+    {{-- ▲▲▲ AKHIR PAGINATION CUSTOM ▲▲▲ --}}
+
 </div>
 @endsection
