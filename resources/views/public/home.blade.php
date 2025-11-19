@@ -54,7 +54,7 @@
             transition-property: opacity, transform;
         }
 
-        /* ▼▼▼ [BARU] STYLE TOMBOL BACK TO TOP ▼▼▼ */
+        /* ▼▼▼ STYLE TOMBOL BACK TO TOP ▼▼▼ */
         #backToTopBtn {
             position: fixed;
             bottom: 30px;
@@ -79,27 +79,69 @@
             opacity: 1;
         }
         /* ▲▲▲ AKHIR STYLE TOMBOL BACK TO TOP ▲▲▲ */
+        
+        /* ▼▼▼ STYLE MODAL SURVEY ▼▼▼ */
+        .modal-dialog-centered-custom {
+            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content-custom {
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .survey-image {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 1rem;
+            /* Placeholder: ganti dengan gambar asli jika ada */
+        }
+        /* ▲▲▲ AKHIR STYLE MODAL SURVEY ▲▲▲ */
     </style>
 @endpush
 
 
 @section('content')
 
-<!-- 1. Bagian Slider/Hero (TELAH DIPERBARUI MENJADI DINAMIS) -->
+{{-- ▼▼▼ HTML MODAL SURVEY KEPUASAN MASYARAKAT ▼▼▼ --}}
+{{-- Catatan: 'data-bs-backdrop="static"' dan 'data-bs-keyboard="false"' mencegah modal ditutup dengan klik di luar atau tombol ESC, memaksa pengguna berinteraksi dengan tombol tutup atau tombol 'Selengkapnya'. --}}
+<div class="modal fade" id="surveyModal" tabindex="-1" aria-labelledby="surveyModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered-custom">
+        <div class="modal-content modal-content-custom p-4">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pt-0">
+                
+                {{-- Ilustrasi Placeholder --}}
+                <img src="{{ asset('images/Miyabi_mcd.jpg') }}" alt="Ilustrasi Survey" class="survey-image img-fluid">
+
+                <h3 class="fw-bold mb-3">Survey Kepuasan Masyarakat</h3>
+                <p class="text-muted">Bantu kami dengan mengisi survey pelayanan Dinas Sosial Provinsi Riau di link di bawah sehingga kami dapat semakin meningkatkan pelayanan kami.</p>
+                
+                {{-- Tombol akan dihandle oleh JavaScript --}}
+                <button type="button" id="btnSelengkapnya" class="btn btn-primary btn-lg rounded-pill px-5 mt-3">
+                    Selengkapnya
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- ▲▲▲ AKHIR HTML MODAL SURVEY KEPUASAN MASYARAKAT ▲▲▲ --}}
+
 {{-- [ANIMASI] Animasi fade-in saat halaman dimuat --}}
 <div class="container my-5" data-aos="fade-in" data-aos-duration="1000">
     
     <div id="heroSlider" class="carousel slide news-slider" data-bs-ride="carousel" data-bs-pause="false" data-bs-interval="3000" 
-         style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+          style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
         
-        <!-- Indicators (Dibuat dinamis) -->
         <div class="carousel-indicators">
             @foreach($sliders as $slider)
                 <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}" aria-current="{{ $loop->first ? 'true' : 'false' }}" aria-label="Slide {{ $loop->iteration }}"></button>
             @endforeach
         </div>
         
-        <!-- Slides (Dibuat dinamis) -->
         <div class="carousel-inner">
             @forelse($sliders as $slider)
                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
@@ -134,11 +176,7 @@
         @endif
     </div>
 
-</div> <!-- Penutup container slider -->
-
-
-<!-- 2. Bagian Sambutan Kepala Dinas (Tidak diubah) -->
-<div class="container my-5">
+</div> <div class="container my-5">
     <div class="row align-items-center">
         {{-- [ANIMASI] Kolom kiri slide dari kanan --}}
         <div class="col-lg-8" data-aos="fade-right" data-aos-offset="100">
@@ -171,12 +209,11 @@
         <div class="col-lg-4" data-aos="fade-left" data-aos-offset="100" data-aos-delay="200">
             <h5 class="fw-bold mb-3">Video Kegiatan Kepala Dinas</h5>
             <div class="ratio ratio-16x9 rounded-3 shadow-sm">
-<iframe src="https://www.youtube.com/embed/pFnJ97g-wSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>            </div>
+<iframe src="https://www.youtube.com/embed/pFnJ97g-wSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>            </div>
         </div>
     </div>
 </div>
 
-<!-- 3. Bagian Berita Terbaru (Tidak diubah) -->
 {{-- [ANIMASI] Seluruh bagian berita fade-up --}}
 <div class="py-5" style="background-color: #ffffff;" data-aos="fade-up" data-aos-offset="100">
     <div class="container">
@@ -242,7 +279,7 @@
     </div>
 </div>
 
-{{-- ▼▼▼ [BARU] HTML TOMBOL BACK TO TOP ▼▼▼ --}}
+{{-- ▼▼▼ HTML TOMBOL BACK TO TOP ▼▼▼ --}}
 <a href="#" id="backToTopBtn" class="btn btn-primary btn-lg rounded-circle shadow" title="Kembali ke atas">
     <i class="bi bi-arrow-up"></i>
 </a>
@@ -260,17 +297,40 @@
         // Tunggu hingga seluruh halaman (termasuk gambar) dimuat
         window.addEventListener('load', function() {
             AOS.init({
-                duration: 800,   // Durasi animasi dalam milidetik
-                once: false,     // [DIUBAH] Animasi terjadi setiap kali di-scroll (atas/bawah)
-                offset: 100,     // Jarak (px) dari bagian bawah layar sebelum animasi dimulai
+                duration: 800,   // Durasi animasi dalam milidetik
+                once: false,     // [DIUBAH] Animasi terjadi setiap kali di-scroll (atas/bawah)
+                offset: 100,     // Jarak (px) dari bagian bawah layar sebelum animasi dimulai
                 easing: 'ease-out-cubic', // Jenis easing
             });
         });
     </script>
 
-    {{-- ▼▼▼ [BARU] SCRIPT UNTUK TOMBOL BACK TO TOP ▼▼▼ --}}
+    {{-- ▼▼▼ SCRIPT UNTUK MODAL SURVEY DAN TOMBOL BACK TO TOP (Dihapus SessionStorage) ▼▼▼ --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- LOGIKA POP-UP SURVEY ---
+            const surveyModal = new bootstrap.Modal(document.getElementById('surveyModal'));
+            const btnSelengkapnya = document.getElementById('btnSelengkapnya');
+            
+            // GANTI DENGAN LINK GOOGLE FORM ASLI ANDA
+            const surveyLink = "https://docs.google.com/forms/d/e/1FAIpQLScJp881sQ5eI8Yd1O2vT1Q9y0x-g5vO0x1hN0x/viewform"; 
+
+            // TAMPILKAN MODAL SETIAP KALI HALAMAN DIMUAT (Refresh atau kembali ke Home)
+            setTimeout(() => {
+                surveyModal.show();
+            }, 500); 
+
+            // Aksi saat tombol "Selengkapnya" diklik
+            btnSelengkapnya.addEventListener('click', function() {
+                // Tutup modal
+                surveyModal.hide();
+                // Arahkan ke link Google Form
+                window.open(surveyLink, '_blank');
+            });
+
+
+            // --- LOGIKA BACK TO TOP BUTTON ---
             var mybutton = document.getElementById("backToTopBtn");
 
             // Tampilkan/sembunyikan tombol
@@ -295,5 +355,5 @@
             }
         });
     </script>
-    {{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}
+    {{-- ▲▲▲ AKHIR SCRIPT MODAL SURVEY DAN TOMBOL BACK TO TOP ▲▲▲ --}}
 @endpush
