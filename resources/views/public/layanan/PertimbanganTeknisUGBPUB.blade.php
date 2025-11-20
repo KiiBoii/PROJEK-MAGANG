@@ -1,4 +1,4 @@
-cd@extends('layouts.public')
+@extends('layouts.public')
 
 @section('title', 'Pertimbangan teknis Undian Gratis Berhadiah (UGB) dan Pengumpulan Uang atau Barang (PUB)')
 
@@ -7,9 +7,24 @@ cd@extends('layouts.public')
     <h2 class="text-center mb-4">Dokumen: Pertimbangan teknis Undian Gratis Berhadiah (UGB) dan Pengumpulan Uang atau Barang (PUB)</h2>
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            {{-- GANTI DENGAN URL ASLI FILE PDF ANDA --}}
-            <iframe src="https://docs.google.com/gview?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf&embedded=true" style="width:100%; height:700px;" frameborder="0"></iframe>
-            <p class="mt-3 text-center text-muted">File PDF di atas adalah dokumen PPID yang diminta. Silakan ganti URL PDF placeholder dengan URL dokumen yang sebenarnya.</p>
+            @php
+                // !!! GANTI DENGAN NAMA FILE PDF YANG SESUAI UNTUK DOKUMEN INI !!!
+                // Contoh nama file yang disederhanakan:
+                $fileName = '12.Pertimbangan_teknis_Undian_Gratis_Berhadiah_(UGB)_dan_Pengumpulan_Uang_atau_Barang(PUB).pdf'; 
+                
+                // Ini adalah URL langsung ke file PDF Anda.
+                $filePath = asset('dokumenPPid/' . $fileName);
+            @endphp
+
+            <iframe
+                {{-- MENGGUNAKAN TAMPILAN NATIVE BROWSER --}}
+                src="{{ $filePath }}" 
+                style="width:100%; height:700px;"
+                frameborder="0"
+            ></iframe>
+            <p class="mt-3 text-center text-muted">
+                File dokumen PDF di atas adalah dokumen PPID yang diminta.
+            </p>
         </div>
     </div>
 </div>
