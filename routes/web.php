@@ -43,11 +43,33 @@ Route::get('/layanan-publik', [PageController::class, 'layanan'])->name('public.
 Route::get('/galeri', [PageController::class, 'galeri'])->name('public.galeri');
 Route::get('/pengumuman', [PageController::class, 'pengumuman'])->name('public.pengumuman');
 
-// <-- RUTE BARU DITAMBAHKAN -->
+// <-- RUTE FAQ -->
 Route::get('/faq', [PageController::class, 'faq'])->name('public.faq');
 
 Route::get('/kontak', [PageController::class, 'kontak'])->name('public.kontak');
 Route::post('/kontak', [PageController::class, 'storeKontak'])->name('public.kontak.store');
+
+
+// =========================================================================
+// ▼▼▼ [BARU] RUTE PPID (DAFTAR INFORMASI PUBLIK) ▼▼▼
+// =========================================================================
+Route::prefix('ppid/daftar-informasi')->name('public.ppid.')->group(function () {
+    Route::get('/lansia-panti', [PageController::class, 'ppidLansiaPanti'])->name('lansia');
+    Route::get('/anak-panti', [PageController::class, 'ppidAnakPanti'])->name('anakpanti');
+    Route::get('/disabilitas-fisik-panti', [PageController::class, 'ppidDisabilitasPanti'])->name('disabilitaspanti');
+    Route::get('/disabilitas-mental', [PageController::class, 'ppidDisabilitasMental'])->name('disabilitasmental');
+    Route::get('/gelandang-pengemis', [PageController::class, 'ppidGelandangPengemis'])->name('gelandangpengemis');
+    Route::get('/standar-pelayanan-abh', [PageController::class, 'ppidStandarPelayananABH'])->name('standarpelayananabh');
+    Route::get('/penanganan-bencana', [PageController::class, 'ppidPenangananBencana'])->name('penangananbencana');
+    Route::get('/izin-pengangkatan-anak', [PageController::class, 'ppidIzinPengangkatanAnak'])->name('izinpengangkatananak');
+    Route::get('/tanda-daftar-lks', [PageController::class, 'ppidTandaDaftarLKS'])->name('tandadaftarlks');
+    Route::get('/pemulangan-imigran', [PageController::class, 'ppidPemulanganImigran'])->name('pemulanganimigran');
+    Route::get('/pengaduan-monitoring-pkh', [PageController::class, 'ppidPengaduanMonitoringPKH'])->name('pengaduanmonitoringpkh');
+    Route::get('/pertimbangan-teknis-ugb-pub', [PageController::class, 'ppidPertimbanganTeknisUGBPUB'])->name('pertimbanganteknisugbpub');
+});
+// =========================================================================
+// ▲▲▲ AKHIR RUTE PPID ▲▲▲
+// =========================================================================
 
 
 // === RUTE AUTENTIKASI KUSTOM (LOGIN/LOGOUT) ===

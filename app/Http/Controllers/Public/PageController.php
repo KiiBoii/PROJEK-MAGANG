@@ -205,20 +205,13 @@ class PageController extends Controller
      */
     public function faq()
     {
-        // ▼▼▼ PERBAIKAN: Karakter non-breaking space ( ) dihapus dari baris di bawah ▼▼▼
         // Mengambil data slider untuk halaman 'faq'. 
-        // Anda bisa ganti 'faq' dengan 'layanan' jika ingin slidernya sama
-        // dengan halaman layanan.
-        $sliders = Slider::where('halaman', 'faq') // [OPSIONAL] Fallback ke slider 'layanan'
+        $sliders = Slider::where('halaman', 'faq') 
                          ->where('is_visible', true)
                          ->latest()
                          ->get();
         
-        // Anda bisa juga mengambil data FAQ dinamis dari DB di sini
-        // $faqs = FaqModel::where('is_visible', true)->get();
-        
         return view('public.faq', compact('sliders' /*, 'faqs' */));
-        // ▲▲▲ AKHIR PERBAIKAN ▲▲▲
     }
 
     /**
@@ -254,7 +247,7 @@ class PageController extends Controller
     /**
      * Halaman Detail Berita
      */
-    public function showBerita($id)
+    public function showBerita($id) // DULU: public public function showBerita($id)
     {
         // Ini akan otomatis gagal (404) jika 'is_visible' = false
         $berita = Berita::with('user')->where('is_visible', true)->findOrFail($id); // <-- Asumsi: Kolom ini ada di tabel beritas
@@ -268,5 +261,69 @@ class PageController extends Controller
                                              ->get();
                                              
         return view('public.berita_detail', compact('berita', 'topik_lainnya')); 
+    }
+
+    // =========================================================================
+    // ▼▼▼ [BARU] 12 METHOD UNTUK HALAMAN PPID (DAFTAR INFORMASI PUBLIK) ▼▼▼
+    // =========================================================================
+
+    public function ppidLansiaPanti()
+    {
+        return view('public.layanan.RehabilitasiSosialLansiaPanti');
+    }
+
+    public function ppidAnakPanti()
+    {
+        return view('public.layanan.RehabilitasiSosialAnakPanti');
+    }
+
+    public function ppidDisabilitasPanti()
+    {
+        return view('public.layanan.RehabilitasiDisabilitasPanti');
+    }
+
+    public function ppidDisabilitasMental()
+    {
+        return view('public.layanan.RehabilitasiDisabilitasMental');
+    }
+
+    public function ppidGelandangPengemis()
+    {
+        return view('public.layanan.RehabilitasiGelandangPengemis');
+    }
+
+    public function ppidStandarPelayananABH()
+    {
+        return view('public.layanan.StandarPelayananAnakBentukHukum');
+    }
+
+    public function ppidPenangananBencana()
+    {
+        return view('public.layanan.PenangananKorbanBencana');
+    }
+
+    public function ppidIzinPengangkatanAnak()
+    {
+        return view('public.layanan.PemberianIzinPengangkatanAnak');
+    }
+
+    public function ppidTandaDaftarLKS()
+    {
+        return view('public.layanan.PenerbitanTandaDaftarLKS');
+    }
+
+    public function ppidPemulanganImigran()
+    {
+        return view('public.layanan.PemulanganWargaImigran');
+    }
+
+    public function ppidPengaduanMonitoringPKH()
+    {
+        return view('public.layanan.PengaduanMonitoringPKH');
+    }
+
+    public function ppidPertimbanganTeknisUGBPUB()
+    {
+        return view('public.layanan.PertimbanganTeknisUGBPUB');
     }
 }

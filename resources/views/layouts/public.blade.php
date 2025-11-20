@@ -314,9 +314,9 @@
                             <a class="nav-link {{ request()->routeIs('public.berita') ? 'active' : '' }}" href="{{ route('public.berita') }}">Berita</a>
                         </li>
                         
-                        {{-- ▼▼▼ MENU PPID DROPDOWN (2-Tingkat) ▼▼▼ --}}
+                        {{-- ▼▼▼ MENU PPID DROPDOWN (2-Tingkat) - TAUTAN DIPERBAIKI ▼▼▼ --}}
                         <li class="nav-item dropdown">
-                            <a class="nav-link {{ request()->routeIs('public.ppid') || request()->is('*ppid*') ? 'active' : '' }}" href="#" id="ppidDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link {{ request()->is('ppid/*') ? 'active' : '' }}" href="#" id="ppidDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 PPID
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="ppidDropdown">
@@ -327,20 +327,19 @@
                                         Daftar Informasi Publik
                                     </a>
                                     <ul class="dropdown-menu">
-                                        {{-- 12 Sub-Submenu PDF --}}
-                                        <li><a class="dropdown-item" href="#">1. Rehabilitasi Sosial dasar Lanjut Usia Telantar di Dalam Panti</a></li>
-                                        <li><a class="dropdown-item" href="#">2. Rehabilitasi Sosial Dasar Anak Telantar dalam Panti</a></li>
-                                        <li><a class="dropdown-item" href="#">3. Rehabilitasi Sosial Dasar Penyandang Disabilitas Fisik, Sensorik Telantar di dalam Panti</a></li>
-                                        <li><a class="dropdown-item" href="#">4. Rehabilitasi Sosial Dasar Penyandang Disabilitas Mental Telantar</a></li>
-                                        <li><a class="dropdown-item" href="#">5. Rehabilitasi Sosial Gelandang dan Pengemis Dalam Panti</a></li>
-                                        <li><a class="dropdown-item" href="#">6. Standar Pelayanan Rehabilitasi Sosial Bagi Anak Nakal, Anak Berhadapan Hukum (ABH), Diluar Hiv/Aids dan Napza di Dalam Panti</a></li>
-                                        <li><a class="dropdown-item" href="#">7. Penanganan Perlindungan Sosial Korban Bencana Alam dan Bencana Sosial</a></li>
-                                        <li><a class="dropdown-item" href="#">8. Pemberian Izin Pengangkatan Anak</a></li>
-                                        <li><a class="dropdown-item" href="#">9. PENERBITAN TANDA DAFTAR LEMBAGA KESEJAHTERAAN SOSIAL (LKS)</a></li>
-                                        <li><a class="dropdown-item" href="#">10. Pemulangan warga imigran korban tindak kekerasan dari titik debarkasi di daerah Provinsi untuk di pulangkan ke Daerah Kab/ Kota Asal</a></li>
-                                        <li><a class="dropdown-item" href="#">11. Pengaduan Masyarakat, Monitoring dan Evaluasi Program Keluarga Harapan (PKH).</a></li>
-                                        <li><a class="dropdown-item" href="#">12. Pertimbangan teknis Undian Gratis Berhadiah (UGB) dan Pengumpulan Uang atau Barang (PUB)</a></li>
-                                        {{-- Catatan: Ganti `#` dengan route atau URL yang mengarah ke PDF terkait --}}
+                                        {{-- 12 Sub-Submenu PDF - MENGGUNAKAN ROUTE BARU --}}
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.lansia') }}">1. Rehabilitasi Sosial dasar Lanjut Usia Telantar di Dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.anakpanti') }}">2. Rehabilitasi Sosial Dasar Anak Telantar dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.disabilitaspanti') }}">3. Rehabilitasi Sosial Dasar Penyandang Disabilitas Fisik, Sensorik Telantar di dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.disabilitasmental') }}">4. Rehabilitasi Sosial Dasar Penyandang Disabilitas Mental Telantar</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.gelandangpengemis') }}">5. Rehabilitasi Sosial Gelandang dan Pengemis Dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.standarpelayananabh') }}">6. Standar Pelayanan Rehabilitasi Sosial Bagi Anak Nakal, Anak Berhadapan Hukum (ABH), Diluar Hiv/Aids dan Napza di Dalam Panti</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.penangananbencana') }}">7. Penanganan Perlindungan Sosial Korban Bencana Alam dan Bencana Sosial</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.izinpengangkatananak') }}">8. Pemberian Izin Pengangkatan Anak</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.tandadaftarlks') }}">9. PENERBITAN TANDA DAFTAR LEMBAGA KESEJAHTERAAN SOSIAL (LKS)</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.pemulanganimigran') }}">10. Pemulangan warga imigran korban tindak kekerasan dari titik debarkasi di daerah Provinsi untuk di pulangkan ke Daerah Kab/ Kota Asal</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.pengaduanmonitoringpkh') }}">11. Pengaduan Masyarakat, Monitoring dan Evaluasi Program Keluarga Harapan (PKH).</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('public.ppid.pertimbanganteknisugbpub') }}">12. Pertimbangan teknis Undian Gratis Berhadiah (UGB) dan Pengumpulan Uang atau Barang (PUB)</a></li>
                                     </ul>
                                 </li>
                                 {{-- Contoh item PPID lain (opsional) --}}
@@ -380,7 +379,7 @@
                             <a class="nav-link {{ request()->routeIs('public.pengumuman') ? 'active' : '' }}" href="{{ route('public.pengumuman') }}">Pengumuman</a>
                         </li>
                         
-                        {{-- ▼▼▼ MENU FAQ (LINK TERPISAH) ▼▼▼ --}}
+                        {{-- ▼▼▼ MENU FAQ (LINK TERPISAH) - Dikembalikan seperti permintaan ▼▼▼ --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('public.faq') ? 'active' : '' }}" href="{{ route('public.faq') }}">FAQ</a>
                         </li>
