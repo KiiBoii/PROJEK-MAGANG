@@ -332,11 +332,13 @@
                         </li>
                         
                         {{-- ▼▼▼ MENU PPID DROPDOWN (STRUKTUR BARU SESUAI GAMBAR) ▼▼▼ --}}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" id="ppidDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                PPID
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="ppidDropdown">
+<li class="nav-item dropdown">
+    <a class="nav-link 
+        {{ request()->routeIs('public.ppid.*') || request()->is('ppid/*') ? 'active' : '' }}" 
+        href="#" id="ppidDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        PPID
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="ppidDropdown">
                                 
                                 {{-- DIUBAH: Daftar Informasi Publik 2025 dengan tautan ke route --}}
                                 <li><a class="dropdown-item" href="{{ route('public.ppid.daftar_info_2025') }}">Daftar Informasi Publik 2025</a></li> 
@@ -384,12 +386,13 @@
                         {{-- ▲▲▲ AKHIR MENU PPID DROPDOWN ▲▲▲ --}}
                         
                         {{-- ▼▼▼ MENU LAYANAN PUBLIK (DIKEMBALIKAN KE STRUKTUR SEDERHANA) ▼▼▼ --}}
-                        <li class="nav-item dropdown">
-                            {{-- LOGIKA ACTIVE DISINI: Aktif jika route Layanan Publik atau route Layanan PPID aktif --}}
-                            <a class="nav-link {{ request()->routeIs('public.layanan') || request()->is('layanan/*') ? 'active' : '' }}" href="{{ route('public.layanan') }}" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Layanan Publik
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="layananDropdown">
+<li class="nav-item dropdown">
+    <a class="nav-link 
+        {{ request()->routeIs('public.layanan') || request()->is('layanan-publik') || request()->is('ppid/daftar-informasi/*') ? 'active' : '' }}" 
+        href="{{ route('public.layanan') }}" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Layanan Publik
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                                 
                                 {{-- Item bawaan Layanan Publik --}}
                                 <li>
