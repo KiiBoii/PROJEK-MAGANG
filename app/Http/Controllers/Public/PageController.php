@@ -178,7 +178,7 @@ class PageController extends Controller
     /**
      * Halaman Pengumuman
      */
-// app/Http/Controllers/Public/PageController.php (sekitar baris 188)
+
 public function pengumuman()
 {
 
