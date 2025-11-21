@@ -178,21 +178,20 @@ class PageController extends Controller
     /**
      * Halaman Pengumuman
      */
-    public function pengumuman()
-    {
+// app/Http/Controllers/Public/PageController.php (sekitar baris 188)
+public function pengumuman()
+{
 
-        $sliders = Slider::where('halaman', 'pengumuman')->where('is_visible', true)->latest()->get();
-        
-        // Asumsi: Pengumuman juga punya kolom is_visible
-        // ▼▼▼ PERUBAHAN DI SINI (10 -> 9) ▼▼▼
-        $pengumumans = Pengumuman::with('user')
-                                     ->where('is_visible', true) // <-- Asumsi: Kolom ini ada di tabel pengumumans
-                                     ->latest()
-                                     ->paginate(10);
-        // ▲▲▲ AKHIR PERUBAHAN ▲▲▲
-        
-        return view('public.pengumuman', compact('sliders', 'pengumumans'));
-    }
+    $sliders = Slider::where('halaman', 'pengumuman')->where('is_visible', true)->latest()->get();
+    
+    // PERBAIKAN: Hapus klausa 'is_visible' karena kolom belum tentu ada di tabel pengumumans
+    $pengumumans = Pengumuman::with('user')
+                             // ->where('is_visible', true) // <-- BARIS INI DIHAPUS
+                             ->latest()
+                             ->paginate(10);
+    
+    return view('public.pengumuman', compact('sliders', 'pengumumans'));
+}
 
     /**
      * [BARU] Halaman FAQ (Pusat Bantuan)
