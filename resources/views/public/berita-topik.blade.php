@@ -169,11 +169,10 @@
         @forelse($sliders ?? [] as $slider)
         <div class="carousel-item @if($loop->first) active @endif">
             
-            {{-- ▼▼▼ PERUBAHAN YANG DITERAPKAN ADA DI SINI ▼▼▼ --}}
             <a href="{{ route('public.berita.detail', $slider->id) }}">
-                <img src="{{ $slider->gambar ? asset('storage/' . $slider->gambar) : 'https://placehold.co/1200x450/e0e0e0/999?text=Topik' }}" class="d-block w-100" alt="{{ $slider->judul }}">
+                {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                <img src="{{ $slider->gambar ? asset($slider->gambar) : 'https://placehold.co/1200x450/e0e0e0/999?text=Topik' }}" class="d-block w-100" alt="{{ $slider->judul }}">
             </a>
-            {{-- ▲▲▲ AKHIR PERUBAHAN ▲▲▲ --}}
 
             <div class="carousel-caption d-none d-md-block">
                 {{-- Judul slider bisa diklik, mengarah ke detail berita --}}
@@ -222,7 +221,8 @@
                     {{-- Menggunakan style card-news yang sama dari berita.blade.php --}}
                     <div class="card card-news h-100"> 
                         @if($berita->gambar)
-                            <img src="{{ asset('storage/' . $berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 200px; object-fit: cover;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 200px; object-fit: cover;">
                         @else
                             <img src="https://placehold.co/400x200/e0e0e0/999?text=Topik" class="card-img-top" alt="Placeholder" style="height: 200px; object-fit: cover;">
                         @endif
@@ -271,7 +271,8 @@
                         <li class="mb-3 border-bottom pb-3">
                             {{-- Menggunakan style list yang sama dari berita.blade.php --}}
                             <a href="{{ route('public.berita.detail', $berita->id) }}" class="d-flex text-decoration-none text-dark">
-                                <img src="{{ $berita->gambar ? asset('storage/'. $berita->gambar) : 'https://placehold.co/70x70/e0e0e0/999?text=Berita' }}" 
+                                {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                                <img src="{{ $berita->gambar ? asset($berita->gambar) : 'https://placehold.co/70x70/e0e0e0/999?text=Berita' }}" 
                                      alt="{{ $berita->judul }}" 
                                      style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
                                 <div class="ms-3">

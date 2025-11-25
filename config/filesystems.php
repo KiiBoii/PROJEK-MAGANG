@@ -47,6 +47,17 @@ return [
             'report' => false,
         ],
 
+        // ▼▼▼ DISK BARU: PUBLIC UPLOADS (Langsung ke folder public/) ▼▼▼
+        'public_uploads' => [
+            'driver' => 'local',
+            'root' => public_path(), // Mengarah ke folder public root
+            'url' => env('APP_URL'), // URL langsung tanpa prefix /storage
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

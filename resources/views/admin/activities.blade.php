@@ -6,8 +6,10 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">Daftar Aktivitas</div>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Daftar Aktivitas</h5>
+                </div>
                 <div class="card-body">
 
                     {{-- ▼▼▼ FORM FILTER ▼▼▼ --}}
@@ -55,27 +57,28 @@
                     <hr>
                     {{-- ▲▲▲ AKHIR FORM FILTER ▲▲▲ --}}
 
-
                     <ul class="list-group list-group-flush">
-                        {{-- Loop data yang sudah dipaginasi --}}
                         @forelse($allActivities as $activity)
-                            <li class="list-group-item d-flex align-items-center">
-                                <i class="bi {{ $activity->icon }} fs-4 text-primary me-3"></i>
-                                <div>
-                                    <a href="{{ $activity->route }}" class="text-decoration-none text-dark stretched-link">
-                                        <strong>{{ $activity->userName }}</strong> 
+                            <li class="list-group-item d-flex align-items-center py-3">
+                                <div class="me-3">
+                                    <i class="bi {{ $activity->icon }} fs-3 text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="{{ $activity->route }}" class="text-decoration-none text-dark stretched-link fw-bold">
+                                            {{ $activity->userName }}
+                                        </a>
+                                        <small class="text-muted">{{ $activity->created_at->format('d M Y, H:i') }}</small>
+                                    </div>
+                                    <div class="text-muted small">
                                         {{ $activity->jenis_aktivitas == 'Pengaduan Baru' ? 'mengirim' : 'menambahkan' }} 
-                                        <em>{{ Str::limit($activity->judul_aktivitas, 50) }}</em>
-                                    </a>
-                                    <small class="d-block text-muted">
-                                        {{ $activity->created_at->diffForHumans() }} 
-                                        ({{ $activity->created_at->format('d M Y, H:i') }})
-                                    </small>
+                                        <span class="fst-italic">"{{ Str::limit($activity->judul_aktivitas, 80) }}"</span>
+                                    </div>
+                                    <small class="text-muted">{{ $activity->created_at->diffForHumans() }}</small>
                                 </div>
                             </li>
                         @empty
-                            <li class="list-group-item text-center text-muted">
-                                {{-- ▼▼▼ Pesan disesuaikan jika ada filter ▼▼▼ --}}
+                            <li class="list-group-item text-center text-muted py-4">
                                 @if(request()->has('day') || request()->has('month') || request()->has('year'))
                                     Tidak ada aktivitas yang ditemukan untuk filter ini.
                                 @else
@@ -84,22 +87,18 @@
                             </li>
                         @endforelse
                     </ul>
-                </div>
 
-                {{-- Tampilkan Link Pagination (LAMA DIHAPUS) --}}
-                {{-- Blok @if ($allActivities->hasPages()) ... @endif telah dihapus dari sini --}}
+                </div>
+                
+                {{-- 🔸 GUNAKAN PAGINATION CUSTOM --}}
+                @if($allActivities->hasPages())
+                    <div class="card-footer bg-white border-top-0 d-flex justify-content-center py-3">
+                        {!! $allActivities->withQueryString()->links('vendor.pagination.custom-circle') !!}
+                    </div>
+                @endif
 
             </div>
         </div>
     </div>
-
-    {{-- ▼▼▼ PERUBAHAN: PAGINATION CUSTOM DITAMBAHKAN DI SINI ▼▼▼ --}}
-    {{-- 🔸 GUNAKAN PAGINATION CUSTOM --}}
-    <div class="d-flex justify-content-center mt-4">
-        {{-- Menggunakan variabel $allActivities --}}
-        {!! $allActivities->withQueryString()->links('vendor.pagination.custom-circle') !!}
-    </div>
-    {{-- ▲▲▲ AKHIR PAGINATION CUSTOM ▲▲▲ --}}
-
 </div>
 @endsection

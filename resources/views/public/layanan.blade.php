@@ -102,7 +102,8 @@
         <div class="carousel-inner">
             @forelse(isset($sliders) ? $sliders : [] as $slider)
                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
+                    {{-- PERBAIKAN 1: Slider Gambar --}}
+                    <img src="{{ asset($slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ $slider->judul }}</h5>
                         <p>{{ $slider->keterangan }}</p>
@@ -166,7 +167,6 @@
                         <div class="col-md-6 d-flex align-items-center">
                             <label for="perPageDok" class="me-2">Tampilkan</label>
                             
-                            {{-- ▼▼▼ PERBAIKAN 1 DI SINI (Spasi lebar dihapus) ▼▼▼ --}}
                             <select id="perPageDok" class="form-select form-select-sm w-auto" onchange="window.location.href = this.value;">
                                 @php
                                     $currentPage = $dokumens->perPage();
@@ -178,7 +178,6 @@
                                     </option>
                                 @endforeach
                             </select>
-                            {{-- ▲▲▲ AKHIR PERBAIKAN 1 ▲▲▲ --}}
 
                             <span class="ms-2">data per halaman</span>
                         </div>
@@ -208,9 +207,11 @@
                                     <td>{{ $dokumen->judul }}</td>
                                     <td>{{ $dokumen->keterangan }}</td>
                                     <td class="text-center">
-                                        <a href="{{ $dokumen->download_url }}" target="_blank" class="btn btn-sm btn-primary">
+                                        {{-- ▼▼▼ PERBAIKAN 2: Ganti download_url dengan asset(file_path) ▼▼▼ --}}
+                                        <a href="{{ asset($dokumen->file_path) }}" target="_blank" class="btn btn-sm btn-primary">
                                             <i class="bi bi-download"></i>
                                         </a>
+                                        {{-- ▲▲▲ SELESAI PERBAIKAN ▲▲▲ --}}
                                     </td>
                                     <td>{{ $dokumen->created_at->format('d M Y') }}</td>
                                 </tr>
@@ -223,11 +224,9 @@
                         </table>
                     </div>
                     
-                    {{-- ▼▼▼ PERBAIKAN 2 DI SINI ▼▼▼ --}}
                     <div class="d-flex justify-content-center mt-4">
                         {{ $dokumens->fragment('content-dokumen')->links('pagination::bootstrap-5') }}
                     </div>
-                    {{-- ▲▲▲ AKHIR PERBAIKAN 2 ▲▲▲ --}}
 
                 </div>
                 

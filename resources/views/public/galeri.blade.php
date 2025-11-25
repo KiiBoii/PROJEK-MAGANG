@@ -374,7 +374,8 @@
         <div class="carousel-inner">
             @forelse($galeris->take(6) as $foto_slide)
             <div class="carousel-item @if($loop->first) active @endif">
-                <img src="{{ $foto_slide->foto_path ? asset('storage/' . $foto_slide->foto_path) : 'https://placehold.co/1200x450/e0e0e0/999?text=Galeri' }}" class="d-block w-100" alt="{{ $foto_slide->judul_kegiatan }}">
+                {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                <img src="{{ $foto_slide->foto_path ? asset($foto_slide->foto_path) : 'https://placehold.co/1200x450/e0e0e0/999?text=Galeri' }}" class="d-block w-100" alt="{{ $foto_slide->judul_kegiatan }}">
                 
                 <div class="carousel-caption d-none d-md-block">
                     {{-- [UBAH] Hapus stretched-link dari slider agar tidak bentrok --}}
@@ -449,13 +450,15 @@
 
                     <div class="grid-item {{ $slug }}">
                         {{-- ▼▼▼ [UBAH] Wrapper card sekarang menjadi pemicu lightbox ▼▼▼ --}}
+                        {{-- PERBAIKAN: Hapus 'storage/' . --}}
                         <div class="card card-news-hover lightbox-trigger" 
-                             href="{{ $foto->foto_path ? asset('storage/' . $foto->foto_path) : 'https://placehold.co/800x600/e0e0e0/999?text=Foto' }}"
+                             href="{{ $foto->foto_path ? asset($foto->foto_path) : 'https://placehold.co/800x600/e0e0e0/999?text=Foto' }}"
                              data-caption="{{ $foto->judul_kegiatan }}"> 
                         {{-- ▲▲▲ AKHIR UBAHAN ▲▲▲ --}}
                             
                             @php
-                                $fotoPath = $foto->foto_path ? asset('storage/' . $foto->foto_path) : 'https://placehold.co/300x250/e0e0e0/999?text=Foto';
+                                // PERBAIKAN: Hapus 'storage/' .
+                                $fotoPath = $foto->foto_path ? asset($foto->foto_path) : 'https://placehold.co/300x250/e0e0e0/999?text=Foto';
                             @endphp
 
                             <img src="{{ $fotoPath }}" class="card-img-top" alt="{{ $foto->judul_kegiatan }}">

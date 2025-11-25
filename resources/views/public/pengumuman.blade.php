@@ -194,7 +194,8 @@
             @forelse($pengumumans->take(3) as $item) {{-- Loop 3 pengumuman pertama --}}
             <div class="carousel-item @if($loop->first) active @endif">
                 {{-- Gunakan gambar pengumuman jika ada, jika tidak, gunakan placeholder --}}
-                <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/1920x400/ffc107/333?text=Pengumuman' }}" class="d-block w-100" alt="{{ $item->judul }}">
+                {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                <img src="{{ $item->gambar ? asset($item->gambar) : 'https://placehold.co/1920x400/ffc107/333?text=Pengumuman' }}" class="d-block w-100" alt="{{ $item->judul }}">
                 
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ $item->judul }}</h5>
@@ -244,7 +245,8 @@
                             
                             {{-- Tampilkan Gambar di sini jika ada --}}
                             @if($item->gambar)
-                                <img src="{{ asset('storage/' . $item->gambar) }}" class="img-fluid rounded mb-3" alt="{{ $item->judul }}" style="width: 100%; height: 300px; object-fit: cover;">
+                                {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                <img src="{{ asset($item->gambar) }}" class="img-fluid rounded mb-3" alt="{{ $item->judul }}" style="width: 100%; height: 300px; object-fit: cover;">
                             @endif
 
                             <h4 class="card-title fw-bold">{{ $item->judul }}</h4>
@@ -270,7 +272,7 @@
 
             {{-- ▼▼▼ [BARU] PAGINASI KUSTOM (GAYA LINGKARAN) ▼▼▼ --}}
 <div class="d-flex justify-content-center mt-4">
-    {!! $pengumumans->withQueryString()->links('vendor.pagination.custom-circle') !!}
+    {!! $pengumumans->withQueryString()->links('vendor.pagination.custom-circle') !!}
 </div>
             {{-- ▲▲▲ AKHIR PAGINASI KUSTOM ▲▲▲ --}}
         </div>
@@ -316,4 +318,3 @@
     });
 </script>
 @endpush
-{{-- ▲▲▲ AKHIR SCRIPT TOMBOL BACK TO TOP ▲▲▲ --}}

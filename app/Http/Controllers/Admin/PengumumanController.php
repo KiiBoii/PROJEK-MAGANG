@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengumuman; // Import Model Pengumuman
+use App\Models\Pengumuman; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // <--  IMPORT 'Auth' facade
-use Illuminate\Support\Facades\Storage; // <--  IMPORT 'Storage' facade
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Storage; 
 
 class PengumumanController extends Controller
 {
 
     public function index()
     {
-        //Tambahkan with('user') untuk mengambil data user (Karyawan)
-        // Ini untuk memperbaiki N+1 Query di halaman index
-        
-        // PERUBAHAN: Mengganti get() dengan paginate(9) untuk pagination
         $pengumumans = Pengumuman::with('user')->latest()->paginate(9); 
         
         return view('admin.pengumuman.index', compact('pengumumans'));
@@ -31,24 +27,21 @@ class PengumumanController extends Controller
     
     public function store(Request $request)
     {
-        // Tambahkan validasi 'gambar'
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Boleh kosong
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
 
-        //Tambahkan logic upload gambar
         if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('pengumuman_images', 'public');
+            // UPDATED: Menggunakan disk 'public_uploads'
+            $validated['gambar'] = $request->file('gambar')->store('pengumuman_images', 'public_uploads');
         }
 
-        // Menambahkan ID user yang sedang login ke data yang akan disimpan
         $validated['user_id'] = Auth::id();
         
         Pengumuman::create($validated);
 
-        // ▼▼▼ PERBAIKAN 1 ▼▼▼
         return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil ditambahkan.');
     }
 
@@ -67,40 +60,36 @@ class PengumumanController extends Controller
 
     public function update(Request $request, Pengumuman $pengumuman)
     {
-        //Tambahkan validasi 'gambar'
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Boleh kosong
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
         
-        //Tambahkan logic update gambar (termasuk hapus gambar lama)
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
             if ($pengumuman->gambar) {
-                Storage::disk('public')->delete($pengumuman->gambar);
+                // UPDATED: Hapus dari disk 'public_uploads'
+                Storage::disk('public_uploads')->delete($pengumuman->gambar);
             }
-            // Simpan gambar baru
-            $validated['gambar'] = $request->file('gambar')->store('pengumuman_images', 'public');
+            // UPDATED: Simpan ke disk 'public_uploads'
+            $validated['gambar'] = $request->file('gambar')->store('pengumuman_images', 'public_uploads');
         }
 
         $pengumuman->update($validated);
 
-        // ▼▼▼ PERBAIKAN 2 ▼▼▼
         return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil diperbarui.');
     }
 
 
     public function destroy(Pengumuman $pengumuman)
     {
-        // 8. Tambahkan logic hapus gambar dari storage
         if ($pengumuman->gambar) {
-            Storage::disk('public')->delete($pengumuman->gambar);
+            // UPDATED: Hapus dari disk 'public_uploads'
+            Storage::disk('public_uploads')->delete($pengumuman->gambar);
         }
 
         $pengumuman->delete();
 
-        // ▼▼▼ PERBAIKAN 3 ▼▼▼
         return redirect()->route('admin.pengumuman.index')->with('success', 'Pengumuman berhasil dihapus.');
     }
 }

@@ -48,7 +48,8 @@
                     <small class="text-muted">Max 2MB. Biarkan kosong jika tidak ingin mengubah gambar.</small>
                     <div class="mt-2">
                         <p>Gambar saat ini:</p>
-                        <img src="{{ asset('storage/' . $slider->gambar) }}" alt="{{ $slider->judul }}" style="max-width: 300px; border-radius: 8px;">
+                        {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                        <img src="{{ asset($slider->gambar) }}" alt="{{ $slider->judul }}" style="max-width: 300px; border-radius: 8px;">
                     </div>
                 </div>
                 

@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Galeri; // Import Model Galeri
+use App\Models\Galeri; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Untuk mengelola file
-use Illuminate\Support\Facades\Auth; // <-- IMPORT 'Auth' facade
+use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Auth; 
 
 class GaleriController extends Controller
 {
-    // Definisikan daftar bidang di satu tempat agar konsisten
     private $bidangList = [
         'Bidang Infrastruktur TIK',
         'Bidang Statistik',
@@ -24,7 +23,6 @@ class GaleriController extends Controller
 
     public function index()
     {
-        // PERUBAHAN: Mengganti get() dengan paginate(9) sesuai permintaan
         $galeris = Galeri::latest()->paginate(9);
         return view('admin.galeri.index', compact('galeris'));
     }
@@ -32,7 +30,6 @@ class GaleriController extends Controller
 
     public function create()
     {
-        // Kirim daftar bidang yang sudah didefinisikan
         return view('admin.galeri.create', ['bidangList' => $this->bidangList]);
     }
 
@@ -41,35 +38,30 @@ class GaleriController extends Controller
     {
         $validated = $request->validate([
             'judul_kegiatan' => 'required|string|max:255',
-            'bidang' => 'required|string|max:255', // Validasi bidang
+            'bidang' => 'required|string|max:255', 
             'foto_path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('foto_path')) {
-            $validated['foto_path'] = $request->file('foto_path')->store('galeri_images', 'public');
+            // UPDATED: Menggunakan disk 'public_uploads'
+            $validated['foto_path'] = $request->file('foto_path')->store('galeri_images', 'public_uploads');
         }
 
-        //2. INI ADALAH PERBAIKANNYA ---
-        // Menambahkan ID user yang sedang login ke data yang akan disimpan
         $validated['user_id'] = Auth::id();
-        // ------------------------------
 
-        Galeri::create($validated); // 'bidang' dan 'user_id' akan otomatis tersimpan
+        Galeri::create($validated); 
 
-        // ▼▼▼ PERBAIKAN 1 ▼▼▼
         return redirect()->route('admin.galeri.index')->with('success', 'Foto kegiatan berhasil ditambahkan.');
     }
 
     public function show(Galeri $galeri)
     {
-        // Opsional: Jika Anda ingin halaman detail galeri
         return view('admin.galeri.show', compact('galeri'));
     }
 
 
     public function edit(Galeri $galeri)
     {
-        // Kirim daftar bidang dan galeri yang akan diedit
         return view('admin.galeri.edit', [
             'galeri' => $galeri,
             'bidangList' => $this->bidangList
@@ -81,25 +73,21 @@ class GaleriController extends Controller
     {
         $validated = $request->validate([
             'judul_kegiatan' => 'required|string|max:255',
-            'bidang' => 'required|string|max:255', // Validasi bidang
+            'bidang' => 'required|string|max:255', 
             'foto_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('foto_path')) {
-            // Hapus foto lama jika ada
             if ($galeri->foto_path) {
-                Storage::disk('public')->delete($galeri->foto_path);
+                // UPDATED: Hapus dari disk 'public_uploads'
+                Storage::disk('public_uploads')->delete($galeri->foto_path);
             }
-            // Simpan foto baru
-            $validated['foto_path'] = $request->file('foto_path')->store('galeri_images', 'public');
+            // UPDATED: Simpan ke disk 'public_uploads'
+            $validated['foto_path'] = $request->file('foto_path')->store('galeri_images', 'public_uploads');
         }
 
-        // (Opsional: Lacak siapa yang terakhir meng-update)
-        // $validated['user_id'] = Auth::id(); // Jika ingin mencatat updater terakhir
+        $galeri->update($validated); 
 
-        $galeri->update($validated); // 'bidang' akan otomatis ter-update
-
-        // ▼▼▼ PERBAIKAN 2 ▼▼▼
         return redirect()->route('admin.galeri.index')->with('success', 'Foto kegiatan berhasil diperbarui.');
     }
 
@@ -107,11 +95,11 @@ class GaleriController extends Controller
     public function destroy(Galeri $galeri)
     {
         if ($galeri->foto_path) {
-            Storage::disk('public')->delete($galeri->foto_path);
+            // UPDATED: Hapus dari disk 'public_uploads'
+            Storage::disk('public_uploads')->delete($galeri->foto_path);
         }
         $galeri->delete();
 
-        // ▼▼▼ PERBAIKAN 3 ▼▼▼
         return redirect()->route('admin.galeri.index')->with('success', 'Foto kegiatan berhasil dihapus.');
     }
 }

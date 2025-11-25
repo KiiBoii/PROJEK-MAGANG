@@ -58,7 +58,8 @@
                     @if($pengumuman->gambar)
                         <div class="mt-2">
                             <p>Gambar saat ini:</p>
-                            <img src="{{ asset('storage/' . $pengumuman->gambar) }}" alt="{{ $pengumuman->judul }}" style="max-width: 200px; border-radius: 8px;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($pengumuman->gambar) }}" alt="{{ $pengumuman->judul }}" style="max-width: 200px; border-radius: 8px;">
                         </div>
                     @endif
                 </div>

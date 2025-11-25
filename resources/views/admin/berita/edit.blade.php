@@ -4,7 +4,7 @@
 @push('styles')
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.css"
-          xintegrity="sha512-ngQ4IGzHQ3s/Hh8kMyG4FC74wzitukRMIcTOoKT3EyzFZCILOPF0twiXOQn75eDINUfKBYmzYn2AA8DkAk8veQ=="
+          integrity="sha512-ngQ4IGzHQ3s/Hh8kMyG4FC74wzitukRMIcTOoKT3EyzFZCILOPF0twiXOQn75eDINUfKBYmzYn2AA8DkAk8veQ=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
 
@@ -66,7 +66,8 @@
                     @if ($berita->gambar)
                         <div class="mt-3">
                             <p class="fw-semibold mb-1">Gambar saat ini:</p>
-                            <img src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}"
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($berita->gambar) }}" alt="{{ $berita->judul }}"
                                  class="img-thumbnail" style="max-width: 200px;">
                         </div>
                     @endif
@@ -101,7 +102,7 @@
 
     {{-- Summernote JS (versi Bootstrap 5) --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs5.min.js"
-            xintegrity="sha512-6F1RVfnxCprKJmfulcxxym1Dar5FsT/V2jiEUvABiaEiFWoQ8yHvqRM/Slf0qJKiwin6IDQucjXuolCfCKnaJQ=="
+            integrity="sha512-6F1RVfnxCprKJmfulcxxym1Dar5FsT/V2jiEUvABiaEiFWoQ8yHvqRM/Slf0qJKiwin6IDQucjXuolCfCKnaJQ=="
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
 

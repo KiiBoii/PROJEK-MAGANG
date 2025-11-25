@@ -61,7 +61,8 @@
                     @if ($galeri->foto_path)
                         <div class="mt-2">
                             <p>Foto saat ini:</p>
-                            <img src="{{ asset('storage/' . $galeri->foto_path) }}" alt="{{ $galeri->judul_kegiatan }}" class="img-thumbnail" style="max-width: 200px;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($galeri->foto_path) }}" alt="{{ $galeri->judul_kegiatan }}" class="img-thumbnail" style="max-width: 200px;">
                         </div>
                     @endif
                 </div>

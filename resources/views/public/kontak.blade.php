@@ -69,8 +69,8 @@
         <div class="carousel-inner">
             @forelse(isset($sliders) ? $sliders : [] as $slider)
                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                    {{-- Pastikan Anda menggunakan asset('storage/') --}}
-                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
+                    {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                    <img src="{{ asset($slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
                     
                     <div class="carousel-caption d-none d-md-block">
                         <h1 class="text-white">{{ $slider->judul }}</h1>

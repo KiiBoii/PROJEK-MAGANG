@@ -123,7 +123,8 @@
                 </header>
 
                 @if($berita->gambar)
-                <img src="{{ asset('storage/' . $berita->gambar) }}" class="article-main-image" alt="{{ $berita->judul }}">
+                {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                <img src="{{ asset($berita->gambar) }}" class="article-main-image" alt="{{ $berita->judul }}">
                 @else
                 <div class="article-main-image" style="background-color: #e9ecef; display: flex; align-items: center; justify-content: center; color: #6c757d;">
                     <span>Gambar tidak tersedia</span>
@@ -137,9 +138,6 @@
         </div>
 
         <div class="col-lg-4">
-            {{-- 
-                KELAS 'sticky-top' DAN STYLE 'top' TELAH DIHAPUS DARI DIV DI BAWAH INI
-            --}}
             <div class="card sidebar-card">
                 <div class="card-body">
                     {{-- ▼▼▼ PERBARUAN: Judul dan Loop diubah ▼▼▼ --}}
@@ -150,7 +148,8 @@
                         @forelse($topik_lainnya as $topik)
                         <li class="mb-3 border-bottom pb-3">
                             <a href="{{ route('public.berita.detail', $topik->id) }}" class="d-flex text-decoration-none text-dark">
-                                <img src="{{ $topik->gambar ? asset('storage/'. $topik->gambar) : 'https://placehold.co/70x70/e0e0e0/999?text=Topik' }}" 
+                                {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                <img src="{{ $topik->gambar ? asset($topik->gambar) : 'https://placehold.co/70x70/e0e0e0/999?text=Topik' }}" 
                                      alt="{{ $topik->judul }}" 
                                      style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
                                 <div class="ms-3">

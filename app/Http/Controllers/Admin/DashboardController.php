@@ -63,7 +63,7 @@ class DashboardController extends Controller
             $chartLabels[] = Carbon::create(null, $month)->format('M');
             
             $beritaChartQuery = Berita::whereYear('created_at', $currentYear)
-                                        ->whereMonth('created_at', $month);
+                                      ->whereMonth('created_at', $month);
             
             if ($isRedaktur) {
                  $beritaChartQuery->where('user_id', $user->id);

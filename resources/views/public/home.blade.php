@@ -145,10 +145,11 @@
         <div class="carousel-inner">
             @forelse($sliders as $slider)
                 <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                    <img src="{{ asset('storage/' . $slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
+                    {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                    <img src="{{ asset($slider->gambar) }}" class="d-block w-100" alt="{{ $slider->judul }}">
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ $slider->judul }}</h5>
-<p>{{ Str::limit(strip_tags($slider->keterangan), 100) }}</p>
+                        <p>{{ Str::limit(strip_tags($slider->keterangan), 100) }}</p>
                     </div>
                 </div>
             @empty
@@ -209,7 +210,7 @@
         <div class="col-lg-4" data-aos="fade-left" data-aos-offset="100" data-aos-delay="200">
             <h5 class="fw-bold mb-3">Video Kegiatan Kepala Dinas</h5>
             <div class="ratio ratio-16x9 rounded-3 shadow-sm">
-<iframe src="https://www.youtube.com/embed/pFnJ97g-wSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>            </div>
+<iframe src="https://www.youtube.com/embed/pFnJ97g-wSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>            </div>
         </div>
     </div>
 </div>
@@ -225,7 +226,8 @@
             <div class="row g-0">
                 <div class="col-md-6">
                     @if($beritaUtama->gambar)
-                        <img src="{{ asset('storage/' . $beritaUtama->gambar) }}" class="img-fluid rounded-start" alt="{{ $beritaUtama->judul }}" style="height: 400px; width: 100%; object-fit: cover;">
+                        {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                        <img src="{{ asset($beritaUtama->gambar) }}" class="img-fluid rounded-start" alt="{{ $beritaUtama->judul }}" style="height: 400px; width: 100%; object-fit: cover;">
                     @else
                         <img src="https://placehold.co/600x400/e0e0e0/999?text=Berita+Utama" class="img-fluid rounded-start" alt="Placeholder" style="height: 400px; width: 100%; object-fit: cover;">
                     @endif
@@ -256,7 +258,8 @@
                 <div class="col-lg col-md-4 col-sm-6 mb-3 mb-lg-0" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 + 300 }}">
                     <div class="card card-news h-100">
                         @if($berita->gambar)
-                            <img src="{{ asset('storage/' . $berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 220px; object-fit: cover;">
+                            {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                            <img src="{{ asset($berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 220px; object-fit: cover;">
                         @else
                             <img src="https://placehold.co/300x220/e0e0e0/999?text=Berita" class="card-img-top" alt="Placeholder" style="height: 220px; object-fit: cover;">
                         @endif
@@ -297,9 +300,9 @@
         // Tunggu hingga seluruh halaman (termasuk gambar) dimuat
         window.addEventListener('load', function() {
             AOS.init({
-                duration: 800,   // Durasi animasi dalam milidetik
-                once: false,     // [DIUBAH] Animasi terjadi setiap kali di-scroll (atas/bawah)
-                offset: 100,     // Jarak (px) dari bagian bawah layar sebelum animasi dimulai
+                duration: 800,   // Durasi animasi dalam milidetik
+                once: false,     // [DIUBAH] Animasi terjadi setiap kali di-scroll (atas/bawah)
+                offset: 100,     // Jarak (px) dari bagian bawah layar sebelum animasi dimulai
                 easing: 'ease-out-cubic', // Jenis easing
             });
         });

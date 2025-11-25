@@ -33,43 +33,35 @@
                             <td>{{ $dokumen->created_at->format('d M Y') }}</td>
                             <td class="text-nowrap">
                                 <a href="{{ route('admin.dokumen.edit', $dokumen->id) }}" class="btn btn-sm btn-info text-white">Edit</a>
-                                <a href="{{ $dokumen->download_url }}" class="btn btn-sm btn-success" target="_blank">Download</a>
                                 
-                                {{-- ▼▼▼ PERUBAHAN: Tombol Pemicu Modal ▼▼▼ --}}
-                                {{-- Mengganti form lama dengan tombol pemicu --}}
+                                {{-- ▼▼▼ PERBAIKAN: Ganti download_url dengan asset() ▼▼▼ --}}
+                                <a href="{{ asset($dokumen->file_path) }}" class="btn btn-sm btn-success" target="_blank">Download</a>
+                                {{-- ▲▲▲ SELESAI PERBAIKAN ▲▲▲ --}}
+                                
                                 <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $dokumen->id }}">
                                     Hapus
                                 </button>
                             </td>
                         </tr>
 
-                        {{-- ▼▼▼ TAMBAHAN: Modal Konfirmasi Hapus (Desain Baru) ▼▼▼ --}}
+                        {{-- Modal Konfirmasi Hapus --}}
                         <div class="modal fade" id="deleteModal{{ $dokumen->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $dokumen->id }}" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
-                                    {{-- Header: Dibuat borderless, hanya berisi tombol close --}}
                                     <div class="modal-header border-bottom-0">
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-
-                                    {{-- Body: Konten terpusat dengan ikon peringatan --}}
                                     <div class="modal-body text-center pt-0">
-                                        {{-- Ikon Peringatan --}}
                                         <div class="text-danger mb-3" style="font-size: 3.5rem;">
                                             <i class="bi bi-exclamation-triangle-fill"></i>
                                         </div>
                                         <h4 class="mb-3">Anda Yakin?</h4>
                                         <p class="text-muted">Anda akan menghapus dokumen:</p>
-                                        {{-- Menggunakan variabel $dokumen --}}
                                         <p class="fw-bold mb-0">"{{ $dokumen->judul }}"</p>
                                         <p class="text-danger small mt-3">Tindakan ini tidak dapat dibatalkan.</p>
                                     </div>
-                                    
-                                    {{-- Footer: Dibuat borderless dan terpusat --}}
                                     <div class="modal-footer border-top-0 justify-content-center pb-4">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                                        
-                                        {{-- Form Hapus --}}
                                         <form action="{{ route('admin.dokumen.destroy', $dokumen->id) }}" method="POST" class="m-0">
                                             @csrf
                                             @method('DELETE')
@@ -81,7 +73,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- ▲▲▲ AKHIR MODAL ▲▲▲ --}}
+                        {{-- Akhir Modal --}}
 
                         @empty
                         <tr>
@@ -92,7 +84,7 @@
                 </table>
             </div>
 
-            {{-- 🔸 GUNAKAN PAGINATION CUSTOM --}}
+            {{-- Pagination --}}
             <div class="d-flex justify-content-center mt-4">
                 {!! $dokumens->withQueryString()->links('vendor.pagination.custom-circle') !!}
             </div>
@@ -101,7 +93,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-{{-- Script tambahan bisa diletakkan di sini jika diperlukan --}}
-@endpush

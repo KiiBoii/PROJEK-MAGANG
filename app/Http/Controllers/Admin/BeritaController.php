@@ -7,29 +7,22 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth; // Pastikan Auth di-import
+use Illuminate\Support\Facades\Auth; 
 
 class BeritaController extends Controller
 {
 
     public function index(Request $request)
     {
-        // ▼▼▼ TAMBAHAN LOGIKA ROLE ▼▼▼
         $user = Auth::user();
         $isRedaktur = ($user->role == 'redaktur');
-        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         $query = Berita::query();
 
-        // ▼▼▼ TAMBAHKAN KONDISI INI ▼▼▼
-        // Jika yang login adalah redaktur, filter query agar hanya
-        // menampilkan berita dengan user_id miliknya.
         if ($isRedaktur) {
             $query->where('user_id', $user->id);
         }
-        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
-        // --- Logika Filter Tanggal ---
         if ($request->filled('tanggal')) {
             $tanggal = $request->input('tanggal');
             if ($tanggal == 'hari_ini') {
@@ -46,8 +39,6 @@ class BeritaController extends Controller
             $query->where('tag', $tag);
         }
 
-        // Query ini sekarang sudah terfilter berdasarkan role (jika redaktur)
-        // dan filter tanggal/tag.
         $beritas = $query->with('user')->latest()->paginate(9);
         
         if ($request->wantsJson() || $request->is('api/*')) {
@@ -74,15 +65,14 @@ class BeritaController extends Controller
         ]);
 
         if ($request->hasFile('gambar')) {
-            $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public');
+            // UPDATED: Menggunakan disk 'public_uploads'
+            $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public_uploads');
         }
 
-        // Ini sudah benar, otomatis menyimpan user_id si pembuat
         $validated['user_id'] = Auth::id(); 
 
         Berita::create($validated);
 
-        // ▼▼▼ PERBAIKAN 1 (Ini yang menyebabkan error Anda) ▼▼▼
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
 
@@ -95,15 +85,10 @@ class BeritaController extends Controller
 
     public function edit(Berita $berita)
     {
-        // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
-        // Cek apakah user adalah redaktur dan apakah berita ini BUKAN miliknya
         $user = Auth::user();
         if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
-            // Jika bukan, lempar kembali ke index dengan pesan error
-            // ▼▼▼ PERBAIKAN 2 ▼▼▼
             return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan mengedit berita ini.');
         }
-        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         return view('admin.berita.edit', compact('berita'));
     }
@@ -111,13 +96,10 @@ class BeritaController extends Controller
     
     public function update(Request $request, Berita $berita)
     {
-        // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
         $user = Auth::user();
         if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
-            // ▼▼▼ PERBAIKAN 3 ▼▼▼
             return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan memperbarui berita ini.');
         }
-        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -128,33 +110,32 @@ class BeritaController extends Controller
 
         if ($request->hasFile('gambar')) {
             if ($berita->gambar) {
-                Storage::disk('public')->delete($berita->gambar);
+                // UPDATED: Hapus dari disk 'public_uploads'
+                Storage::disk('public_uploads')->delete($berita->gambar);
             }
-            $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public');
+            // UPDATED: Simpan ke disk 'public_uploads'
+            $validated['gambar'] = $request->file('gambar')->store('berita_images', 'public_uploads');
         }
 
         $berita->update($validated);
 
-        // ▼▼▼ PERBAIKAN 4 ▼▼▼
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
     
     public function destroy(Request $request, Berita $berita)
     {
-        // ▼▼▼ TAMBAHAN KEAMANAN ▼▼▼
         $user = Auth::user();
         if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
             if ($request->wantsJson() || $request->is('api/*')) {
-                return response()->json(['message' => 'Anda tidak diizinkan menghapus berita ini.'], 403); // 403 Forbidden
+                return response()->json(['message' => 'Anda tidak diizinkan menghapus berita ini.'], 403); 
             }
-            // ▼▼▼ PERBAIKAN 5 ▼▼▼
             return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan menghapus berita ini.');
         }
-        // ▲▲▲ AKHIR TAMBAHAN ▲▲▲
 
         if ($berita->gambar) {
-            Storage::disk('public')->delete($berita->gambar);
+            // UPDATED: Hapus dari disk 'public_uploads'
+            Storage::disk('public_uploads')->delete($berita->gambar);
         }
 
         $berita->delete();
@@ -163,24 +144,16 @@ class BeritaController extends Controller
             return response()->json(['message' => 'Berita berhasil dihapus.']);
         }
 
-        // ▼▼▼ PERBAIKAN 6 ▼▼▼
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
     }
 
-    /**
-     * [BARU] Method untuk toggle status visible (tampil/sembunyi)
-     * Pastikan Anda sudah menambahkan kolom 'is_visible' (boolean) ke tabel 'beritas'
-     */
     public function toggleStatus(Berita $berita)
     {
-        // Keamanan: Cek apakah user adalah redaktur dan apakah berita ini BUKAN miliknya
         $user = Auth::user();
         if ($user->role == 'redaktur' && $berita->user_id != $user->id) {
             return redirect()->route('admin.berita.index')->with('error', 'Anda tidak diizinkan mengubah status berita ini.');
         }
 
-        // Ganti status (dari true jadi false, atau false jadi true)
-        // Pastikan kolom 'is_visible' ada di tabel 'beritas'
         $berita->is_visible = !$berita->is_visible;
         $berita->save();
 

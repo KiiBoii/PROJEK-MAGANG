@@ -46,7 +46,7 @@ class KaryawanController extends Controller
         }
 
         // 5. Eksekusi query dengan urutan terbaru
-$karyawans = $query->latest()->paginate(9);
+        $karyawans = $query->latest()->paginate(9);
 
         // 6. Kirim data ke view, termasuk data untuk mengisi form filter
         return view('admin.karyawan.index', [
@@ -91,7 +91,8 @@ $karyawans = $query->latest()->paginate(9);
 
         // [BARU] Logika untuk menyimpan foto jika ada
         if ($request->hasFile('foto')) {
-            $validated['foto'] = $request->file('foto')->store('foto_karyawan', 'public');
+            // ▼▼▼ UPDATE: Gunakan disk 'public_uploads' ▼▼▼
+            $validated['foto'] = $request->file('foto')->store('foto_karyawan', 'public_uploads');
         }
 
         User::create($validated);
@@ -125,10 +126,15 @@ $karyawans = $query->latest()->paginate(9);
      */
     public function update(Request $request, User $karyawan)
     {
+        // 1. Validasi Input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $karyawan->id, // Abaikan email ini saat update
-            'password' => 'nullable|string|min:8|confirmed', // Password opsional saat update
+            
+            // ▼▼▼ PERBAIKAN LOGIKA PASSWORD ▼▼▼
+            // 'nullable' agar tidak wajib diisi. 'confirmed' cek kesamaan dengan password_confirmation jika diisi.
+            'password' => 'nullable|string|min:8|confirmed', 
+            
             'role' => ['required', Rule::in(array_keys($this->roleList))],
             'jabatan' => 'nullable|string|max:255',
             'departemen' => 'nullable|string|max:255',
@@ -138,23 +144,30 @@ $karyawans = $query->latest()->paginate(9);
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        if ($request->filled('password')) { // Jika password diisi, hash password baru
+        // 2. Cek apakah password diisi?
+        if ($request->filled('password')) { 
+            // Jika diisi, kita hash password barunya
             $validated['password'] = Hash::make($validated['password']);
-        } else { // Jika password tidak diisi, gunakan password lama
+        } else { 
+            // Jika kosong, kita HAPUS key 'password' dari array $validated
+            // Agar password lama di database TIDAK tertimpa/berubah
             unset($validated['password']);
         }
 
         // [BARU] Logika untuk update foto
         if ($request->hasFile('foto')) {
             // 1. Hapus foto lama jika ada
-            if ($karyawan->foto && Storage::disk('public')->exists($karyawan->foto)) {
-                Storage::disk('public')->delete($karyawan->foto);
+            // ▼▼▼ UPDATE: Cek & Hapus dari disk 'public_uploads' ▼▼▼
+            if ($karyawan->foto && Storage::disk('public_uploads')->exists($karyawan->foto)) {
+                Storage::disk('public_uploads')->delete($karyawan->foto);
             }
             
             // 2. Simpan foto baru dan update path di $validated
-            $validated['foto'] = $request->file('foto')->store('foto_karyawan', 'public');
+            // ▼▼▼ UPDATE: Simpan ke disk 'public_uploads' ▼▼▼
+            $validated['foto'] = $request->file('foto')->store('foto_karyawan', 'public_uploads');
         }
 
+        // 3. Update data ke database
         $karyawan->update($validated);
 
         // ▼▼▼ PERBAIKAN 2 ▼▼▼
@@ -168,8 +181,9 @@ $karyawans = $query->latest()->paginate(9);
     public function destroy(User $karyawan)
     {
         // [BARU] Hapus foto dari storage sebelum menghapus data user
-        if ($karyawan->foto && Storage::disk('public')->exists($karyawan->foto)) {
-            Storage::disk('public')->delete($karyawan->foto);
+        // ▼▼▼ UPDATE: Cek & Hapus dari disk 'public_uploads' ▼▼▼
+        if ($karyawan->foto && Storage::disk('public_uploads')->exists($karyawan->foto)) {
+            Storage::disk('public_uploads')->delete($karyawan->foto);
         }
 
         $karyawan->delete();

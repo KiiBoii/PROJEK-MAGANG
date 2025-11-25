@@ -53,7 +53,7 @@
         .sidebar .sidebar-header {
             padding: 1rem; /* Padding disesuaikan */
             margin-bottom: 1rem;
-            background-color: var #ffff; /* Latar belakang header sidebar */
+            background-color: #ffff; /* Latar belakang header sidebar */
             border-bottom: 1px solid #dee2e6;
             text-align: center; /* Logo di tengah */
         }
@@ -267,7 +267,7 @@
             
             {{-- ▼▼▼ [PERUBAHAN] Variabel route dinamis dipindah ke sini ▼▼▼ --}}
             @php
-$routeNamePrefix = 'admin.';
+            $routeNamePrefix = 'admin.';
             @endphp
             
             {{-- ▼▼▼ [PERUBAHAN] Header diubah menjadi logo ▼▼▼ --}}
@@ -373,7 +373,8 @@ $routeNamePrefix = 'admin.';
                         <a class="d-block link-dark text-decoration-none dropdown-toggle" href="#" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                             
                             @if (Auth::user()->foto)
-                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" 
+                                {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                                <img src="{{ asset(Auth::user()->foto) }}" 
                                      alt="{{ Auth::user()->name }}" 
                                      width="32" height="32" 
                                      class="rounded-circle" 

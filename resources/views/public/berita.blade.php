@@ -297,7 +297,8 @@
         <div class="carousel-inner">
             @forelse($hot_news ?? [] as $hot)
             <div class="carousel-item @if($loop->first) active @endif">
-                <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/1200x450/e0e0e0/999?text=Berita+Slider' }}" class="d-block w-100" alt="{{ $hot->judul }}">
+                {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/1200x450/e0e0e0/999?text=Berita+Slider' }}" class="d-block w-100" alt="{{ $hot->judul }}">
                 
                 <div class="carousel-caption d-none d-md-block">
                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="text-decoration-none text-white stretched-link">
@@ -339,7 +340,8 @@
                     @if(isset($hot_news[0]))
                         @php $hot = $hot_news[0]; @endphp
                         <div class="card card-news-hover h-100">
-                            <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x600/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
+                             {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                            <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/400x600/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
                             <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                             <div class="card-hover-caption">
                                 <h6>{{ $hot->judul }}</h6>
@@ -355,7 +357,8 @@
                             @if(isset($hot_news[1]))
                                 @php $hot = $hot_news[1]; @endphp
                                 <div class="card card-news-hover h-100">
-                                    <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
+                                     {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                    <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -369,7 +372,8 @@
                             @if(isset($hot_news[2]))
                                 @php $hot = $hot_news[2]; @endphp
                                 <div class="card card-news-hover h-100">
-                                    <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
+                                     {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                    <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -385,7 +389,8 @@
                             @if(isset($hot_news[3]))
                                 @php $hot = $hot_news[3]; @endphp
                                 <div class="card card-news-hover h-100">
-                                    <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
+                                     {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                    <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -399,7 +404,8 @@
                             @if(isset($hot_news[4]))
                                 @php $hot = $hot_news[4]; @endphp
                                 <div class="card card-news-hover h-100">
-                                    <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
+                                     {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                    <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -413,7 +419,8 @@
                             @if(isset($hot_news[5]))
                                 @php $hot = $hot_news[5]; @endphp
                                 <div class="card card-news-hover h-100">
-                                    <img src="{{ $hot->gambar ? asset('storage/' . $hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
+                                     {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                    <img src="{{ $hot->gambar ? asset($hot->gambar) : 'https://placehold.co/400x250/e0e0e0/999?text=Hot+News' }}" class="card-img-top" alt="{{ $hot->judul }}">
                                     <a href="{{ route('public.berita.detail', $hot->id) }}" class="stretched-link"></a>
                                     <div class="card-hover-caption">
                                         <h6>{{ $hot->judul }}</h6>
@@ -436,7 +443,8 @@
                 <div class="col-md-4 mb-4">
                     <div class="card card-news h-100"> 
                         @if($berita->gambar)
-                            <img src="{{ asset('storage/' . $berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 200px; object-fit: cover;">
+                             {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                            <img src="{{ asset($berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 200px; object-fit: cover;">
                         @else
                             <img src="https://placehold.co/400x200/e0e0e0/999?text=Berita" class="card-img-top" alt="Placeholder" style="height: 200px; object-fit: cover;">
                         @endif
@@ -473,7 +481,8 @@
                         @forelse($topik_lainnya as $topik)
                         <li class="mb-3 border-bottom pb-3">
                             <a href="{{ route('public.berita.detail', $topik->id) }}" class="d-flex text-decoration-none text-dark">
-                                <img src="{{ $topik->gambar ? asset('storage/'. $topik->gambar) : 'https://placehold.co/70x70/e0e0e0/999?text=Topik' }}" 
+                                 {{-- PERBAIKAN: Hapus 'storage/' . --}}
+                                <img src="{{ $topik->gambar ? asset($topik->gambar) : 'https://placehold.co/70x70/e0e0e0/999?text=Topik' }}" 
                                      alt="{{ $topik->judul }}" 
                                      style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;">
                                 <div class="ms-3">

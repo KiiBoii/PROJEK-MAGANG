@@ -51,7 +51,8 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100"> 
                 @if($berita->gambar)
-                    <img src="{{ asset('storage/'. $berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 200px; object-fit: cover;">
+                    {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                    <img src="{{ asset($berita->gambar) }}" class="card-img-top" alt="{{ $berita->judul }}" style="height: 200px; object-fit: cover;">
                 @else
                     <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
                         <span class="text-muted"><i class="bi bi-image-fill fs-3"></i></span>

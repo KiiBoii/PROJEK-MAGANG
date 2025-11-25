@@ -193,7 +193,8 @@
                                             @php $fotoColumn = 'foto'; @endphp
 
                                             @if($rank->$fotoColumn)
-                                                <img src="{{ asset('storage/' . $rank->$fotoColumn) }}" alt="{{ $rank->name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                                                {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                                                <img src="{{ asset($rank->$fotoColumn) }}" alt="{{ $rank->name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
                                             @else
                                                 <span class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1rem;">
                                                     {{ strtoupper(substr($rank->name, 0, 1)) }}

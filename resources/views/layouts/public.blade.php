@@ -7,9 +7,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -263,8 +262,9 @@
             margin-top: 3rem; 
         }
         
+        /* UPDATE UKURAN LOGO FOOTER */
         .footer-center-content .logo-img {
-            max-height: 70px; 
+            max-height: 50px; /* DIPERKECIL dari 70px menjadi 50px */
             margin-bottom: 1rem;
             width: auto; 
             border-radius: 0; 
@@ -480,10 +480,10 @@
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                     <h5>LOKASI</h5>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63834.790313990954!2d101.43211943053905!3d0.48666664207182264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31d5aebcc272c77b%3A0x7b45c35bb6d8f1b8!2sDinas%20Sosial%20Provinsi%20Riau!5e0!3m2!1sid!2sid!4v1762851919935!5m2!1sid!2sid" 
-                                class="map-placeholder" 
-                                allowfullscreen="" 
-                                loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade">
+                            class="map-placeholder" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
                 <div class="col-lg-4 col-md-12 mb-4">
@@ -501,7 +501,8 @@
                     "Mewujudkan manajemen penyelenggaraan pemerintahan yang baik (good governance), efektif dan efisien, professional, transparan dan akuntabel."
                 </p>
                 
-                <img src="{{ asset('images/logo_pemprov.png') }}" alt="Logo Pemprov Riau">
+                {{-- UPDATE DISINI: Menambahkan class="logo-img" agar CSS max-height: 50px bekerja --}}
+                <img src="{{ asset('images/logo_pemprov.png') }}" alt="Logo Pemprov Riau" class="logo-img">
 
                 <div class="logo-text">DINAS SOSIAL PROVINSI RIAU</div>
                 

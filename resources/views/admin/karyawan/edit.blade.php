@@ -16,7 +16,6 @@
 
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-body">
-            {{-- [DIUBAH] Tambahkan enctype="multipart/form-data" untuk upload file --}}
             <form action="{{ route('admin.karyawan.update', $karyawan->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -31,7 +30,7 @@
                     <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $karyawan->email) }}" required>
                 </div>
 
-                {{-- [BARU DITAMBAHKAN] Kolom untuk memilih Role --}}
+                {{-- Kolom Role --}}
                 <div class="mb-3">
                     <label for="role" class="form-label">Role (Peran)</label>
                     <select class="form-select" id="role" name="role" required>
@@ -43,42 +42,50 @@
                         @endforeach
                     </select>
                 </div>
-                {{-- ========================================== --}}
 
-                {{-- [BARU] Input untuk Foto Profil --}}
+                {{-- Input Foto Profil --}}
                 <div class="mb-3">
                     <label for="foto" class="form-label">Foto Profil (Opsional)</label>
                     
-                    {{-- [BARU] Tampilkan foto saat ini jika ada --}}
                     @if($karyawan->foto)
                         <div class="mb-2">
-                            <img src="{{ asset('storage/' . $karyawan->foto) }}" alt="Foto {{ $karyawan->name }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($karyawan->foto) }}" alt="Foto {{ $karyawan->name }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
                         </div>
-                        <small class="text-muted">Upload file baru untuk mengganti foto di atas.</small>
+                        <small class="text-muted d-block mb-2">Foto saat ini. Upload baru untuk menggantinya.</small>
                     @endif
                     
-                    <input class="form-control mt-2" type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/jpg">
-                    <small class="text-muted">Max: 2MB. Format: JPG, JPEG, PNG. Biarkan kosong jika tidak ingin mengubah foto.</small>
+                    <input class="form-control" type="file" id="foto" name="foto" accept="image/png, image/jpeg, image/jpg">
+                    <small class="text-muted">Max: 2MB. Format: JPG, JPEG, PNG.</small>
                 </div>
 
                 {{-- ▼▼▼ BLOK PASSWORD DIPERBARUI ▼▼▼ --}}
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password (Biarkan kosong jika tidak ingin mengubah)</label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password">
-                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
+                <div class="card bg-light mb-3 border-0">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted mb-3"><i class="bi bi-lock"></i> Ganti Password (Opsional)</h6>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password Baru</label>
+                            <div class="input-group">
+                                {{-- autocomplete="new-password" ditambahkan agar browser tidak autofill password lama --}}
+                                <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" placeholder="Biarkan kosong jika tetap menggunakan password lama">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                        <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
-                            <i class="bi bi-eye"></i>
-                        </button>
+                        <div class="mb-0">
+                            <label for="password_confirmation" class="form-label">Konfirmasi Password Baru</label>
+                            <div class="input-group">
+                                {{-- autocomplete="new-password" ditambahkan --}}
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password" placeholder="Ulangi password baru (hanya jika diisi)">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted mt-1 d-block">Jika kolom di atas kosong, password tidak akan berubah.</small>
+                        </div>
                     </div>
                 </div>
                 {{-- ▲▲▲ AKHIR BLOK PASSWORD ▲▲▲ --}}
@@ -103,19 +110,19 @@
                     <textarea class="form-control" id="alamat" name="alamat" rows="3">{{ old('alamat', $karyawan->alamat) }}</textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 20px; padding: 10px 30px;">Update Admin</button>
-                <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary ms-2" style="border-radius: 20px; padding: 10px 30px;">Batal</a>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4" style="border-radius: 20px;">Update Admin</button>
+                    <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary px-4" style="border-radius: 20px;">Batal</a>
+                </div>
             </form>
         </div>
     </div>
 </div>
 @endsection
 
-{{-- ▼▼▼ TAMBAHKAN SCRIPT DI SINI ▼▼▼ --}}
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        
         // Fungsi generik untuk toggle password
         function setupPasswordToggle(inputId, toggleId) {
             const passwordInput = document.getElementById(inputId);
@@ -123,11 +130,9 @@
 
             if (passwordInput && toggleButton) {
                 toggleButton.addEventListener('click', function () {
-                    // Cek tipe input saat ini
                     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                     passwordInput.setAttribute('type', type);
                     
-                    // Ganti ikon mata
                     const icon = this.querySelector('i');
                     if (type === 'password') {
                         icon.classList.remove('bi-eye-slash');
@@ -140,10 +145,8 @@
             }
         }
 
-        // Terapkan ke kedua bidang password
         setupPasswordToggle('password', 'togglePassword');
         setupPasswordToggle('password_confirmation', 'togglePasswordConfirmation');
-
     });
 </script>
 @endpush

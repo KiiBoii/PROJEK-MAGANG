@@ -74,7 +74,7 @@
     <p class="text-muted">Peringkat diurutkan berdasarkan jumlah total berita yang telah di-upload.</p>
     
     {{-- ▼▼▼ BLOK FILTER BARU ▼▼▼ --}}
-    <div class="card mb-4">
+    <div class="card mb-4 shadow-sm border-0">
         <div class="card-body">
             <form action="{{ route('admin.dashboard.contributors') }}" method="GET">
                 <div class="row g-2 align-items-end">
@@ -131,22 +131,23 @@
         <div class="col-lg-4 col-md-6 mb-4 order-1 card-rank-2">
             @php $user2 = $top3Contributors->get(1); @endphp {{-- Ambil data rank 2 --}}
             @if($user2)
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm border-0">
                     <div class="card-body text-center p-4" style="position: relative;">
                         {{-- Medali Peringkat --}}
                         <span class="rank-badge rank-2">#2</span>
                         {{-- Foto Profil --}}
                         @if($user2->$fotoColumn)
-                            <img src="{{ asset('storage/' . $user2->$fotoColumn) }}" alt="{{ $user2->name }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #c0c0c0;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($user2->$fotoColumn) }}" alt="{{ $user2->name }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #c0c0c0;">
                         @else
-                            <span class="badge bg-primary rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 3rem; border: 4px solid #eee;">
+                            <span class="badge bg-primary rounded-circle mb-3 d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; font-size: 3rem; border: 4px solid #eee;">
                                 {{ strtoupper(substr($user2->name, 0, 1)) }}
                             </span>
                         @endif
                         {{-- Nama dan Total --}}
                         <h5 class="card-title mb-1">{{ $user2->name }}</h5>
                         <p class="text-muted small">
-                            Kontribusi {{-- Tampilkan info filter jika ada --}}
+                            Kontribusi 
                             @if($filters['day'] || $filters['month'] || $filters['year'])
                                 (Difilter)
                             @else
@@ -174,16 +175,17 @@
                         <span class="rank-badge rank-1"><i class="bi bi-trophy-fill"></i></span>
                         {{-- Foto Profil --}}
                         @if($user1->$fotoColumn)
-                            <img src="{{ asset('storage/'. $user1->$fotoColumn) }}" alt="{{ $user1->name }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #ffc107;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($user1->$fotoColumn) }}" alt="{{ $user1->name }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #ffc107;">
                         @else
-                            <span class="badge bg-primary rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 3rem; border: 4px solid #eee;">
+                            <span class="badge bg-primary rounded-circle mb-3 d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; font-size: 3rem; border: 4px solid #eee;">
                                 {{ strtoupper(substr($user1->name, 0, 1)) }}
                             </span>
                         @endif
                         {{-- Nama dan Total --}}
                         <h5 class="card-title mb-1">{{ $user1->name }}</h5>
                         <p class="text-muted small">
-                            Kontribusi {{-- Tampilkan info filter jika ada --}}
+                            Kontribusi 
                             @if($filters['day'] || $filters['month'] || $filters['year'])
                                 (Difilter)
                             @else
@@ -195,7 +197,7 @@
                 </div>
             @else
                 {{-- Placeholder jika tidak ada kontributor rank 1 --}}
-                <div class="card h-100 text-center text-muted d-flex align-items-center justify-content-center">
+                <div class="card h-100 text-center text-muted d-flex align-items-center justify-content-center border-0 shadow-sm">
                     <p>
                         @if($filters['day'] || $filters['month'] || $filters['year'])
                             Tidak ada kontributor pada periode ini.
@@ -211,22 +213,23 @@
         <div class="col-lg-4 col-md-6 mb-4 order-3 card-rank-3">
             @php $user3 = $top3Contributors->get(2); @endphp {{-- Ambil data rank 3 --}}
             @if($user3)
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm border-0">
                     <div class="card-body text-center p-4" style="position: relative;">
                         {{-- Medali Peringkat --}}
                         <span class="rank-badge rank-3">#3</span>
                         {{-- Foto Profil --}}
                         @if($user3->$fotoColumn)
-                            <img src="{{ asset('storage/' . $user3->$fotoColumn) }}" alt="{{ $user3->name }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #cd7f32;">
+                            {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                            <img src="{{ asset($user3->$fotoColumn) }}" alt="{{ $user3->name }}" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 4px solid #cd7f32;">
                         @else
-                            <span class="badge bg-primary rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 3rem; border: 4px solid #eee;">
+                            <span class="badge bg-primary rounded-circle mb-3 d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px; font-size: 3rem; border: 4px solid #eee;">
                                 {{ strtoupper(substr($user3->name, 0, 1)) }}
                             </span>
                         @endif
                         {{-- Nama dan Total --}}
                         <h5 class="card-title mb-1">{{ $user3->name }}</h5>
                         <p class="text-muted small">
-                            Kontribusi {{-- Tampilkan info filter jika ada --}}
+                            Kontribusi 
                             @if($filters['day'] || $filters['month'] || $filters['year'])
                                 (Difilter)
                             @else
@@ -247,9 +250,9 @@
     {{-- ▲▲▲ AKHIR BAGIAN TOP 3 ▲▲▲ --}}
 
     {{-- ▼▼▼ BAGIAN SISA PERINGKAT (DAFTAR) - tetap sama ▼▼▼ --}}
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            Peringkat Selanjutnya (4+)
+    <div class="card shadow-sm border-0">
+        <div class="card-header d-flex justify-content-between align-items-center bg-white">
+            <span class="fw-bold">Peringkat Selanjutnya (4+)</span>
             @if($filters['day'] || $filters['month'] || $filters['year'])
                 <span class="badge bg-info text-dark">Menampilkan Hasil Filter</span>
             @endif
@@ -258,12 +261,13 @@
             <ul class="list-group list-group-flush">
                 @forelse($remainingContributors as $index => $user)
                     @php $rank = $index + 4; @endphp
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
                         <div class="d-flex align-items-center">
                             <span class="badge bg-secondary rounded-pill me-3" style="width: 35px; height: 35px; font-size: 1rem; display: flex; align-items: center; justify-content: center;">{{ $rank }}</span>
                             
                             @if($user->$fotoColumn)
-                                <img src="{{ asset('storage/' . $user->$fotoColumn) }}" alt="{{ $user->name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
+                                {{-- ▼▼▼ PERBAIKAN: Hapus 'storage/' . ▼▼▼ --}}
+                                <img src="{{ asset($user->$fotoColumn) }}" alt="{{ $user->name }}" class="rounded-circle me-3" style="width: 40px; height: 40px; object-fit: cover;">
                             @else
                                 <span class="badge bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1rem;">
                                     {{ strtoupper(substr($user->name, 0, 1)) }}
@@ -275,7 +279,7 @@
                         <span class="fw-bold fs-5 text-dark">{{ $user->total_berita }} <small class="text-muted">Kontribusi</small></span>
                     </li>
                 @empty
-                    <li class="list-group-item text-center text-muted">
+                    <li class="list-group-item text-center text-muted py-4">
                         @if($filters['day'] || $filters['month'] || $filters['year'])
                             Tidak ada kontributor lain pada periode ini.
                         @else
