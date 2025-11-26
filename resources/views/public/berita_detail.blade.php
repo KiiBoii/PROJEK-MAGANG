@@ -118,7 +118,7 @@
                     <div class="article-meta">
                         {{-- ▼▼▼ PERBARUAN: Ambil nama user dari relasi ▼▼▼ --}}
                         By <span class="author">{{ $berita->user->name ?? 'Admin' }}</span> | 
-                        {{ $berita->created_at->format('d F Y, H:i') }} WIB
+                        {{ $berita->created_at->timezone('Asia/Jakarta')->format('d F Y, H:i') }} WIB
                     </div>
                 </header>
 
