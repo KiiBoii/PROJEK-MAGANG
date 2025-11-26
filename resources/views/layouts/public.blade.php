@@ -405,6 +405,13 @@
                                         Dokumen Publikasi
                                     </a>
                                 </li>
+
+                                {{-- TAMBAHAN BARU: LINK KE GOOGLE DRIVE --}}
+                                <li>
+                                    <a class="dropdown-item" href="https://drive.google.com/drive/folders/1ONJjk_QyIPJeZtNN0yx2X5oATgzEaQx_" target="_blank">
+                                        RKA Dinas Social Provinsi
+                                    </a>
+                                </li>
                                 
                                 {{-- Submenu Daftar Layanan Teknis (12 item) --}}
                                 <li class="dropdown-submenu">
