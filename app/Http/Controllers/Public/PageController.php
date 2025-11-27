@@ -188,7 +188,11 @@ class PageController extends Controller
     public function kontak()
     {
         $sliders = Slider::where('halaman', 'kontak')->where('is_visible', true)->latest()->get();
-        return view('public.kontak', compact('sliders'));
+        
+        // ▼▼▼ PERBAIKAN: Menggunakan paginate(10) agar bisa melihat semua data ▼▼▼
+        $riwayat_pengaduan = Kontak::latest()->paginate(10);
+
+        return view('public.kontak', compact('sliders', 'riwayat_pengaduan'));
     }
     
 
@@ -227,8 +231,6 @@ class PageController extends Controller
                                      ->take(5) // Diambil 5 saja cukup untuk sidebar
                                      ->get();
         
-        // ▼▼▼ UPDATED: Pastikan nama filenya 'berita_detail' (bukan 'berita.detail') ▼▼▼
-        // Pastikan file Anda ada di: resources/views/public/berita_detail.blade.php
         return view('public.berita_detail', compact('berita', 'topik_lainnya')); 
     }
 
