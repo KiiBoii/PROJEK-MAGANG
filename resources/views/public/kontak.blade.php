@@ -3,7 +3,6 @@
 {{-- 1. CSS KUSTOM --}}
 @push('styles')
 <style>
-    /* --- Style untuk Slider Header (Tetap) --- */
     .news-slider .carousel-item {
         height: 450px;
         background-color: #555;
@@ -41,7 +40,6 @@
     }
 </style>
 @endpush
-
 
 @section('content')
 
@@ -180,7 +178,7 @@
     </div>
 </div>
 
-{{-- BAGIAN 3: RIWAYAT PENGADUAN TERKINI (TAMPILAN TABEL SEPERTI ADMIN) --}}
+{{-- BAGIAN 3: RIWAYAT PENGADUAN TERKINI --}}
 <div class="container mb-5">
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h3 class="fw-bold" style="color: var(--dark-blue); border-left: 5px solid var(--primary-color); padding-left: 15px;">
@@ -204,6 +202,15 @@
                     </thead>
                     <tbody>
                         @forelse($riwayat_pengaduan as $index => $item)
+                        @php
+                            // HELPER SENSOR NAMA PELAPOR (misal: Rizki Pratama -> R***i P******a)
+                            $namaParts = explode(' ', trim($item->nama));
+                            $maskedName = implode(' ', array_map(function($word) {
+                                $len = strlen($word);
+                                if ($len <= 2) return $word;
+                                return substr($word, 0, 1) . str_repeat('*', $len - 2) . substr($word, -1);
+                            }, $namaParts));
+                        @endphp
                         <tr>
                             <td class="text-center">{{ $riwayat_pengaduan->firstItem() + $index }}</td>
                             <td>
@@ -214,14 +221,16 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    {{-- Menampilkan Nama Saja --}}
-                                    <span class="fw-bold text-dark">{{ $item->nama }}</span>
+                                    <span class="fw-bold text-dark">{{ $maskedName }}</span>
                                 </div>
                             </td>
                             <td>
                                 <span class="d-inline-block text-muted" style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     {{ $item->isi_pengaduan }}
                                 </span>
+                                @if($item->balasan)
+                                    <div><small class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Sudah Direspon Admin</small></div>
+                                @endif
                             </td>
                             <td>
                                 @php
@@ -239,7 +248,6 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                {{-- Tombol Detail (Modal) --}}
                                 <button type="button" class="btn btn-sm btn-outline-info rounded-circle" data-bs-toggle="modal" data-bs-target="#detailModal{{ $item->id }}" title="Lihat Detail">
                                     <i class="bi bi-eye"></i>
                                 </button>
@@ -259,7 +267,6 @@
                 </table>
             </div>
 
-            {{-- ▼▼▼ TOMBOL NAVIGASI HALAMAN (PAGINATION) ▼▼▼ --}}
             <div class="d-flex justify-content-center mt-4 pb-4">
                 {!! $riwayat_pengaduan->withQueryString()->links('vendor.pagination.custom-circle') !!}
             </div>
@@ -267,7 +274,7 @@
     </div>
 </div>
 
-{{-- MODAL DETAIL (Sama seperti Admin, tapi info Kontak disembunyikan untuk privasi) --}}
+{{-- MODAL DETAIL PUBLIK --}}
 @foreach($riwayat_pengaduan as $item)
     @php
         $statusClassModal = match($item->status) {
@@ -278,6 +285,14 @@
             'ditolak' => 'bg-danger',
             default => 'bg-secondary'
         };
+
+        // SENSOR NAMA
+        $namaPartsModal = explode(' ', trim($item->nama));
+        $maskedNameModal = implode(' ', array_map(function($word) {
+            $len = strlen($word);
+            if ($len <= 2) return $word;
+            return substr($word, 0, 1) . str_repeat('*', $len - 2) . substr($word, -1);
+        }, $namaPartsModal));
     @endphp
     <div class="modal fade" id="detailModal{{ $item->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $item->id }}" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -288,7 +303,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        {{-- Kolom Foto --}}
                         <div class="col-lg-5 mb-3 text-center">
                             @if($item->foto_pengaduan)
                                 <img src="{{ asset($item->foto_pengaduan) }}" class="img-fluid rounded shadow-sm border" alt="Bukti Foto" style="max-height: 300px; width: 100%; object-fit: contain; background-color: #f8f9fa;">
@@ -305,7 +319,6 @@
                             @endif
                         </div>
                         
-                        {{-- Kolom Info --}}
                         <div class="col-lg-7">
                             <table class="table table-sm table-borderless">
                                 <tr>
@@ -321,17 +334,36 @@
                                 </tr>
                                 <tr>
                                     <td class="text-muted">Nama Pelapor</td>
-                                    <td class="fw-bold">: {{ $item->nama }}</td>
+                                    <td class="fw-bold">: {{ $maskedNameModal }}</td>
                                 </tr>
-                                {{-- Info Email & HP disembunyikan untuk publik agar aman --}}
                             </table>
                             
-                            <div class="card bg-light border-0 mt-2">
+                            <div class="card bg-light border-0 mt-2 mb-3">
                                 <div class="card-body">
                                     <h6 class="card-title text-primary"><i class="bi bi-chat-left-text me-2"></i>Isi Laporan</h6>
                                     <p class="card-text text-dark" style="white-space: pre-line; text-align: justify;">{{ $item->isi_pengaduan }}</p>
                                 </div>
                             </div>
+
+                            {{-- TAMPILAN BALASAN RESMI ADMIN --}}
+                            @if($item->balasan)
+                                <div class="card border-primary bg-light mt-3 shadow-sm">
+                                    <div class="card-header bg-primary text-white py-2">
+                                        <i class="bi bi-reply-fill me-2"></i> <strong>Tanggapan Resmi Dinas Sosial</strong>
+                                        <small class="float-end text-white-50">
+                                            {{ $item->balasan_at ? \Carbon\Carbon::parse($item->balasan_at)->timezone('Asia/Jakarta')->format('d M Y H:i') . ' WIB' : '' }}
+                                        </small>
+                                    </div>
+                                    <div class="card-body text-dark">
+                                        <p class="card-text mb-0" style="white-space: pre-line; text-align: justify;">{{ $item->balasan }}</p>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="alert alert-secondary mt-3 mb-0 text-center text-muted" role="alert">
+                                    <i class="bi bi-hourglass-split me-1"></i> Belum ada respon dari Admin untuk laporan ini.
+                                </div>
+                            @endif
+
                         </div>
                     </div>
                 </div>

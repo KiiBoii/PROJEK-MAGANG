@@ -44,7 +44,7 @@ Route::get('/faq', [PageController::class, 'faq'])->name('public.faq');
 Route::get('/kontak', [PageController::class, 'kontak'])->name('public.kontak');
 Route::post('/kontak', [PageController::class, 'storeKontak'])->name('public.kontak.store');
 
-// --- RUTE PPID (Sesuai kode sebelumnya) ---
+// --- RUTE PPID ---
 Route::prefix('ppid')->name('public.ppid.')->group(function () {
     Route::get('/daftar-informasi-2025', [PageController::class, 'ppidDaftarInfo2025'])->name('daftar_info_2025');
     Route::get('/maklumat', [PageController::class, 'ppidMaklumat'])->name('maklumat');
@@ -126,9 +126,17 @@ Route::middleware(['auth', 'role:admin,redaktur', PreventBackHistory::class])
         // Route Resource (Index & Destroy)
         Route::resource('pengaduan', PengaduanController::class)->only(['index', 'destroy']);
         
-        // Tambahkan Route KHUSUS untuk Update Status
+        // Route Update Status
         Route::patch('pengaduan/{id}/update-status', [PengaduanController::class, 'updateStatus'])
             ->name('pengaduan.update-status');
+
+        // Route Simpan / Edit Balasan Admin
+        Route::patch('pengaduan/{id}/balas', [PengaduanController::class, 'balas'])
+            ->name('pengaduan.balas');
+
+        // Route Hapus Balasan Admin
+        Route::delete('pengaduan/{id}/hapus-balasan', [PengaduanController::class, 'hapusBalasan'])
+            ->name('pengaduan.hapus-balasan');
         // ▲▲▲ SELESAI PERBAIKAN ▼▼▼
     
     }); 

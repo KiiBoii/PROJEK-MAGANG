@@ -25,17 +25,17 @@ class PengaduanController extends Controller
             $query->where('status', $status);
         }
 
-        // ▼▼▼ PERBAIKAN: Ubah pagination menjadi 20 ▼▼▼
+        // Pagination 20 item per halaman
         $pengaduans = $query->paginate(20)->withQueryString();
 
-        // Hitung jumlah untuk badge di tab (Opsional, agar terlihat bagus)
+        // Hitung jumlah data untuk badge di tab navigasi
         $counts = [
-            'semua' => Kontak::count(),
+            'semua'    => Kontak::count(),
             'diajukan' => Kontak::where('status', 'diajukan')->count(),
             'diproses' => Kontak::where('status', 'diproses')->count(),
             'diterima' => Kontak::where('status', 'diterima')->count(),
-            'selesai' => Kontak::where('status', 'selesai')->count(),
-            'ditolak' => Kontak::where('status', 'ditolak')->count(),
+            'selesai'  => Kontak::where('status', 'selesai')->count(),
+            'ditolak'  => Kontak::where('status', 'ditolak')->count(),
         ];
 
         return view('admin.pengaduan.index', compact('pengaduans', 'counts', 'status'));
@@ -52,7 +52,6 @@ class PengaduanController extends Controller
 
         $pengaduan = Kontak::findOrFail($id);
         
-        // Pastikan 'status' ada di $fillable pada Model Kontak
         $pengaduan->update([
             'status' => $request->status
         ]);
@@ -61,7 +60,49 @@ class PengaduanController extends Controller
     }
 
     /**
-     * Menghapus pengaduan.
+     * Menyimpan / memperbarui balasan admin.
+     */
+    public function balas(Request $request, $id)
+    {
+        $request->validate([
+            'balasan' => 'required|string',
+            'status'  => 'nullable|in:diajukan,diproses,diterima,ditolak,selesai',
+        ]);
+
+        $pengaduan = Kontak::findOrFail($id);
+
+        $updateData = [
+            'balasan'    => $request->balasan,
+            'balasan_at' => now(),
+        ];
+
+        // Opsional: Jika admin juga memilih perubahan status pada form balasan
+        if ($request->filled('status')) {
+            $updateData['status'] = $request->status;
+        }
+
+        $pengaduan->update($updateData);
+
+        return redirect()->back()->with('success', 'Balasan pengaduan berhasil disimpan.');
+    }
+
+    /**
+     * Menghapus balasan admin.
+     */
+    public function hapusBalasan($id)
+    {
+        $pengaduan = Kontak::findOrFail($id);
+
+        $pengaduan->update([
+            'balasan'    => null,
+            'balasan_at' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Balasan pengaduan berhasil dihapus.');
+    }
+
+    /**
+     * Menghapus seluruh data pengaduan.
      */
     public function destroy($id)
     {
@@ -70,9 +111,8 @@ class PengaduanController extends Controller
         // Hapus foto pengaduan (jika ada)
         if ($pengaduan->foto_pengaduan) {
             Storage::disk('public_uploads')->delete($pengaduan->foto_pengaduan);
-            // Cek juga disk public biasa untuk kompatibilitas
-            if(Storage::disk('public')->exists($pengaduan->foto_pengaduan)){
-                 Storage::disk('public')->delete($pengaduan->foto_pengaduan);
+            if (Storage::disk('public')->exists($pengaduan->foto_pengaduan)) {
+                Storage::disk('public')->delete($pengaduan->foto_pengaduan);
             }
         }
 

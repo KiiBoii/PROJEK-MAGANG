@@ -20,6 +20,8 @@ class Kontak extends Model
         'isi_pengaduan',
         'foto_pengaduan',
         'status', // <--- Wajib ada agar bisa di-update
+        'balasan',     // <--- WAJIB DITAMBAHKAN
+        'balasan_at',  // <--- WAJIB DITAMBAHKAN
     ];
 
     // Opsional: Casting status agar selalu string
