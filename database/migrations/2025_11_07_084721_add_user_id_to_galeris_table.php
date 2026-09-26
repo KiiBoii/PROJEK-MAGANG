@@ -10,18 +10,26 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('galeriss', function (Blueprint $table) {
-        // Tambahkan user_id yang terhubung ke tabel 'users'
-        $table->foreignId('user_id')->nullable()->constrained('users')->after('id');
-    });
-}
+    {
+        // 1. Ubah 'galeriss' menjadi 'galeris'
+        Schema::table('galeris', function (Blueprint $table) {
+            // 2. Tambahkan kolomnya terlebih dahulu dengan posisi setelah 'id'
+            $table->unsignedBigInteger('user_id')->nullable()->after('id');
+            
+            // 3. Definisikan foreign key-nya secara terpisah agar aman di MySQL
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
 
-public function down(): void
-{
-    Schema::table('galeriss', function (Blueprint $table) {
-        $table->dropForeign(['user_id']);
-        $table->dropColumn('user_id');
-    });
-}
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        // Ubah 'galeriss' menjadi 'galeris'
+        Schema::table('galeris', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
+    }
 };

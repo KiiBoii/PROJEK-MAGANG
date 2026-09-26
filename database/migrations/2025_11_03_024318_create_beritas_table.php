@@ -11,14 +11,14 @@ return new class extends Migration
      */
 public function up(): void
 {
-    Schema::create('beritas', function (Blueprint $table) {
-        $table->id();
-        $table->string('judul');
-        $table->text('isi');
-        $table->string('gambar')->nullable(); // Path ke gambar
-        $table->timestamps(); // Kapan dibuat & di-update
-        $table->string('tag')->nullable()->after('gambar'); // 'info', 'layanan', 'kegiatan'
-    });
+Schema::create('beritas', function (Blueprint $table) {
+    $table->id();
+    $table->string('judul');
+    $table->text('isi');
+    $table->string('gambar')->nullable();
+    $table->string('tag')->nullable(); // Cukup tulis seperti ini tanpa ->after()
+    $table->timestamps();
+});
 }
     /**
      * Reverse the migrations.

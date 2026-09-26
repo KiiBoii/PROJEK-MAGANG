@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::table('beritas', function (Blueprint $table) {
-        $table->string('tag')->nullable()->after('gambar'); // 'info', 'layanan', 'kegiatan'
-    });
+        Schema::table('beritas', function (Blueprint $table) {
+            // Dikosongkan karena kolom 'tag' sudah dibuat di file migrasi awal beritas
+        });
     }
 
     /**
