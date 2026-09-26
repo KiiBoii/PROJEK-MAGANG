@@ -115,7 +115,7 @@
             <div class="modal-body text-center pt-0">
                 
                 {{-- Ilustrasi Placeholder --}}
-                <img src="{{ asset('images/melonyabi.jpg') }}" alt="Ilustrasi Survey" class="survey-image img-fluid">
+                <img src="{{ asset('images/survey.jpg') }}" alt="Ilustrasi Survey" class="survey-image img-fluid">
 
                 <h3 class="fw-bold mb-3">Survey Kepuasan Masyarakat</h3>
                 <p class="text-muted">Bantu kami dengan mengisi survey pelayanan Dinas Sosial Provinsi Riau di link di bawah sehingga kami dapat semakin meningkatkan pelayanan kami.</p>
@@ -185,7 +185,7 @@
             <h2 class="fw-bold mb-3" style="color: #0d47a1;">KEPALA DINAS</h2>
             
             <div class="d-flex mb-3">
-                <img src="{{ asset('images/Max Verstappen.jpg') }}" class="rounded-circle" alt="Foto Kepala Dinas" style="width: 150px; height: 150px; object-fit: cover;">
+                <img src="{{ asset('images/dummyicon.jpg') }}" class="rounded-circle" alt="Foto Kepala Dinas" style="width: 150px; height: 150px; object-fit: cover;">
                 <div class="ms-4">
                     <h4 class="fw-bold mb-1">Nama Kepala Dinas, S.H., M.Si.</h4>
                     <p class="text-muted mb-2">Kepala Dinas Sosial Provinsi Riau</p>
